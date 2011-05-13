@@ -4,6 +4,7 @@ class CreateCommits < ActiveRecord::Migration
       t.string :number
       t.text :description
       t.integer :author_id
+      t.integer :parent_id
       t.timestamps
     end
   end

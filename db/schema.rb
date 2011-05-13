@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110214185828) do
+ActiveRecord::Schema.define(:version => 20110513101443) do
 
   create_table "authors", :force => true do |t|
     t.string   "name"
@@ -23,6 +23,50 @@ ActiveRecord::Schema.define(:version => 20110214185828) do
     t.string   "number"
     t.text     "description"
     t.integer  "author_id"
+    t.integer  "parent_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "project_id"
+  end
+
+  create_table "projects", :force => true do |t|
+    t.string   "name"
+    t.string   "working_directory"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "test_suite_runs", :force => true do |t|
+    t.integer  "test_suite_id"
+    t.integer  "commit_id"
+    t.integer  "test_count"
+    t.integer  "assertions_count"
+    t.integer  "failures_count"
+    t.integer  "errors_count"
+    t.float    "run_time"
+    t.string   "state"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "test_suites", :force => true do |t|
+    t.string   "name"
+    t.integer  "project_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "test_unit_runs", :force => true do |t|
+    t.integer  "test_unit_id"
+    t.float    "run_time"
+    t.string   "result",       :limit => 1
+    t.datetime "created_at"
+  end
+
+  create_table "test_units", :force => true do |t|
+    t.integer  "test_suite_id"
+    t.string   "class_name"
+    t.text     "name"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
