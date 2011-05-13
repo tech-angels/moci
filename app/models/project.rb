@@ -39,4 +39,8 @@ class Project < ActiveRecord::Base
     commits.order('committed_at DESC').last
   end
 
+  def current_commit
+    commits.find_by_number(vcs.current_number)
+  end
+
 end

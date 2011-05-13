@@ -9,6 +9,7 @@ class TestSuite < ActiveRecord::Base
     #TODO: decide which runner based on type
     tr = TestSuiteRun.create!(
       :state => 'running',
+      :commit => project.current_commit,
       :test_suite => self)
     StupidCI::TestRunner::Unit.run(tr)
   end

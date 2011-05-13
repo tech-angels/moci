@@ -30,6 +30,10 @@ module StupidCI
             @tr.failures_count = v
           when :errors_count
             @tr.errors_count = v
+          when :run_time
+            @tr.run_time = v
+          when :finished
+            @tr.state = 'finished'
           else
             #TODO
           end

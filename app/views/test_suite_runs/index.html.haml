@@ -1,0 +1,41 @@
+%h1 Latest test suite runs
+
+%p
+  %table{:style => 'width: 100%'}
+    %tr
+      %th
+        Project
+      %th
+        Test Suite
+      %th
+        Commit
+      %th
+        State
+      %th
+        Results
+      %th
+        Time took
+    - @test_suite_runs.each do |tsr|
+      %tr{:class => cycle(%w{odd even})}
+        %td
+          = tsr.test_suite.project.name
+        %td
+          = tsr.test_suite.name
+        %td
+          = tsr.commit.committed_at
+        %td
+          = tsr.state.humanize
+        %td
+          = tsr.tests_count
+          |
+          = tsr.assertions_count
+          |
+          = tsr.errors_count
+          |
+          = tsr.failures_count
+        %td
+          = tsr.run_time
+
+
+
+

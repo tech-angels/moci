@@ -8,6 +8,9 @@ gem 'rails', '3.0.3'
 gem 'sqlite3-ruby', :require => 'sqlite3'
 
 gem 'git'
+gem 'haml'
+
+#gem 'will-paginate'
 #gem 'ruby-git', :git => 'git://github.com/schacon/ruby-git.git', :require => 'git'
 
 # Use unicorn as the web server

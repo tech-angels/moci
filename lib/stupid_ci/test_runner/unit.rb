@@ -9,8 +9,8 @@ module StupidCI
       def run
         ret = {}
         ret[:tests] = []
+        t0 = Time.now
         IO.popen("cd #{working_directory}; TESTOPTS=\"-v\" rake test:units", 'r+') do |pipe|
-           t0 = Time.now
            lt = Time.now
            running = false
 
@@ -77,6 +77,10 @@ module StupidCI
            end
 
         end
+        push(
+          :run_time => Time.now - t0,
+          :finished => true
+        )
         ret
       end
     end
