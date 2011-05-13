@@ -59,8 +59,9 @@ ActiveRecord::Schema.define(:version => 20110513101443) do
 
   create_table "test_unit_runs", :force => true do |t|
     t.integer  "test_unit_id"
+    t.integer  "test_suite_run_id"
     t.float    "run_time"
-    t.string   "result",       :limit => 1
+    t.string   "result",            :limit => 1
     t.datetime "created_at"
   end
 

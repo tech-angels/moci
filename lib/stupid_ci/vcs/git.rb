@@ -7,6 +7,22 @@ module StupidCI
         @g = ::Git.open(dir, :log => Logger.new(STDOUT))
       end
 
+      #FIXME useful for debugging, delete me later
+      def g
+        @g
+      end
+
+      def up_to_date?
+        #TODO proper branch
+        @g.log.between('HEAD','master').map.size == 0
+      end
+
+      def move_forward
+        unless up_to_date?
+          @g.checkout(@g.log.between('HEAD','master').map[-1].sha)
+        end
+      end
+
       def current_number
         @g.revparse('HEAD')
       end

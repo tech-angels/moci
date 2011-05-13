@@ -1,0 +1,61 @@
+%h1 Latest commits
+
+
+- @commits.each do |commit|
+  %br
+  - if tsr = commit.test_suite_runs.order('created_at DESC').first
+    - if tsr.running?
+      - state = 'running'
+    - else
+      - if tsr.clean?
+        - state = 'ok'
+      - else
+        - state = 'bad'
+  - else
+    - state = 'pending'
+  %div{:class => "commit #{state}"}
+    .info_part{:style => 'min-height: 90px;'}
+      .avatar{:style => 'float: left; padding-right: 15px;'}
+        = image_tag(commit.author.gravatar_url)
+      .results{:style => 'float: right; text-align: right'}
+        - case state
+        - when 'pending'
+          PENDING
+        - when 'running'
+          RUNNING
+          -# TODO progress
+        - when 'ok'
+          %span.clean CLEAN
+          %br
+          %b= tsr.tests_count
+          test,
+          %b= tsr.assertions_count
+          assertions
+        - when 'bad'
+          %span.bad BAD
+          %br
+          %b= tsr.tests_count
+          test,
+          %b= tsr.assertions_count
+          assertions,
+          %b= tsr.errors_count
+          errors,
+          %b= tsr.failures_count
+          failures
+
+      Author:
+      %b= commit.author.name
+      %br
+      Time:
+      %b= commit.committed_at
+      %br
+      %tt
+        =commit.description
+    - if state == 'bad'
+      %ul
+        - tsr.test_unit_runs.where(:result => %w{E F}).all.each do |tur|
+          %li
+            = "[#{tur.test_unit.class_name}]"
+            = tur.test_unit.name
+            %b failed
+

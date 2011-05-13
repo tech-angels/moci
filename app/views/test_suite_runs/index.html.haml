@@ -16,7 +16,7 @@
       %th
         Time took
     - @test_suite_runs.each do |tsr|
-      %tr{:class => cycle(%w{odd even})}
+      %tr{:class => cycle('','bg')}
         %td
           = tsr.test_suite.project.name
         %td

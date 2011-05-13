@@ -45,6 +45,7 @@ module StupidCI
         unit = @tr.test_suite.test_units.find_or_create_by_name_and_class_name(name, class_name)
         @last_test = tur = TestUnitRun.create!(
           :test_unit => unit,
+          :test_suite_run => @tr,
           :result => 'W'
         )
       end

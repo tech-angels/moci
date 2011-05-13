@@ -13,7 +13,7 @@ class Project < ActiveRecord::Base
   def foo
     head = head_commit
     if head && vcs.current_number == head.number
-      # we have it in db
+      commit = head
       puts "no create"
     else
       puts "creating"
@@ -33,6 +33,34 @@ class Project < ActiveRecord::Base
       )
       commit.save!
     end
+
+    test_suites.each do |suite|
+      if commit.test_suite_runs.where(:test_suite_id => suite.id).count == 0
+        suite.run
+      end
+    end
+  end
+
+  def boo
+    unless vcs.up_to_date?
+      #TODO this is not the right place for it
+      vcs.move_forward
+      execute("bundle install")
+      execute("rake db:migrate")
+      foo
+      return true
+    end
+    return false
+  end
+
+  def boo_hoo
+    loop do
+      break unless boo
+    end
+  end
+
+  def execute(command)
+    system("cd #{working_directory} && #{command}") or raise "failed to execute '#{command}'"
   end
 
   def head_commit

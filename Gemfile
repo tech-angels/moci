@@ -9,7 +9,7 @@ gem 'sqlite3-ruby', :require => 'sqlite3'
 
 gem 'git'
 gem 'haml'
-
+gem 'gravtastic'
 #gem 'will-paginate'
 #gem 'ruby-git', :git => 'git://github.com/schacon/ruby-git.git', :require => 'git'
 
