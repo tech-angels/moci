@@ -24,6 +24,7 @@ ActiveRecord::Schema.define(:version => 20110513101443) do
     t.text     "description"
     t.integer  "author_id"
     t.integer  "parent_id"
+    t.datetime "committed_at"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "project_id"
@@ -39,7 +40,7 @@ ActiveRecord::Schema.define(:version => 20110513101443) do
   create_table "test_suite_runs", :force => true do |t|
     t.integer  "test_suite_id"
     t.integer  "commit_id"
-    t.integer  "test_count"
+    t.integer  "tests_count"
     t.integer  "assertions_count"
     t.integer  "failures_count"
     t.integer  "errors_count"

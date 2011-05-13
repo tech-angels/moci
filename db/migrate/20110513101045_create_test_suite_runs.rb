@@ -3,7 +3,7 @@ class CreateTestSuiteRuns < ActiveRecord::Migration
     create_table :test_suite_runs do |t|
       t.integer :test_suite_id
       t.integer :commit_id
-      t.integer :test_count
+      t.integer :tests_count
       t.integer :assertions_count
       t.integer :failures_count
       t.integer :errors_count

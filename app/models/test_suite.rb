@@ -1,9 +1,15 @@
 class TestSuite < ActiveRecord::Base
   belongs_to :project
 
+  has_many :test_units
+
   #TODO: suite types
 
   def run
     #TODO: decide which runner based on type
+    tr = TestSuiteRun.create!(
+      :state => 'running',
+      :test_suite => self)
+    StupidCI::TestRunner::Unit.run(tr)
   end
 end

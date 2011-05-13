@@ -1,15 +1,15 @@
 module StupidCI
   module TestRunner
-    class Unit
+    class Unit < Base
 
       # TODO: maybe try some implementing some test runner to avoid parsing
       # Parsing is safer however in case some other gems modified tests already somehow though.
       # TODO: error messages parsing
       # TODO this runs it all at once, would be nice to see progress
-      def self.run(directory)
+      def run
         ret = {}
         ret[:tests] = []
-        IO.popen("cd #{directory}; TESTOPTS=\"-v\" rake test:units", 'r+') do |pipe|
+        IO.popen("cd #{working_directory}; TESTOPTS=\"-v\" rake test:units", 'r+') do |pipe|
            t0 = Time.now
            lt = Time.now
            running = false
@@ -39,6 +39,7 @@ module StupidCI
                  :class_name => m[2],
                  :name => m[1]
                }
+               push_test(m[1],m[2])
                buf = ''
                lt = Time.now
                puts "test #{m[1]}"
@@ -55,16 +56,23 @@ module StupidCI
                  else 'U'
                  end
                  puts test[:result]
+                 last_test(test[:result], test[:time])
                  buf = ''
                end
              end
 
              # Summary line
              if m = buf.match(/(.*?) tests, (.*?) assertions, (.*?) failures, (.*) errors/)
-               ret[:tests_count] = m[1]
-               ret[:assertions_count] = m[2]
-               ret[:failures_count] = m[3]
-               ret[:errors_count] = m[4]
+                 ret[:tests_count] = m[1]
+                 ret[:assertions_count] = m[2]
+                 ret[:failures_count] = m[3]
+                 ret[:errors_count] = m[4]
+               push(
+                 :tests_count => m[1],
+                 :assertions_count => m[2],
+                 :failures_count => m[3],
+                 :errors_count => m[4]
+               )
              end
            end
 
