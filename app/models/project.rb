@@ -1,4 +1,3 @@
-#require 'stupid_ci/vcs/git'
 class Project < ActiveRecord::Base
   validates_presence_of :name
 
@@ -7,7 +6,7 @@ class Project < ActiveRecord::Base
 
   def vcs
     #TODO: VCS type
-    StupidCI::VCS::Git.new self.working_directory
+    Moci::VCS::Git.new self.working_directory
   end
 
   def foo

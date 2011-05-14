@@ -1,4 +1,4 @@
-module StupidCI
+module Moci
   module TestRunner
     class Base
 

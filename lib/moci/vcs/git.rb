@@ -1,5 +1,5 @@
 
-module StupidCI
+module Moci
   module VCS
     class Git
 

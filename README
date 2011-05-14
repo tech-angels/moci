@@ -1,12 +1,6 @@
-== STUPD CI
+== MOCI
 
-  First thing: I decided not to spend big chunk of time on beginning of
-  this project on inventing a nice name for it. So it's just for now. It will be changed.
-
-== AUTHOR
-
-  Kacper Cieśla (comboy) @ Tech-angels
-  http://tech-angels.fr
+  Continuous Integration that sucks less.
 
 == TODOS
 
@@ -24,3 +18,10 @@
   Assumptions:
   * even though it's gonna be ruby & git only for now, make it modular so that either test
     runner or VCS can be added without rewrites
+
+== AUTHOR
+
+  Kacper Cieśla (comboy) @ Tech-angels
+  http://tech-angels.fr/
+
+

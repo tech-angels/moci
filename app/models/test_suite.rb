@@ -11,6 +11,6 @@ class TestSuite < ActiveRecord::Base
       :state => 'running',
       :commit => project.current_commit,
       :test_suite => self)
-    StupidCI::TestRunner::Unit.run(tr)
+    Moci::TestRunner::Unit.run(tr)
   end
 end

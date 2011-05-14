@@ -4,4 +4,4 @@
 require File.expand_path('../config/application', __FILE__)
 require 'rake'
 
-StupidCi::Application.load_tasks
+Moci::Application.load_tasks
