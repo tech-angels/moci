@@ -11,8 +11,7 @@ class Project < ActiveRecord::Base
   end
 
   def foo
-    head = head_commit
-    if head && vcs.current_number == head.number
+    if head = commits.find_by_number(vcs.current_number)
       commit = head
       puts "no create"
     else
@@ -70,5 +69,6 @@ class Project < ActiveRecord::Base
   def current_commit
     commits.find_by_number(vcs.current_number)
   end
+
 
 end

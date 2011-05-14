@@ -35,12 +35,13 @@
     <p class="f-left box">
 
       <!-- Switcher -->
+      <!--
       <span class="f-left" id="switcher">
         <a href="#" rel="1col" class="styleswitch ico-col1" title="Display one column"><img src="design/switcher-1col.gif" alt="1 Column" /></a>
         <a href="#" rel="2col" class="styleswitch ico-col2" title="Display two columns"><img src="design/switcher-2col.gif" alt="2 Columns" /></a>
-      </span>
+      </span>-->
 
-      Project: <strong>Your Project</strong>
+      <strong>Stupid CI</strong>: Please invent some nicer name for it.
 
     </p>
 
@@ -50,7 +51,9 @@
 
   <hr class="noscreen" />
 
+
   <!-- Menu -->
+  <!--
   <div id="menu" class="box">
 
     <ul class="box f-right">
@@ -58,13 +61,13 @@
     </ul>
 
     <ul class="box">
-      <li id="menu-active"><a href="#"><span>Lorem ipsum</span></a></li> <!-- Active -->
+      <li id="menu-active"><a href="#"><span>Lorem ipsum</span></a></li>
       <li><a href="#"><span>Lorem ipsum</span></a></li>
       <li><a href="#"><span>Lorem ipsum</span></a></li>
       <li><a href="#"><span>Lorem ipsum</span></a></li>
     </ul>
 
-  </div> <!-- /header -->
+  </div>--> <!-- /header -->
 
   <hr class="noscreen" />
 
@@ -74,33 +77,7 @@
     <!-- Aside (Left Column) -->
     <div id="aside" class="box">
 
-      <div class="padding box">
-
-        <!-- Logo (Max. width = 200px) -->
-        <p id="logo"><a href="#"><img src="tmp/logo.gif" alt="Our logo" title="Visit Site" /></a></p>
-
-        <!-- Search -->
-        <form action="#" method="get" id="search">
-          <fieldset>
-            <legend>Search</legend>
-
-            <p><input type="text" size="17" name="" class="input-text" />&nbsp;<input type="submit" value="OK" class="input-submit-02" /><br />
-            <a href="javascript:toggle('search-options');" class="ico-drop">Advanced search</a></p>
-
-            <!-- Advanced search -->
-            <div id="search-options" style="display:none;">
-
-              <p>
-                <label><input type="checkbox" name="" checked="checked" /> Option I.</label><br />
-                <label><input type="checkbox" name="" /> Option II.</label><br />
-                <label><input type="checkbox" name="" /> Option III.</label>
-              </p>
-
-            </div> <!-- /search-options -->
-
-          </fieldset>
-        </form>
-
+			<div class="padding box">
         <!-- Create a new project -->
         <p id="btn-create" class="box"><a href="#"><span>Create a new project</span></a></p>
 
@@ -109,24 +86,21 @@
       <ul class="box">
         <li><a href="#">Lorem ipsum</a></li>
         <li><a href="#">Lorem ipsum</a></li>
-        <li><a href="#">Lorem ipsum</a></li>
-        <li id="submenu-active"><a href="#">Active Page</a> <!-- Active -->
+        <li><a href="<%= url_for :controller => '/test_suite_runs', :action => 'index' %>">Latest test runs</a></li>
+        <li id="submenu-active"><a href="<%= url_for :controller => '/commits', :action => 'index' %>">Latest commits</a> <!-- Active -->
           <ul>
-            <li><a href="#">Lorem ipsum</a></li>
-            <li><a href="#">Lorem ipsum</a></li>
-            <li><a href="#">Lorem ipsum</a></li>
             <li><a href="#">Lorem ipsum</a></li>
             <li><a href="#">Lorem ipsum</a></li>
           </ul>
         </li>
+      </ul>
+
+			<div class="padding box">
+        <h2>Workers</h2>
+      </div> <!-- /padding -->
+
+      <ul class="box">
         <li><a href="#">Lorem ipsum</a></li>
-        <li><a href="#">Lorem ipsum</a>
-          <ul>
-            <li><a href="#">Lorem ipsum</a></li>
-            <li><a href="#">Lorem ipsum</a></li>
-            <li><a href="#">Lorem ipsum</a></li>
-          </ul>
-                </li>
         <li><a href="#">Lorem ipsum</a></li>
       </ul>
 

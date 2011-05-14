@@ -3,16 +3,24 @@
 
 - @commits.each do |commit|
   %br
+  - introduced = fixed = []
   - if tsr = commit.test_suite_runs.order('created_at DESC').first
     - if tsr.running?
       - state = 'running'
     - else
       - if tsr.clean?
-        - state = 'ok'
+        - state = 'clean'
       - else
         - state = 'bad'
   - else
     - state = 'pending'
+  - if parent = commit.parent
+    - parent_errors =  parent.test_suite_runs.first.test_unit_runs.with_error
+    - my_errors = tsr.test_unit_runs.with_error
+    - introduced = my_errors.map(&:test_unit) - parent_errors.map(&:test_unit)
+    - fixed = parent_errors.map(&:test_unit) - my_errors.map(&:test_unit)
+    - state = 'ok' if introduced.size == 0 && state == 'bad'
+
   %div{:class => "commit #{state}"}
     .info_part{:style => 'min-height: 90px;'}
       .avatar{:style => 'float: left; padding-right: 15px;'}
@@ -25,21 +33,20 @@
           RUNNING
           -# TODO progress
         - when 'ok'
+          %span.ok OK
+        - when 'clean'
           %span.clean CLEAN
-          %br
-          %b= tsr.tests_count
-          test,
-          %b= tsr.assertions_count
-          assertions
         - when 'bad'
           %span.bad BAD
-          %br
-          %b= tsr.tests_count
-          test,
-          %b= tsr.assertions_count
-          assertions,
+        %br
+        %b= tsr.tests_count
+        test,
+        %b= tsr.assertions_count
+        assertions,
+        - if tsr.errors_count > 0
           %b= tsr.errors_count
           errors,
+        - if tsr.failures_count > 0
           %b= tsr.failures_count
           failures
 
@@ -51,11 +58,19 @@
       %br
       %tt
         =commit.description
-    - if state == 'bad'
+    - if state == 'bad' || state == 'ok' || state == 'clean'
       %ul
-        - tsr.test_unit_runs.where(:result => %w{E F}).all.each do |tur|
+        - fixed.each do |tu|
+          %li.green
+            = "[#{tu.class_name}]"
+            = tu.name
+            %span.green FIXED
+        - tsr.test_unit_runs.with_error.all.each do |tur|
           %li
             = "[#{tur.test_unit.class_name}]"
             = tur.test_unit.name
-            %b failed
+            - if introduced.include? tur.test_unit
+              %span.red INTRODUCED
+            - else
+              %b failed
 
