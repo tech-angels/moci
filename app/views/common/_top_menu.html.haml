@@ -1,0 +1,18 @@
+#menu.box
+  %ul.box.f-right
+    %li
+      = link_to '#' do
+        %span
+          %strong
+            Visit Site &raquo;
+  %ul.box
+    - Project.order('name').all.each do |project|
+      - if project == @project
+        %li#menu-active
+          = link_to '#' do
+            %span= @project.name
+      - else
+        %li
+          = link_to '#' do
+            %span= project.name
+

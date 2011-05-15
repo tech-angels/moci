@@ -15,11 +15,12 @@
   - else
     - state = 'pending'
   - if parent = commit.parent
-    - parent_errors =  parent.test_suite_runs.first.test_unit_runs.with_error
-    - my_errors = tsr.test_unit_runs.with_error
-    - introduced = my_errors.map(&:test_unit) - parent_errors.map(&:test_unit)
-    - fixed = parent_errors.map(&:test_unit) - my_errors.map(&:test_unit)
-    - state = 'ok' if introduced.size == 0 && state == 'bad'
+    - if tsr && parent.test_suite_runs.first
+      - parent_errors =  parent.test_suite_runs.first.test_unit_runs.with_error
+      - my_errors = tsr.test_unit_runs.with_error
+      - introduced = my_errors.map(&:test_unit) - parent_errors.map(&:test_unit)
+      - fixed = parent_errors.map(&:test_unit) - my_errors.map(&:test_unit)
+      - state = 'ok' if introduced.size == 0 && state == 'bad'
 
   %div{:class => "commit #{state}"}
     .info_part{:style => 'min-height: 90px;'}
@@ -39,16 +40,17 @@
         - when 'bad'
           %span.bad BAD
         %br
-        %b= tsr.tests_count
-        test,
-        %b= tsr.assertions_count
-        assertions,
-        - if tsr.errors_count > 0
-          %b= tsr.errors_count
-          errors,
-        - if tsr.failures_count > 0
-          %b= tsr.failures_count
-          failures
+        - unless state == 'pending'
+          %b= tsr.tests_count
+          test,
+          %b= tsr.assertions_count
+          assertions,
+          - if tsr.errors_count > 0
+            %b= tsr.errors_count
+            errors,
+          - if tsr.failures_count > 0
+            %b= tsr.failures_count
+            failures
 
       Author:
       %b= commit.author.name

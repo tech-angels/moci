@@ -1,0 +1,30 @@
+.padding.box
+  %p#btn-create.box
+    = link_to '#' do
+      %span Create a new project
+
+%ul.box
+  %li
+    = link_to 'lorem ipsum', '#'
+  %li
+    = link_to 'lorem ipsum', '#'
+  %li
+    = link_to 'lorem ipsum', '#'
+  %li
+    = link_to "Latest test runs", :controller => '/test_suite_runs', :action => 'index'
+  %li#submenu-active
+    = link_to "Latest commits", :controller => '/commits', :action => 'index'
+    %ul
+      %li
+        = link_to 'lorem', '#'
+      %li
+        = link_to 'lorem', '#'
+
+.padding.box
+  %h2 Workers
+
+%ul.box
+  %li
+    = link_to 'lorem', '#'
+  %li
+    = link_to 'lorem', '#'

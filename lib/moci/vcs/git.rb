@@ -1,10 +1,11 @@
 
 module Moci
   module VCS
-    class Git
+    class Git < Base
 
-      def initialize(dir)
-        @g = ::Git.open(dir, :log => Logger.new(STDOUT))
+      def initialize(project)
+        @project = project
+        @g = ::Git.open(@project.working_directory)# , :log => Logger.new(STDOUT))
       end
 
       #FIXME useful for debugging, delete me later
@@ -12,20 +13,34 @@ module Moci
         @g
       end
 
-      def up_to_date?
-        #TODO proper branch
-        @g.log.between('HEAD','master').map.size == 0
-      end
-
-      def move_forward
-        unless up_to_date?
-          @g.checkout(@g.log.between('HEAD','master').map[-1].sha)
+      def update
+        @g.fetch rescue nil # FIXME better handling
+        @g.log.between('HEAD','master').map(&:sha).each do |sha|
+          got_commit_number sha
         end
       end
+
+      #def up_to_date?
+        ##TODO proper branch
+        #@g.log.between('HEAD','master').map.size == 0
+      #end
+
+      #def latest_checked_out?
+        #@g.log.between('HEAD','master').map.size == 0
+      #end
+
+      #def move_forward
+        #unless up_to_date?
+          #next_sha = @g.log.between('HEAD','master').map[-1].sha
+          #puts "CHECKOUT: #{next_sha}"
+          #@g.checkout(next_sha)
+        #end
+      #end
 
       def current_number
         @g.revparse('HEAD')
       end
+
 
       def details(number)
         c = @g.gcommit(number)
@@ -36,6 +51,12 @@ module Moci
           :committed_at => c.date,
           :description => c.message
         }
+      end
+
+      protected
+
+      def checkout_number(sha)
+        @g.checkout(sha)
       end
 
     end

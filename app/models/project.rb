@@ -6,55 +6,34 @@ class Project < ActiveRecord::Base
 
   def vcs
     #TODO: VCS type
-    Moci::VCS::Git.new self.working_directory
+    Moci::VCS::Git.new self
   end
 
-  def foo
-    if head = commits.find_by_number(vcs.current_number)
-      commit = head
-      puts "no create"
-    else
-      puts "creating"
-      #TODO: maybe move somewhere else
-      info = vcs.details(vcs.current_number)
-      unless author = Author.find_by_email(info[:author_email])
-        author = Author.new
-        author.email = info[:author_email]
-        author.name = info[:author_name]
-        author.save!
-      end
-      commit = commits.new(
-        :author => author,
-        :description => info[:description],
-        :committed_at => info[:committed_at],
-        :number => info[:number]
-      )
-      commit.save!
-    end
-
+  def run_test_suites
     test_suites.each do |suite|
-      if commit.test_suite_runs.where(:test_suite_id => suite.id).count == 0
+      if head_commit.test_suite_runs.where(:test_suite_id => suite.id).count == 0
         suite.run
       end
     end
   end
 
-  def boo
-    unless vcs.up_to_date?
-      #TODO this is not the right place for it
-      vcs.move_forward
+  def ping
+    vcs.update
+    run_test_suites
+    did_something = false
+    while head_commit != newest_commit
+
+      next_commit = head_commit.next
+      raise "head_commit != newest_commit && head has no next" unless next_commit
+      vcs.checkout next_commit
+      #TODO this is not the right place for it, possibly some project type depondent calss
+      # should be a better place
       execute("bundle install")
       execute("rake db:migrate")
-      foo
-      return true
+      run_test_suites
+      did_something = true
     end
-    return false
-  end
-
-  def boo_hoo
-    loop do
-      break unless boo
-    end
+    return did_something
   end
 
   def execute(command)
@@ -62,12 +41,11 @@ class Project < ActiveRecord::Base
   end
 
   def head_commit
-    commits.order('committed_at DESC').last
-  end
-
-  def current_commit
     commits.find_by_number(vcs.current_number)
   end
 
+  def newest_commit
+    commits.order('committed_at DESC').first
+  end
 
 end

@@ -9,7 +9,7 @@ class TestSuite < ActiveRecord::Base
     #TODO: decide which runner based on type
     tr = TestSuiteRun.create!(
       :state => 'running',
-      :commit => project.current_commit,
+      :commit => project.head_commit,
       :test_suite => self)
     Moci::TestRunner::Unit.run(tr)
   end

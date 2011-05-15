@@ -8,6 +8,11 @@ class Commit < ActiveRecord::Base
 
   def parent
     #FIXME TODO XXX
-    Commit.order('committed_at DESC').where('committed_at < ?',self.committed_at).first
+    project.commits.order('committed_at DESC').where('committed_at < ?',self.committed_at).first
+  end
+
+  def next
+    #FIXME TODO XXX
+    project.commits.order('committed_at ASC').where('committed_at > ?',self.committed_at).first
   end
 end

@@ -53,21 +53,9 @@
 
 
   <!-- Menu -->
-  <!--
-  <div id="menu" class="box">
 
-    <ul class="box f-right">
-      <li><a href="#"><span><strong>Visit Site &raquo;</strong></span></a></li>
-    </ul>
-
-    <ul class="box">
-      <li id="menu-active"><a href="#"><span>Lorem ipsum</span></a></li>
-      <li><a href="#"><span>Lorem ipsum</span></a></li>
-      <li><a href="#"><span>Lorem ipsum</span></a></li>
-      <li><a href="#"><span>Lorem ipsum</span></a></li>
-    </ul>
-
-  </div>--> <!-- /header -->
+    <%= render :partial => '/common/top_menu.html.haml' %>
+  <!-- /header -->
 
   <hr class="noscreen" />
 
@@ -77,32 +65,7 @@
     <!-- Aside (Left Column) -->
     <div id="aside" class="box">
 
-			<div class="padding box">
-        <!-- Create a new project -->
-        <p id="btn-create" class="box"><a href="#"><span>Create a new project</span></a></p>
-
-      </div> <!-- /padding -->
-
-      <ul class="box">
-        <li><a href="#">Lorem ipsum</a></li>
-        <li><a href="#">Lorem ipsum</a></li>
-        <li><a href="<%= url_for :controller => '/test_suite_runs', :action => 'index' %>">Latest test runs</a></li>
-        <li id="submenu-active"><a href="<%= url_for :controller => '/commits', :action => 'index' %>">Latest commits</a> <!-- Active -->
-          <ul>
-            <li><a href="#">Lorem ipsum</a></li>
-            <li><a href="#">Lorem ipsum</a></li>
-          </ul>
-        </li>
-      </ul>
-
-			<div class="padding box">
-        <h2>Workers</h2>
-      </div> <!-- /padding -->
-
-      <ul class="box">
-        <li><a href="#">Lorem ipsum</a></li>
-        <li><a href="#">Lorem ipsum</a></li>
-      </ul>
+      <%= render :partial => '/common/aside' %>
 
     </div> <!-- /aside -->
 
