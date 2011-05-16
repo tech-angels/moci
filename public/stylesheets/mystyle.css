@@ -3,14 +3,18 @@
 /* WRITE YOUR CSS CODE HERE */
 .msg.warning {border:2px solid #F2DD8C; background-color:#FFF5CC;}
 .msg.warning a {color:#df0000;} .msg.warning a:hover, .msg.warning a:active, .msg.warning a:focus {color:#303030;}
-.msg.info {border:2px solid #B8E2FB; background-color:#E8F6FF;}
-.commit.clean {border:2px solid #BBDF8D; background-color:#EAF7D9;}
-.commit.ok {border:2px solid #F2DD8C; background-color:#FFF5CC;}
+.commit.running {border:2px solid #B8E2FB; background-color:#E8F6FF;}
+.clean {border:2px solid #BBDF8D; background-color:#EAF7D9;}
+.ok {border:2px solid #F2DD8C; background-color:#FFF5CC;}
 .commit.pending {border:2px solid #AAAAAA; background-color:#EEEEEE;}
-.commit.bad {border:2px solid #FFAEAE; background-color:#FEEBEB;}
+.bad {border:2px solid #FFAEAE; background-color:#FEEBEB;}
 .commit .clean {
   font-size: 1.5em;
   color: green;
+}
+.commit tt {
+  font-size: 1.2em;
+  font-weight: bold;
 }
 .commit .bad {
   font-size: 1.5em;

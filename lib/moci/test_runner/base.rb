@@ -34,6 +34,8 @@ module Moci
             @tr.run_time = v
           when :finished
             @tr.state = 'finished'
+          when :output
+            @tr.run_log = v
           else
             #TODO
           end

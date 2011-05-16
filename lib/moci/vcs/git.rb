@@ -14,8 +14,10 @@ module Moci
       end
 
       def update
+        got_commit_number current_number
         @g.fetch rescue nil # FIXME better handling
-        @g.log.between('HEAD','master').map(&:sha).each do |sha|
+        # FIXME simplified branch handling
+        @g.log.between('HEAD',@project.vcs_branch_name).map(&:sha).each do |sha|
           got_commit_number sha
         end
       end

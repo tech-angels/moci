@@ -1,0 +1,36 @@
+%h1
+  = @test_suite_run.test_suite.project.name
+  = '::'
+  = @test_suite_run.test_suite.name
+  = '@'
+  = @test_suite_run.created_at
+
+%table
+  - @test_unit_runs.group_by {|x| x.test_unit.class_name}.each do |class_name, turs|
+    %tr.clean
+      %td{:colspan => 4}
+        %h3= class_name.gsub(/Test$/,'')
+    %tr
+      %th result
+      %th test name
+      %th time taken
+    - turs.each do |tur|
+      %tr{:class => (tur.with_error? ? 'bad' : (tur.result == '.' ? 'clean' : 'info'))}
+        %td
+          - case tur.result
+          - when '.'
+            .green OK
+          - when 'E'
+            .red ERROR
+          - when 'F'
+            .red FAILURE
+          - else
+            %b ???
+        %td
+          = tur.test_unit.name.gsub(/^test:? ?_?/,'')
+        %td= raw "#{'%.3f' % tur.run_time.to_f}&nbsp;s"
+
+%h3 Console output:
+
+%pre
+  = @test_suite_run.run_log

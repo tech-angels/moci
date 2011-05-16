@@ -1,1 +1,12 @@
-TODO: project page
+%h1= @project.name
+
+.state
+  %h3 Current state
+  %h2= @project.vcs_branch_name
+  Last commit:
+
+  %table
+    - @project.test_suites.each do |ts|
+      %tr
+        %td
+          = ts.name

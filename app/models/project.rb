@@ -1,3 +1,4 @@
+require 'tempfile'
 class Project < ActiveRecord::Base
   validates_presence_of :name
 
@@ -9,9 +10,9 @@ class Project < ActiveRecord::Base
     Moci::VCS::Git.new self
   end
 
-  def run_test_suites
+  def run_test_suites(rerun = false)
     test_suites.each do |suite|
-      if head_commit.test_suite_runs.where(:test_suite_id => suite.id).count == 0
+      if rerun || head_commit.test_suite_runs.where(:test_suite_id => suite.id).count == 0
         suite.run
       end
     end
@@ -19,17 +20,16 @@ class Project < ActiveRecord::Base
 
   def ping
     vcs.update
+    commit = head_commit
+    commit.checkout
+    commit.prepare
     run_test_suites
     did_something = false
     while head_commit != newest_commit
-
-      next_commit = head_commit.next
-      raise "head_commit != newest_commit && head has no next" unless next_commit
-      vcs.checkout next_commit
-      #TODO this is not the right place for it, possibly some project type depondent calss
-      # should be a better place
-      execute("bundle install")
-      execute("rake db:migrate")
+      commit = head_commit.next
+      raise "head_commit != newest_commit && head has no next" unless commit
+      commit.checkout
+      commit.prepare
       run_test_suites
       did_something = true
     end
@@ -37,7 +37,30 @@ class Project < ActiveRecord::Base
   end
 
   def execute(command)
-    system("cd #{working_directory} && #{command}") or raise "failed to execute '#{command}'"
+    # See https://gist.github.com/973177 for comment about BUNDLE_GEMFILE
+    # redirection to file to avoid using ruby tricks to get both return status
+    # and output. If there's any better way please fix.
+    temp_file = Tempfile.new('execute.log')
+    system("cd #{working_directory} && BUNDLE_GEMFILE=\"Gemfile\" #{command} 2>&1 >#{temp_file.path}") or raise "failed to execute '#{command}'"
+    output = File.read(temp_file.path)
+    temp_file.unlink
+    output
+  end
+
+  def prepare_env(commit)
+    #TODO this is rails specific, and not even works for every app (eg  2.x)
+    if commit.prepared?
+      execute("bundle install")
+      File.open("#{working_directory}/db/development_structure.sql",'w') do |f|
+        f.puts commit.dev_structure
+      end
+    else
+      commit.preparation_log = execute("bundle install")
+      commit.preparation_log += execute("rake db:migrate")
+      commit.preparation_log += execute("rake db:structure:dump")
+      commit.dev_structure = File.read("#{working_directory}/db/development_structure.sql")
+      commit.save!
+    end
   end
 
   def head_commit

@@ -9,10 +9,10 @@
     - Project.order('name').all.each do |project|
       - if project == @project
         %li#menu-active
-          = link_to '#' do
+          = link_to :action => :show, :controller => '/projects', :project_name => project.name do
             %span= @project.name
       - else
         %li
-          = link_to '#' do
+          = link_to :action => :show, :controller => '/projects', :project_name => project.name do
             %span= project.name
 

@@ -1,8 +1,11 @@
 # SQLite version 3.x
 #   gem install sqlite3-ruby (not necessary on OS X Leopard)
 development:
-  adapter: sqlite3
-  database: db/development.sqlite3
+  adapter: postgresql
+  database: moci_dev
+  username: moci_dev
+  password: whatever
+  host: 127.0.0.1
   pool: 5
   timeout: 5000
 

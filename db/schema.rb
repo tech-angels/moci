@@ -25,6 +25,8 @@ ActiveRecord::Schema.define(:version => 20110513101443) do
     t.integer  "author_id"
     t.integer  "parent_id"
     t.datetime "committed_at"
+    t.text     "preparation_log"
+    t.text     "dev_structure"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "project_id"
@@ -33,6 +35,7 @@ ActiveRecord::Schema.define(:version => 20110513101443) do
   create_table "projects", :force => true do |t|
     t.string   "name"
     t.string   "working_directory"
+    t.string   "vcs_branch_name"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -46,6 +49,7 @@ ActiveRecord::Schema.define(:version => 20110513101443) do
     t.integer  "errors_count"
     t.float    "run_time"
     t.string   "state"
+    t.text     "run_log"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

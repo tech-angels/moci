@@ -24,7 +24,7 @@
         %td
           = tsr.commit.committed_at
         %td
-          = tsr.state.humanize
+          = link_to tsr.state.humanize, :action => :show, :id => tsr.id
         %td
           = tsr.tests_count
           |

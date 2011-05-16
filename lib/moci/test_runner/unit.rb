@@ -10,7 +10,8 @@ module Moci
         ret = {}
         ret[:tests] = []
         t0 = Time.now
-        IO.popen("cd #{working_directory}; TESTOPTS=\"-v\" rake test:units", 'r+') do |pipe|
+        output = ""
+        IO.popen("cd #{working_directory}; BUNDLE_GEMFILE=\"Gemfile\" TESTOPTS=\"-v\" rake test:units", 'r+') do |pipe|
            lt = Time.now
            running = false
 
@@ -18,7 +19,8 @@ module Moci
            buf = ''
 
            while c = pipe.getc
-             buf << c.chr
+             buf << c
+             output << c
 
              # Test suite start
              if buf.match(/Started$/)
@@ -79,6 +81,7 @@ module Moci
         end
         push(
           :run_time => Time.now - t0,
+          :output => output,
           :finished => true
         )
         ret

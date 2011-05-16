@@ -40,39 +40,56 @@
         - when 'bad'
           %span.bad BAD
         %br
-        - unless state == 'pending'
-          %b= tsr.tests_count
-          test,
-          %b= tsr.assertions_count
-          assertions,
-          - if tsr.errors_count > 0
-            %b= tsr.errors_count
-            errors,
-          - if tsr.failures_count > 0
-            %b= tsr.failures_count
-            failures
-
+        - if commit.prepared?
+          = link_to 'prep log', '#'
+        - else
+          %i waiting for prepration
+      %tt
+        =commit.description
+      (
+      = commit.number[0..6]
+      )
+      -# FIXME DEBUG
+      = commit.id
+      %br
+      %br
       Author:
       %b= commit.author.name
       %br
       Time:
-      %b= commit.committed_at
+      %b= time_ago_in_words commit.committed_at
       %br
-      %tt
-        =commit.description
-    - if state == 'bad' || state == 'ok' || state == 'clean'
-      %ul
-        - fixed.each do |tu|
-          %li.green
-            = "[#{tu.class_name}]"
-            = tu.name
-            %span.green FIXED
-        - tsr.test_unit_runs.with_error.all.each do |tur|
-          %li
-            = "[#{tur.test_unit.class_name}]"
-            = tur.test_unit.name
-            - if introduced.include? tur.test_unit
-              %span.red INTRODUCED
-            - else
-              %b failed
+
+    - commit.test_suite_runs.includes(:test_suite).group_by(&:test_suite).each do |ts, tsrs|
+      %b= "#{ts.name}:"
+      - tsr = tsrs.first
+      %b= tsr.tests_count
+      test,
+      %b= tsr.assertions_count
+      assertions,
+      - if tsr.errors_count.to_i > 0
+        %b= tsr.errors_count
+        errors,
+      - if tsr.failures_count.to_i > 0
+        %b= tsr.failures_count
+        failures
+      (
+      = raw tsrs.map { |tsr| link_to('log', :controller => :test_suite_runs, :action => :show, :id => tsr.id) }.join(',')
+      )
+
+      - if state == 'bad' || state == 'ok' || state == 'clean'
+        %ul
+          - fixed.each do |tu|
+            %li.green
+              = "[#{tu.class_name}]"
+              = tu.name
+              %span.green FIXED
+          - tsr.test_unit_runs.with_error.all.each do |tur|
+            %li
+              = "[#{tur.test_unit.class_name}]"
+              = tur.test_unit.name
+              - if introduced.include? tur.test_unit
+                %span.red INTRODUCED
+              - else
+                %b failed
 
