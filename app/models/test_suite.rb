@@ -3,14 +3,18 @@ class TestSuite < ActiveRecord::Base
 
   has_many :test_units
 
-  #TODO: suite types
+  validates_presence_of :suite_type #TODO validate value
+  validates_presence_of :name
 
   def run
-    #TODO: decide which runner based on type
     tr = TestSuiteRun.create!(
       :state => 'running',
       :commit => project.head_commit,
       :test_suite => self)
-    Moci::TestRunner::Unit.run(tr)
+    runner_class.run(tr)
+  end
+
+  def runner_class
+    Moci::TestRunner.const_get suite_type
   end
 end

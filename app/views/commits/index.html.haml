@@ -16,10 +16,10 @@
     - state = 'pending'
   - if parent = commit.parent
     - if tsr && parent.test_suite_runs.first
-      - parent_errors =  parent.test_suite_runs.first.test_unit_runs.with_error
-      - my_errors = tsr.test_unit_runs.with_error
-      - introduced = my_errors.map(&:test_unit) - parent_errors.map(&:test_unit)
-      - fixed = parent_errors.map(&:test_unit) - my_errors.map(&:test_unit)
+      -# parent_errors =  parent.test_suite_runs.first.test_unit_runs.with_error
+      -# my_errors = tsr.test_unit_runs.with_error
+      -# introduced = my_errors.map(&:test_unit) - parent_errors.map(&:test_unit)
+      -# fixed = parent_errors.map(&:test_unit) - my_errors.map(&:test_unit)
       - state = 'ok' if introduced.size == 0 && state == 'bad'
 
   %div{:class => "commit #{state}"}
@@ -61,10 +61,20 @@
       %br
 
     - commit.test_suite_runs.includes(:test_suite).group_by(&:test_suite).each do |ts, tsrs|
+      - prev_tsr = nil
+      - prev_tsr = parent.test_suite_runs.where(:test_suite_id => ts.id).first if parent
+
       %b= "#{ts.name}:"
       - tsr = tsrs.first
       %b= tsr.tests_count
-      test,
+      - if prev_tsr && (diff = prev_tsr.tests_count.to_i - tsr.tests_count.to_i) != 0
+        (
+        - if diff > 0
+          %span.red= "-#{diff}"
+        - else
+          %span.green= "+#{diff}"
+        )
+      tests,
       %b= tsr.assertions_count
       assertions,
       - if tsr.errors_count.to_i > 0
@@ -77,18 +87,19 @@
       = raw tsrs.map { |tsr| link_to('log', :controller => :test_suite_runs, :action => :show, :id => tsr.id) }.join(',')
       )
 
-      - if state == 'bad' || state == 'ok' || state == 'clean'
+      - if prev = tsr.previous_run
         %ul
-          - fixed.each do |tu|
+          - new_errors = tsr.new_errors
+          - tsr.gone_errors.each do |tu|
             %li.green
               = "[#{tu.class_name}]"
               = tu.name
               %span.green FIXED
-          - tsr.test_unit_runs.with_error.all.each do |tur|
+          - tsr.errors.each do |tu|
             %li
-              = "[#{tur.test_unit.class_name}]"
-              = tur.test_unit.name
-              - if introduced.include? tur.test_unit
+              = "[#{tu.class_name}]"
+              = tu.name
+              - if new_errors.include? tu
                 %span.red INTRODUCED
               - else
                 %b failed

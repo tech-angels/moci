@@ -1,18 +1,16 @@
 module Moci
   module TestRunner
-    class Unit < Base
+    class RailsUnits < Base
 
       # TODO: maybe try some implementing some test runner to avoid parsing
       # Parsing is safer however in case some other gems modified tests already somehow though.
       # TODO: error messages parsing
-      # TODO this runs it all at once, would be nice to see progress
+
+
       def run
-        ret = {}
-        ret[:tests] = []
-        t0 = Time.now
+        t0 = lt = Time.now
         output = ""
-        IO.popen("cd #{working_directory}; BUNDLE_GEMFILE=\"Gemfile\" TESTOPTS=\"-v\" rake test:units", 'r+') do |pipe|
-           lt = Time.now
+        IO.popen("cd #{working_directory}; BUNDLE_GEMFILE=\"Gemfile\" TESTOPTS=\"-v\" rake test:#{test_type} 2>&1", 'r+') do |pipe|
            running = false
 
            pipe.sync = true ### you can do this once
@@ -25,7 +23,7 @@ module Moci
              # Test suite start
              if buf.match(/Started$/)
                buf = ''
-               ret[:loading_time] = Time.now - t0
+               push :loading_time, Time.now - t0
                running = true
              end
 
@@ -37,38 +35,26 @@ module Moci
              # Single test run line
              if running && buf.match(/\):$/)
                m = buf.match(/(.*?)\((.*?)\):$/)
-               ret[:tests] << {
-                 :class_name => m[2],
-                 :name => m[1]
-               }
-               push_test(m[1],m[2])
+               push_test m[1], m[2]
                buf = ''
                lt = Time.now
-               puts "test #{m[1]}"
              end
 
              # Single test run line result
-             if running && buf.match(/..\n$/)
-               if test = ret[:tests].last
-                 test[:time] = Time.now - lt
-                 test[:result] = case buf
-                 when/\./ then '.'
-                 when /E/ then 'E'
-                 when /F/ then 'F'
-                 else 'U'
-                 end
-                 puts test[:result]
-                 last_test(test[:result], test[:time])
-                 buf = ''
+             if running && buf.match(/..\n$/) && @last_test
+               run_time = Time.now - lt
+               result = case buf
+               when/\./ then '.'
+               when /E/ then 'E'
+               when /F/ then 'F'
+               else 'U'
                end
+               last_test result, run_time
+               buf = ''
              end
 
              # Summary line
-             if m = buf.match(/(.*?) tests, (.*?) assertions, (.*?) failures, (.*) errors/)
-                 ret[:tests_count] = m[1]
-                 ret[:assertions_count] = m[2]
-                 ret[:failures_count] = m[3]
-                 ret[:errors_count] = m[4]
+             if m = buf.match(/(\d+?) tests, (\d+?) assertions, (\d+?) failures, (\d+?) errors/)
                push(
                  :tests_count => m[1],
                  :assertions_count => m[2],
@@ -77,15 +63,20 @@ module Moci
                )
              end
            end
-
         end
         push(
           :run_time => Time.now - t0,
           :output => output,
           :finished => true
         )
-        ret
       end
+
+      protected
+
+      def test_type
+        "units"
+      end
+
     end
   end
 

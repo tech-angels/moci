@@ -2,6 +2,7 @@ class CreateTestSuites < ActiveRecord::Migration
   def self.up
     create_table :test_suites do |t|
       t.string :name
+      t.string :suite_type
       t.integer :project_id
       t.timestamps
     end
