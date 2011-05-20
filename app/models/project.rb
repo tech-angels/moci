@@ -5,6 +5,8 @@ class Project < ActiveRecord::Base
   has_many :commits
   has_many :test_suites
 
+  has_and_belongs_to_many :notifications
+
   def vcs
     #TODO: VCS type
     Moci::VCS::Git.new self
@@ -41,7 +43,7 @@ class Project < ActiveRecord::Base
     # redirection to file to avoid using ruby tricks to get both return status
     # and output. If there's any better way please fix.
     temp_file = Tempfile.new('execute.log')
-    system("cd #{working_directory} && BUNDLE_GEMFILE=\"Gemfile\" #{command} 2>&1 >#{temp_file.path}") or raise "failed to execute '#{command}'"
+    system("cd #{working_directory} && BUNDLE_GEMFILE=\"Gemfile\" #{command} 2>&1 >#{temp_file.path}") or raise "failed to execute '#{command}' ret: #{temp_file.read}"
     output = File.read(temp_file.path)
     temp_file.unlink
     output

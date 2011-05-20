@@ -2,15 +2,24 @@ source 'http://rubygems.org'
 
 gem 'rails', '3.0.3'
 
-# Bundle edge Rails instead:
-# gem 'rails', :git => 'git://github.com/rails/rails.git'
+# DB
 
 gem 'sqlite3-ruby', :require => 'sqlite3'
 gem 'pg'
 
-gem 'git'
+# UI
+
 gem 'haml'
 gem 'gravtastic'
+
+# VCS
+
+gem 'git'
+
+# Notifications
+
+gem 'httparty'
+
 #gem 'will-paginate'
 #gem 'ruby-git', :git => 'git://github.com/schacon/ruby-git.git', :require => 'git'
 

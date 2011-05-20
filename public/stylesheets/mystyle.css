@@ -1,13 +1,65 @@
+/* project show */
+.branch_title .name {
+  float: left;
+  font-size: 160%;
+  margin-right: 10px;
+}
+.branch_title {
+  /*border-bottom: 2px solid #aaa;*/
+  min-height: 30px;
+}
+
+.state {
+  width: 48%;
+  float: left;
+}
+.about {
+  width: 48%;
+  float: right;
+  text-align: right;
+}
+
+.keyvalue .value {
+  text-align: right;
+  font-weight: bold;
+}
+.keyvalue .key {
+  text-align: right;
+}
+
+
 .commit {padding:10px; padding-left:20px; min-height: 80px;}
+
+
 
 /* WRITE YOUR CSS CODE HERE */
 .msg.warning {border:2px solid #F2DD8C; background-color:#FFF5CC;}
 .msg.warning a {color:#df0000;} .msg.warning a:hover, .msg.warning a:active, .msg.warning a:focus {color:#303030;}
 .commit.running {border:2px solid #B8E2FB; background-color:#E8F6FF;}
-.clean {border:2px solid #BBDF8D; background-color:#EAF7D9;}
-.ok {border:2px solid #F2DD8C; background-color:#FFF5CC;}
+.commit.clean {border:2px solid #BBDF8D; background-color:#EAF7D9;}
+.commit.ok {border:2px solid #F2DD8C; background-color:#FFF5CC;}
 .commit.pending {border:2px solid #AAAAAA; background-color:#EEEEEE;}
-.bad {border:2px solid #FFAEAE; background-color:#FEEBEB;}
+.commit.fail {border:2px solid #FFAEAE; background-color:#FEEBEB;}
+
+.build_state.running {border-color: #B8E2FB; background-color:#E8F6FF;}
+.build_state.clean {border-color: #BBDF8D; background-color:#EAF7D9;}
+.build_state.ok {border-color: #F2DD8C; background-color:#FFF5CC;}
+.build_state.pending {border-color: #AAAAAA; background-color:#EEEEEE;}
+.build_state.fail {border-color: #FFAEAE; background-color:#FEEBEB;}
+
+.latest_commits_mini {
+  float: right;
+  margin: 2px;
+  height: 20px;
+  min-height: 20px;
+  width: 5px;
+  padding: 0px;
+  font-size: 3px;
+  font-weight: bold;
+  color: #aaa;
+  border: 1px solid #aaa;
+}
+
 .commit .clean {
   font-size: 1.5em;
   color: green;
@@ -16,9 +68,14 @@
   font-size: 1.2em;
   font-weight: bold;
 }
-.commit .bad {
+.commit .fail {
   font-size: 1.5em;
   color: red;
+}
+
+.commit .pending {
+  font-size: 1.5em;
+  color: #888;
 }
 .commit .ok {
   font-size: 1.5em;

@@ -5,40 +5,30 @@
   %br
   - introduced = fixed = []
   - if tsr = commit.test_suite_runs.order('created_at DESC').first
-    - if tsr.running?
-      - state = 'running'
-    - else
-      - if tsr.clean?
-        - state = 'clean'
-      - else
-        - state = 'bad'
-  - else
-    - state = 'pending'
+    -#- if tsr.running?
+      -#- state = 'running'
+    -#- else
+      -#- if tsr.clean?
+        -#- state = 'clean'
+      -#- else
+        -#- state = 'bad'
+  -#- else
+    -#- state = 'pending'
+  - state = commit.build_state
   - if parent = commit.parent
-    - if tsr && parent.test_suite_runs.first
+    -# if tsr && parent.test_suite_runs.first
       -# parent_errors =  parent.test_suite_runs.first.test_unit_runs.with_error
       -# my_errors = tsr.test_unit_runs.with_error
       -# introduced = my_errors.map(&:test_unit) - parent_errors.map(&:test_unit)
       -# fixed = parent_errors.map(&:test_unit) - my_errors.map(&:test_unit)
-      - state = 'ok' if introduced.size == 0 && state == 'bad'
+      -# state = 'ok' if introduced.size == 0 && state == 'bad'
 
   %div{:class => "commit #{state}"}
     .info_part{:style => 'min-height: 90px;'}
       .avatar{:style => 'float: left; padding-right: 15px;'}
         = image_tag(commit.author.gravatar_url)
-      .results{:style => 'float: right; text-align: right'}
-        - case state
-        - when 'pending'
-          PENDING
-        - when 'running'
-          RUNNING
-          -# TODO progress
-        - when 'ok'
-          %span.ok OK
-        - when 'clean'
-          %span.clean CLEAN
-        - when 'bad'
-          %span.bad BAD
+      .results{:style => 'float: right; text-align: right; padding-left: 10px'}
+        %span{:class => commit.build_state}= commit.build_state.upcase
         %br
         - if commit.prepared?
           = link_to 'prep log', '#'
@@ -47,7 +37,7 @@
       %tt
         =commit.description
       (
-      = commit.number[0..6]
+      = link_to commit.number[0..6], "https://github.com/tech-angels/betnet/commit/#{commit.number}"
       )
       -# FIXME DEBUG
       = commit.id
@@ -57,7 +47,9 @@
       %b= commit.author.name
       %br
       Time:
-      %b= time_ago_in_words commit.committed_at
+      %b
+        = time_ago_in_words commit.committed_at
+        ago
       %br
 
     - commit.test_suite_runs.includes(:test_suite).group_by(&:test_suite).each do |ts, tsrs|
@@ -72,10 +64,17 @@
         - if diff > 0
           %span.red= "-#{diff}"
         - else
-          %span.green= "+#{diff}"
+          %span.green= "+#{diff.abs}"
         )
       tests,
       %b= tsr.assertions_count
+      - if prev_tsr && (diff = prev_tsr.assertions_count.to_i - tsr.assertions_count.to_i) != 0
+        (
+        - if diff > 0
+          %span.red= "-#{diff}"
+        - else
+          %span.green= "+#{diff.abs}"
+        )
       assertions,
       - if tsr.errors_count.to_i > 0
         %b= tsr.errors_count

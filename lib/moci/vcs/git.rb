@@ -16,8 +16,9 @@ module Moci
       def update
         got_commit_number current_number
         @g.fetch rescue nil # FIXME better handling
+        #@g.merge("origin/#{@project.vcs_branch_name}")
         # FIXME simplified branch handling
-        @g.log.between('HEAD',@project.vcs_branch_name).map(&:sha).each do |sha|
+        @g.log.between('HEAD',"origin/#{@project.vcs_branch_name}").map(&:sha).each do |sha|
           got_commit_number sha
         end
       end
