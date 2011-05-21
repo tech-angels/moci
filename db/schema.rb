@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110518121130) do
+ActiveRecord::Schema.define(:version => 20110520134112) do
 
   create_table "authors", :force => true do |t|
     t.string   "name"
@@ -45,9 +45,17 @@ ActiveRecord::Schema.define(:version => 20110518121130) do
     t.integer "notification_id"
   end
 
+  create_table "project_instances", :force => true do |t|
+    t.integer  "project_id"
+    t.string   "state",             :default => "new"
+    t.string   "locked_by"
+    t.string   "working_directory"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "projects", :force => true do |t|
     t.string   "name"
-    t.string   "working_directory"
     t.string   "vcs_branch_name"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -65,6 +73,7 @@ ActiveRecord::Schema.define(:version => 20110518121130) do
     t.text     "run_log"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "project_instance_id"
   end
 
   create_table "test_suites", :force => true do |t|

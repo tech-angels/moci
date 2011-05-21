@@ -28,7 +28,7 @@ module Moci
           end
           x += "\n  #{tsr.test_suite.name}: #{tsr.build_state}#{m}" unless m.empty?
         end
-        msg x
+        pp msg x
 
         sound 'trombone' if commit.build_state == 'fail'
         sound 'rimshot' if commit.build_state == 'clean' && fixed > 0
@@ -44,7 +44,9 @@ module Moci
       end
 
       def room
-        Room.new(@room_id)
+        room = Room.new(@room_id)
+        pp room
+        room
       end
 
       protected

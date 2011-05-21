@@ -5,8 +5,6 @@ module Moci
       # TODO: maybe try some implementing some test runner to avoid parsing
       # Parsing is safer however in case some other gems modified tests already somehow though.
       # TODO: error messages parsing
-
-
       def run
         t0 = lt = Time.now
         output = ""

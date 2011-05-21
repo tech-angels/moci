@@ -2,12 +2,16 @@ module Moci
   module VCS
     class Base
 
+      # Checkout given Commit object
+      # (Not commit number, but Commit model is passed)
       def checkout(commit)
         checkout_number(commit.number)
       end
 
       protected
 
+      # Used by implementations to notify about new commit found.
+      # Creates Commit object in database.
       def got_commit_number(number)
         unless @project.commits.find_by_number(number)
           info = details(number)

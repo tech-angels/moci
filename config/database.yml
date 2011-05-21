@@ -2,7 +2,7 @@
 #   gem install sqlite3-ruby (not necessary on OS X Leopard)
 development:
   adapter: postgresql
-  database: moci_dev
+  database: moci_dev2
   username: moci_dev
   password: whatever
   host: 127.0.0.1

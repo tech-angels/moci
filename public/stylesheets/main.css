@@ -24,6 +24,7 @@ h1, h2, h3, h4, h5, h6, address, blockquote, dl, fieldset, ol, p, table, ul {mar
 #content ul {margin:15px 0; list-style:none;}
 #content ul li {padding-left:15px; background:url("../design/ul.gif") 0 4px no-repeat;}
 #content ul li.green {background:url("../design/ul_green.gif") 0 4px no-repeat;}
+#content ul li.warn {background:url("../design/ul_warn.png") 0 4px no-repeat;}
 #content ul ul {margin:0 0 0 10px;}
 #content ul ul li {padding-left:15px; background:url("../design/ul-ul.gif") 0 4px no-repeat;}
 #content ol {margin:15px 0 15px 30px; list-style-type:decimal;}

@@ -81,6 +81,15 @@
   font-size: 1.5em;
   color: #e7b900;
 }
+
+.commit .running {
+  font-size: 1.5em;
+  color: #0085CC;
+}
+.orange {
+  color: orange;
+  font-weight: bold;
+}
 .red {
   color: red;
   font-weight: bold;

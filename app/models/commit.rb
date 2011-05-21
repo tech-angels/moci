@@ -30,15 +30,6 @@ class Commit < ActiveRecord::Base
     project.run_test_suites(true)
   end
 
-  def prepare
-    puts "preparing commit #{self.id}"
-    # FIXME this will fail for merges, some true db copies may be needed
-    if parent && !parent.prepared?
-      parent.prepare
-    end
-    project.prepare_env(self)
-  end
-
   def build_state
     # OPTIMIZE like hell
     new_errors = latest_test_suite_runs.compact.map(&:new_errors).map(&:size).sum
@@ -68,11 +59,6 @@ class Commit < ActiveRecord::Base
     @latest_test_suite_runs ||= project.test_suites.map do |ts|
       test_suite_runs.where(:test_suite_id => ts.id).order('created_at DESC').first
     end
-  end
-
-  def checkout
-    puts "Checking out #{self.id} #{self.number}"
-    project.vcs.checkout self
   end
 
   def prepared?
