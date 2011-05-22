@@ -12,4 +12,12 @@ class Project < ActiveRecord::Base
     commits.order('committed_at DESC').first
   end
 
+  def acquire_instance(handle, wait = false)
+    #TODO: wait == true
+    instances.all.each do |instance|
+      return instance if instance.try_to_acquire(handle)
+    end
+    return false
+  end
+
 end

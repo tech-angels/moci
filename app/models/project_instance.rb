@@ -1,14 +1,7 @@
 class ProjectInstance < ActiveRecord::Base
   belongs_to :project
 
-
-  # XXX preparing worker skeleton
-  def lame_worker
-    loop do
-      ping
-      sleep 60
-    end
-  end
+  scope :free, :conditions => {:locked_by => nil}
 
   # Checkout given commit
   def checkout(commit)
@@ -46,7 +39,7 @@ class ProjectInstance < ActiveRecord::Base
         run_test_suites
       end
       break unless head_commit.next
-      vcs.checkout head_commit.next
+      checkout head_commit.next
     end
   end
 
@@ -75,6 +68,7 @@ class ProjectInstance < ActiveRecord::Base
     rescue Exception => e
       puts "FIXME TODO FAILURE: #{e.to_str}"
     end
+    true
   end
 
   # Run all test suites.
@@ -84,6 +78,20 @@ class ProjectInstance < ActiveRecord::Base
         suite.run(self)
       end
     end
+  end
+
+  # Try to lock instance if it's free
+  def try_to_acquire(handle)
+    # Since it's done within single query, database guarantees that lock won't
+    # be given twice
+    self.class.update_all(
+      {:locked_by => handle},
+      {:locked_by => nil, :id => self.id}) == 1
+  end
+
+  # Take off the lock
+  def free!
+    self.update_attributes!(:locked_by => nil)
   end
 
   # Instance of Version Control System class associated with this Project
