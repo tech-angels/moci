@@ -1,25 +1,26 @@
 .padding.box
   %p#btn-create.box
     = link_to '#' do
-      %span Create a new project
+      %span Add new something
 
 %ul.box
-  %li
-    = link_to_p "Latest test runs", :controller => '/test_suite_runs', :action => 'index'
   - if @project
-    %li#submenu-active
-      = link_to "Latest commits", :controller => '/commits', :action => 'index', :project_name => @project.name
-      %ul
-        %li
-          = link_to 'lorem', '#'
-        %li
-          = link_to 'lorem', '#'
+    = menu_li "Projent info", :controller => '/projects', :action => 'show'
+    = menu_li  "Latest commits", :controller => '/commits', :action => 'index', :project_name => @project.name
+    -#%ul
+      -#%li
+        -#= link_to 'lorem', '#'
+      -#%li
+        -#= link_to 'lorem', '#'
 
-.padding.box
-  %h2 Workers
+  = menu_li "Latest test runs", :controller => '/test_suite_runs', :action => 'index'
 
-%ul.box
-  %li
-    = link_to 'lorem', '#'
-  %li
-    = link_to 'lorem', '#'
+
+-#.padding.box
+  -#%h2 Workers
+
+-#%ul.box
+  -#%li
+    -#= link_to 'lorem', '#'
+  -#%li
+    -#= link_to 'lorem', '#'

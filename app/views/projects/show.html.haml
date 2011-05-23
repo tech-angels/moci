@@ -12,7 +12,7 @@
           -#= commit.build_state[0..0].upcase
           &nbsp;
   %br
-  - unless last_commits.empty?
+  - if !last_commits.empty?
     %table{:style => 'width: 100%'}
       - last_commits.reverse[-5..-1].reverse.each_with_index do |commit, i|
         -# commit = @project.commits.order('committed_at DESC').first

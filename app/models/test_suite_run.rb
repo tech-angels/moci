@@ -3,7 +3,7 @@ class TestSuiteRun < ActiveRecord::Base
   belongs_to :project_instance
   belongs_to :test_suite
 
-  has_many :test_unit_runs
+  has_many :test_unit_runs, :dependent => :destroy
 
   scope :finished, :conditions => {:state => 'finished'}
 
@@ -39,19 +39,41 @@ class TestSuiteRun < ActiveRecord::Base
 
   def random_errors
     # OPTIMIZE
-    tsrs = commit.test_suite_runs.finished.where(:test_suite_id => test_suite.id).all
-    count_all = tsrs.count
-    counts = TestUnitRun.where(:test_suite_run_id => tsrs.map(&:id)).with_error.group(:test_unit_id).select('test_unit_id, count(*) as count_all')
-    counts = counts.select {|x| x.count_all.to_i != count_all.to_i}
-    counts.map {|x| [TestUnit.find(x.test_unit_id), x.count_all.to_f/count_all.to_f]}
+    @random_errors ||= (
+      tsrs = commit.test_suite_runs.finished.where(:test_suite_id => test_suite.id).all
+      count_all = tsrs.count
+      counts = TestUnitRun.where(:test_suite_run_id => tsrs.map(&:id)).with_error.group(:test_unit_id).select('test_unit_id, count(*) as count_all')
+      counts = counts.select {|x| x.count_all.to_i != count_all.to_i}
+      counts.map {|x| [TestUnit.find(x.test_unit_id), x.count_all.to_f/count_all.to_f]}
+    )
+  end
+
+  def possibly_random(go_back = 5)
+    @possibly_random ||= (
+      # OPTIMIZE FIXME!! This is AWFULLY suboptimal
+      ret = random_errors.map(&:first)
+      if @previous_run && go_back > 0
+        ret += @previous_run.random_errors.map(&:first)
+        ret += @previous_run.possibly_random(go_back - 1)
+      end
+      ret.uniq
+    )
   end
 
   def errors
     @errors ||= test_unit_runs.includes(:test_unit).with_error.map(&:test_unit)
   end
 
+  #TODO this should be handled by some events
   def after_run
-    self.commit.notify_test_suite_done(self) # TODO events
+    # Notification
+
+    # We want it to fire only after first run
+    before_me_count = TestSuiteRun.where(
+      :test_suite_id => test_suite.id,
+      :commit_id => commit.id).
+      where('created_at < ?', self.created_at).count
+    self.commit.notify_test_suite_done(self) if before_me_count == 0
   end
 
 end

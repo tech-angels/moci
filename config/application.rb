@@ -40,5 +40,10 @@ module Moci
 
     # Configure sensitive parameters which will be filtered from the log file.
     config.filter_parameters += [:password]
+
+  end
+
+  def self.build_logger
+    @build_logger ||= Logger.new("#{Rails.root}/log/build.log")
   end
 end

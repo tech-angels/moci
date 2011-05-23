@@ -14,6 +14,10 @@ class Commit < ActiveRecord::Base
     desc
   end
 
+  def short_number
+    number[0..8]
+  end
+
   def parent
     #FIXME TODO XXX
     project.commits.order('committed_at DESC').where('committed_at < ?',self.committed_at).first
@@ -34,13 +38,8 @@ class Commit < ActiveRecord::Base
     # OPTIMIZE like hell
     new_errors = latest_test_suite_runs.compact.map(&:new_errors).map(&:size).sum
     errors = latest_test_suite_runs.compact.map(&:errors).map(&:size).sum
-    if latest_test_suite_runs.any? {|x| x.nil?}
-      if latest_test_suite_runs.compact.any?(&:running?)
-        return 'running'
-      else
-        return 'pending'
-      end
-    end
+    return 'running'  if first_test_suite_runs.compact.any?(&:running?)
+    return 'pending'  if latest_test_suite_runs.any? {|x| x.nil?}
     return 'fail' if new_errors > 0
     return 'ok' if new_errors == 0 && errors > 0
     return 'clean' if errors == 0
@@ -58,6 +57,13 @@ class Commit < ActiveRecord::Base
     # OPTIMIZE
     @latest_test_suite_runs ||= project.test_suites.map do |ts|
       test_suite_runs.where(:test_suite_id => ts.id).order('created_at DESC').first
+    end
+  end
+
+  def first_test_suite_runs
+    # OPTIMIZE
+    @first_test_suite_runs ||= project.test_suites.map do |ts|
+      test_suite_runs.where(:test_suite_id => ts.id).order('created_at ASC').first
     end
   end
 

@@ -14,10 +14,23 @@ class Project < ActiveRecord::Base
 
   def acquire_instance(handle, wait = false)
     #TODO: wait == true
+    free_instance = nil
     instances.all.each do |instance|
-      return instance if instance.try_to_acquire(handle)
+      if instance.try_to_acquire(handle)
+        free_instance = instance
+        break
+      end
     end
-    return false
+
+    if block_given? && free_instance
+      begin
+        yield(free_instance)
+      ensure
+        free_instance.reload.free!
+      end
+    else
+      return free_instance
+    end
   end
 
 end

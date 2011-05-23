@@ -52,64 +52,68 @@
         ago
       %br
 
-    - unless %{running pending}.include? commit.build_state
+    - commit.test_suite_runs.finished.includes(:test_suite).group_by(&:test_suite).each do |ts, tsrs|
+      - prev_tsr = nil
+      - prev_tsr = parent.test_suite_runs.where(:test_suite_id => ts.id).first if parent
 
-      - commit.test_suite_runs.finished.includes(:test_suite).group_by(&:test_suite).each do |ts, tsrs|
-        - prev_tsr = nil
-        - prev_tsr = parent.test_suite_runs.where(:test_suite_id => ts.id).first if parent
-
-        %b= "#{ts.name}:"
-        - tsr = tsrs.first
-        - random_errors = tsr.random_errors
-        %b= tsr.tests_count
-        - if prev_tsr && (diff = prev_tsr.tests_count.to_i - tsr.tests_count.to_i) != 0
-          (
-          - if diff > 0
-            %span.red= "-#{diff}"
-          - else
-            %span.green= "+#{diff.abs}"
-          )
-        tests,
-        %b= tsr.assertions_count
-        - if prev_tsr && (diff = prev_tsr.assertions_count.to_i - tsr.assertions_count.to_i) != 0
-          (
-          - if diff > 0
-            %span.red= "-#{diff}"
-          - else
-            %span.green= "+#{diff.abs}"
-          )
-        assertions,
-        - if tsr.errors_count.to_i > 0
-          %b= tsr.errors_count
-          errors,
-        - if tsr.failures_count.to_i > 0
-          %b= tsr.failures_count
-          failures
+      %b= "#{ts.name}:"
+      - tsr = tsrs.first
+      - random_errors = tsr.random_errors
+      %b= tsr.tests_count
+      - if prev_tsr && (diff = prev_tsr.tests_count.to_i - tsr.tests_count.to_i) != 0
         (
-        = raw tsrs.map { |tsr| link_to('log', :controller => :test_suite_runs, :action => :show, :id => tsr.id) }.join(',')
+        - if diff > 0
+          %span.red= "-#{diff}"
+        - else
+          %span.green= "+#{diff.abs}"
         )
+      tests,
+      %b= tsr.assertions_count
+      - if prev_tsr && (diff = prev_tsr.assertions_count.to_i - tsr.assertions_count.to_i) != 0
+        (
+        - if diff > 0
+          %span.red= "-#{diff}"
+        - else
+          %span.green= "+#{diff.abs}"
+        )
+      assertions,
+      - if tsr.errors_count.to_i > 0
+        %b= tsr.errors_count
+        errors,
+      - if tsr.failures_count.to_i > 0
+        %b= tsr.failures_count
+        failures
+      (
+      = raw tsrs.map { |tsr| link_to('log', :controller => :test_suite_runs, :action => :show, :id => tsr.id) }.join(',')
+      )
 
-        - if prev = tsr.previous_run
-          %ul
-            - new_errors = tsr.new_errors
-            - (tsr.gone_errors - random_errors.map(&:first)).each do |tu|
-              %li.green
-                %span.green FIXED
-                %b= tu.class_name
-                = tu.name
-            - (tsr.errors - random_errors.map(&:first)).each do |tu|
-              %li
-                - if new_errors.include? tu
-                  %span.red INTRODUCED
-                - else
-                  %b FAILED
-                %b= tu.class_name
-                = tu.name
-            - random_errors.each do |tu,probability|
-              %li.warn
-                %span.orange RANDOM (#{probability.round(2)*100}%)
-                %b= tu.class_name
-                = tu.name
+      - if prev = tsr.previous_run
+        - prandom = tsr.possibly_random
+        %ul
+          - new_errors = tsr.new_errors
+          - (tsr.gone_errors - prandom).each do |tu|
+            %li.green
+              %span.green FIXED
+              %b= tu.class_name
+              = tu.name
+          - (tsr.errors - prandom).each do |tu|
+            %li
+              - if new_errors.include? tu
+                %span.red INTRODUCED
+              - else
+                %b FAILED
+              %b= tu.class_name
+              = tu.name
+          - tsr.random_errors.each do |tu,probability|
+            %li.warn
+              %span.orange RANDOM (#{probability.round(2)*100}%)
+              %b= tu.class_name
+              = tu.name
+          - (tsr.errors & (prandom - tsr.random_errors.map(&:first))).each do |tu|
+            %li.warn
+              %span.orange POSSIBLY RANDOM
+              %b= tu.class_name
+              = tu.name
 
 
 = will_paginate @commits
