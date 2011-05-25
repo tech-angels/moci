@@ -12,16 +12,7 @@
   <!--[if lte IE 6]><link rel="stylesheet" media="screen,projection" type="text/css" href="/stylesheets/main-ie6.css" /><![endif]--> <!-- MSIE6 -->
   <link rel="stylesheet" media="screen,projection" type="text/css" href="/stylesheets/style.css" /> <!-- GRAPHIC THEME -->
   <link rel="stylesheet" media="screen,projection" type="text/css" href="/stylesheets/mystyle.css" /> <!-- WRITE YOUR CSS CODE HERE -->
-  <script type="text/javascript" src="js/jquery.js"></script>
-  <script type="text/javascript" src="js/switcher.js"></script>
-  <script type="text/javascript" src="js/toggle.js"></script>
-  <script type="text/javascript" src="js/ui.core.js"></script>
-  <script type="text/javascript" src="js/ui.tabs.js"></script>
-  <script type="text/javascript">
-  $(document).ready(function(){
-    $(".tabs > ul").tabs();
-  });
-  </script>
+  <%= javascript_include_tag "http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js" %>
   <title>moci</title>
 </head>
 

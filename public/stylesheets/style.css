@@ -18,6 +18,7 @@ a:hover, a:active, a:focus {color:#df0000;}
 #content table th {border-right:1px solid #0074B3; background-color:#0085cc; color:#fff;}
 #content table td {border:1px solid #cfcfcf;}
 #content table tr.bg td {background-color:#e8f6ff;}
+#content table tr.bg2 td {background-color:#ffffff;}
 #content dl dt {color:#df0000;}
 #content fieldset {border:1px solid #ccc;}
 #content legend {background:#FFF; color:#0085cc;}

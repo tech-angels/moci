@@ -48,7 +48,7 @@ class TestSuiteRun < ActiveRecord::Base
     )
   end
 
-  def possibly_random(go_back = 5)
+  def possibly_random(go_back = 10)
     @possibly_random ||= (
       # OPTIMIZE FIXME!! This is AWFULLY suboptimal
       ret = random_errors.map(&:first)

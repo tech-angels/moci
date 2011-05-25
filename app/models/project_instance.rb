@@ -59,6 +59,7 @@ class ProjectInstance < ActiveRecord::Base
         rescue
           execute("bundle install")
         end
+        execute("rm -f log/test.log")
         File.open("#{working_directory}/db/development_structure.sql",'w') do |f|
           f.puts commit.dev_structure
         end
@@ -73,6 +74,8 @@ class ProjectInstance < ActiveRecord::Base
         commit.save!
       end
     rescue Exception => e
+      commit.preparation_log = 'FAIL'
+      commit.save!
       puts "FIXME TODO FAILURE: #{e.to_str}"
     end
     true

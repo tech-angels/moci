@@ -14,7 +14,7 @@
       %th
         Results
       %th
-        Time took
+        Duration
     - @test_suite_runs.each do |tsr|
       %tr{:class => cycle('','bg')}
         %td
@@ -22,19 +22,20 @@
         %td
           = tsr.test_suite.name
         %td
-          = tsr.commit.committed_at
+          = image_tag tsr.commit.author.gravatar_url :size => 15
+          %b= tsr.commit.short_number[0..6]
+          = tsr.commit.short_description
         %td
           = link_to tsr.state.humanize, :action => :show, :id => tsr.id
         %td
-          = tsr.tests_count
-          |
-          = tsr.assertions_count
-          |
-          = tsr.errors_count
-          |
-          = tsr.failures_count
+          %b= tsr.tests_count
+          tests,
+          = bad_value tsr.errors_count
+          errors
+          = bad_value tsr.failures_count
+          failures
         %td
-          = tsr.run_time
+          = duration tsr.run_time
 
 
 

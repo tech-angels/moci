@@ -52,7 +52,7 @@
         ago
       %br
 
-    - commit.test_suite_runs.finished.includes(:test_suite).group_by(&:test_suite).each do |ts, tsrs|
+    - commit.test_suite_runs.finished.includes(:test_suite).order('test_suites.created_at').group_by(&:test_suite).each do |ts, tsrs|
       - prev_tsr = nil
       - prev_tsr = parent.test_suite_runs.where(:test_suite_id => ts.id).first if parent
 
@@ -69,23 +69,33 @@
         )
       tests,
       %b= tsr.assertions_count
-      - if prev_tsr && (diff = prev_tsr.assertions_count.to_i - tsr.assertions_count.to_i) != 0
-        (
-        - if diff > 0
-          %span.red= "-#{diff}"
-        - else
-          %span.green= "+#{diff.abs}"
-        )
       assertions,
-      - if tsr.errors_count.to_i > 0
-        %b= tsr.errors_count
-        errors,
-      - if tsr.failures_count.to_i > 0
-        %b= tsr.failures_count
-        failures
+      = bad_value tsr.errors_count
+      errors,
+      = bad_value tsr.failures_count
+      failures
       (
-      = raw tsrs.map { |tsr| link_to('log', :controller => :test_suite_runs, :action => :show, :id => tsr.id) }.join(',')
+      = link_to_function 'details', "$('#run_details_#{commit.id}_#{ts.id}').show();"
       )
+
+      %div{:id => "run_details_#{commit.id}_#{ts.id}", :style => "display: none;"}
+        %br
+        %table{:style => 'width: 100%'}
+          - tsrs.each do |tsr|
+            %tr{:class => cycle('bg2','bg')}
+              %td
+                = "instance ##{tsr.project_instance.id}"
+              %td
+                %b= tsr.tests_count
+                tests,
+                = bad_value tsr.errors_count
+                errors
+                = bad_value tsr.failures_count
+                failures
+              %td
+                = duration tsr.run_time
+              %td
+                = link_to tsr.state.humanize, :controller => :test_suite_runs, :action => :show, :id => tsr.id
 
       - if prev = tsr.previous_run
         - prandom = tsr.possibly_random
@@ -114,6 +124,8 @@
               %span.orange POSSIBLY RANDOM
               %b= tu.class_name
               = tu.name
+
+
 
 
 = will_paginate @commits
