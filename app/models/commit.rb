@@ -67,7 +67,14 @@ class Commit < ActiveRecord::Base
     end
   end
 
-  def prepared?
-    !! self.preparation_log
+  # returns ProjectInstanceCommit for given instance if exists
+  # TODO: I really don't like that method name
+  def in_instance(project_instance)
+    project_instance.commits.find_by_commit_id(self.id)
   end
+
+  def prepared?
+    ProjectInstanceCommit.where(:commit_id => self.id).any? &:prepared?
+  end
+
 end

@@ -1,6 +1,9 @@
 class ProjectInstance < ActiveRecord::Base
   belongs_to :project
 
+  has_many :project_instance_commits
+  alias commits project_instance_commits
+
   scope :free, :conditions => {:locked_by => nil}
 
   # Checkout given commit
@@ -10,20 +13,25 @@ class ProjectInstance < ActiveRecord::Base
   end
 
   # Execute shell command within project instance directory
-  # Returns output of the command, raises if return exit code != 0
-  # TODO: Consider returning exit code and putting output in second argument
-  def execute(command)
+  # Output parameter can be used to pass a string where output will be appended.
+  # Returns true if exit code was 0
+  def execute(command, output='')
     # redirection to file to avoid using ruby tricks to get both return status
     # and output. If there's any better way please fix.
     temp_file = Tempfile.new('execute.log')
     command = "cd #{working_directory} && BUNDLE_GEMFILE=\"Gemfile\" bundle exec #{command} &> #{temp_file.path}"
+    exit_status = nil
+    info " executing #{command}"
     Bundler.with_clean_env do
-      info " executing #{command}"
-      system(command) or raise "failed to execute '#{command}' ret: #{temp_file.read}"
+      exit_status = system(command)
     end
-    output = File.read temp_file.path
+    output << File.read(temp_file.path)
     temp_file.unlink
-    return output
+    exit_status
+  end
+
+  def execute!(command, output='')
+    execute(command, output) or raise "executing command #{command} failed with output: #{output}"
   end
 
   # Currently checked out commit
@@ -47,38 +55,51 @@ class ProjectInstance < ActiveRecord::Base
   # Prevare project so that tests can be run for given commit.
   def prepare_env(commit)
     info "Preparing env for #{commit.short_number}"
+    checkout commit
+
+    pi_commit = commit.in_instance(self) #FIXME architect it better
+
     # Older commits should always be prepared first
-    prepare_env(commit.parent) if commit.parent && !commit.parent.prepared?
+    prepare_env(pi_commit.parent.commit) if pi_commit.parent && !pi_commit.parent.prepared?
+
     #TODO this is rails specific, and not even works for every app (eg  2.x)
-    begin
-      if commit.prepared?
-        puts "EXEC BUNDLE"
-        # FIXME error handling
-        begin
-          execute("bundle check")
-        rescue
-          execute("bundle install")
-        end
-        execute("rm -f log/test.log")
-        File.open("#{working_directory}/db/development_structure.sql",'w') do |f|
-          f.puts commit.dev_structure
-        end
-      else
-        info " first time setup for #{commit.short_number}"
-        puts "EXEC BUNDLE"
-        commit.preparation_log = execute("bundle install")
-        puts "EXEC MIGRATE"
-        commit.preparation_log += execute("rake db:migrate")
-        commit.preparation_log += execute("rake db:structure:dump")
-        commit.dev_structure = File.read("#{working_directory}/db/development_structure.sql")
-        commit.save!
+    output = ''
+    if pi_commit.prepared?
+
+      # check if there really is need for bundle install
+      unless execute "bundle check"
+        execute! "bundle install", output
       end
-    rescue Exception => e
-      commit.preparation_log = 'FAIL'
-      commit.save!
-      puts "FIXME TODO FAILURE: #{e.to_str}"
+
+      # save some gigabytes
+      execute! "rm -f log/test.log"
+
+      # put development_structure for given version in place
+      File.open("#{working_directory}/db/development_structure.sql",'w') do |f|
+        f.puts pi_commit.data[:dev_structure]
+      end
+
+    else
+
+      info " first time setup for #{commit.short_number}"
+
+      if execute("bundle install", output) && execute("rake db:migrate", output) && execute("rake db:structure:dump" , output)
+        pi_commit.preparation_log = output
+        pi_commit.state = 'prepared'
+        pi_commit.data = {
+          :dev_structure => File.read("#{working_directory}/db/development_structure.sql")
+        }
+        pi_commit.save!
+      else
+        raise "failed to prepare commit" # TODO error handling
+      end
+
     end
     true
+  end
+
+  def prepared_for?(commit)
+    pic = commit.in_instance(self) && pic.prepared?
   end
 
   # Run all test suites.

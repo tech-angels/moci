@@ -5,6 +5,10 @@ module Moci
       # Checkout given Commit object
       # (Not commit number, but Commit model is passed)
       def checkout(commit)
+        update unless pic = @project_instance.commits.find_by_commit_id(commit.id)
+        unless pic || @project_instance.commits.find_by_commit_id(commit.id)
+          raise "could not find commit #{commit.id} on instance #{@project_instance.id}"
+        end
         checkout_number(commit.number)
       end
 
@@ -13,7 +17,7 @@ module Moci
       # Used by implementations to notify about new commit found.
       # Creates Commit object in database.
       def got_commit_number(number)
-        unless @project.commits.find_by_number(number)
+        unless commit = @project.commits.find_by_number(number)
           info = details(number)
 
           unless author = Author.find_by_email(info[:author_email])
@@ -31,6 +35,11 @@ module Moci
           )
 
           commit.save!
+        end
+
+        unless pi_commit = @project_instance.commits.find_by_commit_id(commit.id)
+          pi_commit = @project_instance.commits.new( :commit => commit )
+          pi_commit.save!
         end
       end
     end

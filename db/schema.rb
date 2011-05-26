@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110520134112) do
+ActiveRecord::Schema.define(:version => 20110526114521) do
 
   create_table "authors", :force => true do |t|
     t.string   "name"
@@ -43,6 +43,16 @@ ActiveRecord::Schema.define(:version => 20110520134112) do
   create_table "notifications_projects", :id => false, :force => true do |t|
     t.integer "project_id"
     t.integer "notification_id"
+  end
+
+  create_table "project_instance_commits", :force => true do |t|
+    t.integer  "commit_id"
+    t.integer  "project_instance_id"
+    t.string   "state",               :default => "new"
+    t.text     "preparation_log"
+    t.text     "data_yaml"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "project_instances", :force => true do |t|
