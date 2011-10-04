@@ -8,6 +8,8 @@ module Moci
       def run
         t0 = lt = Time.now
         output = ""
+
+        Bundler.with_clean_env do
         IO.popen("cd #{working_directory}; BUNDLE_GEMFILE=\"Gemfile\" TESTOPTS=\"-v\" rake test:#{test_type} 2>&1", 'r+') do |pipe|
            running = false
 
@@ -62,6 +64,7 @@ module Moci
              end
            end
         end
+        end #bundle clean env
         push(
           :run_time => Time.now - t0,
           :output => output,

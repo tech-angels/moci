@@ -5,6 +5,7 @@ class Commit < ActiveRecord::Base
   belongs_to :project
 
   has_many :test_suite_runs
+  has_many :project_instance_commits
 
   def short_description
     desc = description.split("\n").first
@@ -39,6 +40,7 @@ class Commit < ActiveRecord::Base
     new_errors = latest_test_suite_runs.compact.map(&:new_errors).map(&:size).sum
     errors = latest_test_suite_runs.compact.map(&:errors).map(&:size).sum
     return 'running'  if first_test_suite_runs.compact.any?(&:running?)
+    return 'preparation_failed' if project_instance_commits.any? {|c| c.state == 'preparation_failed'} # FIXME
     return 'pending'  if latest_test_suite_runs.any? {|x| x.nil?}
     return 'fail' if new_errors > 0
     return 'ok' if new_errors == 0 && errors > 0

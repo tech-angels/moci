@@ -19,10 +19,13 @@ module Moci
         # FIXME I mean it, like below it really really sucks
         Project.all.each do |project|
           project.acquire_instance(my_id) do |instance|
-            project.commits.order('committed_at DESC').limit(5).each do |commit|
-              instance.checkout commit
-              instance.prepare_env commit
-              break if instance.run_test_suites(4) # target number of commit builts
+            project.commits.order('committed_at DESC').limit(10).each do |commit|
+              unless commit.skipped?
+                instance.checkout commit
+                if instance.prepare_env commit
+                  break if instance.run_test_suites(4) # target number of commit builts
+                end
+              end
             end
           end
         end

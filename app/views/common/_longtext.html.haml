@@ -1,0 +1,13 @@
+:ruby
+  @simple_modal_counter ||= 0
+  @simple_modal_counter += 1
+  div_id = "simple_modal_content_#@simple_modal_counter"
+
+%div{:id => div_id, :style => 'display:none'}
+  %h3= name
+  %div{:style => 'overflow: auto'}
+    %pre
+      = longtext
+
+= link_to_function name, "$('##{div_id}').modal();"
+

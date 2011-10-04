@@ -1,5 +1,8 @@
 source 'http://rubygems.org'
 
+
+gem 'wirble'
+
 gem 'rails', '3.0.3'
 
 # DB

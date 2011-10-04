@@ -1,0 +1,16 @@
+%table{:style => 'width: 100%'}
+  - test_suite_runs.each do |tsr|
+    %tr{:class => cycle('bg2','bg')}
+      %td
+        = "instance ##{tsr.project_instance.id}"
+      %td
+        %b= tsr.tests_count
+        tests,
+        = bad_value tsr.errors_count
+        errors
+        = bad_value tsr.failures_count
+        failures
+      %td
+        = duration tsr.run_time
+      %td
+        = link_to tsr.state.humanize, :controller => :test_suite_runs, :action => :show, :id => tsr.id

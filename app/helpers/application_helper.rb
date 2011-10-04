@@ -28,4 +28,8 @@ module ApplicationHelper
     raw ret
   end
 
+  def link_to_longtext(name, longtext, options={})
+    render :partial => '/common/longtext', :locals => {:name => name, :longtext => longtext, :options => options}
+  end
+
 end

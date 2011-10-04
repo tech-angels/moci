@@ -40,12 +40,14 @@
 .commit.ok {border:2px solid #F2DD8C; background-color:#FFF5CC;}
 .commit.pending {border:2px solid #AAAAAA; background-color:#EEEEEE;}
 .commit.fail {border:2px solid #FFAEAE; background-color:#FEEBEB;}
+.commit.preparation_failed {border:2px solid #FFAEAE; background-color:#FEEBEB;}
 
 .build_state.running {border-color: #B8E2FB; background-color:#E8F6FF;}
 .build_state.clean {border-color: #BBDF8D; background-color:#EAF7D9;}
 .build_state.ok {border-color: #F2DD8C; background-color:#FFF5CC;}
 .build_state.pending {border-color: #AAAAAA; background-color:#EEEEEE;}
 .build_state.fail {border-color: #FFAEAE; background-color:#FEEBEB;}
+.build_state.preparation_failed {border-color: #FFAEAE; background-color:#FEEBEB;}
 
 .latest_commits_mini {
   float: right;
@@ -69,6 +71,11 @@
   font-weight: bold;
 }
 .commit .fail {
+  font-size: 1.5em;
+  color: red;
+}
+
+.commit .preparation_failed {
   font-size: 1.5em;
   color: red;
 }
@@ -98,3 +105,19 @@
   color: green;
   font-weight: bold;
 }
+
+.commit .title a {
+  color: black;
+}
+
+
+/* Overlay */
+#simplemodal-overlay {background-color:#000; cursor:wait;}
+
+/* Container */
+#simplemodal-container {height:80%; width:90%; color:#bbb; background-color:#333; border:4px solid #444; padding:12px;}
+#simplemodal-container .simplemodal-data {padding:8px;}
+#simplemodal-container code {background:#141414; border-left:3px solid #65B43D; color:#bbb; display:block; font-size:12px; margin-bottom:12px; padding:4px 6px 6px;}
+#simplemodal-container a {color:#ddd;}
+#simplemodal-container a.modalCloseImg {background:url(/images/modal_x.png) no-repeat; width:25px; height:29px; display:inline; z-index:3200; position:absolute; top:-15px; right:-16px; cursor:pointer;}
+#simplemodal-container h3 {color:#84b8d9;}

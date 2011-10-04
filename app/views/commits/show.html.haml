@@ -1,0 +1,19 @@
+= render :partial => 'commit', :locals => {:commit => @commit}
+
+%h2 Instances
+
+%table{:style => "width: 100%"}
+  - @commit.project_instance_commits.each do |pic|
+    %tr
+      %td
+        = pic.project_instance.name
+      %td
+        = pic.state
+      %td
+        = pic.created_at
+      %td
+        = link_to_longtext 'preparation log', pic.preparation_log
+
+%h2 Test suite runs
+
+= render :partial => '/test_suite_runs/list', :locals => {:test_suite_runs => @commit.test_suite_runs}

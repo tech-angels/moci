@@ -6,10 +6,11 @@ module Moci
       # (Not commit number, but Commit model is passed)
       def checkout(commit)
         update unless pic = @project_instance.commits.find_by_commit_id(commit.id)
-        unless pic || @project_instance.commits.find_by_commit_id(commit.id)
-          raise "could not find commit #{commit.id} on instance #{@project_instance.id}"
-        end
+        #unless pic || @project_instance.commits.find_by_commit_id(commit.id)
+          #raise "could not find commit #{commit.id} on instance #{@project_instance.id}"
+        #end
         checkout_number(commit.number)
+        got_commit_number commit.number
       end
 
       protected

@@ -29,12 +29,12 @@ class TestSuiteRun < ActiveRecord::Base
 
   def new_errors
     return errors unless previous_run
-    @new_errrors ||= test_unit_runs.includes(:test_unit).with_error.map(&:test_unit) - previous_run.test_unit_runs.includes(:test_unit).with_error.map(&:test_unit)
+    @new_errrors ||= test_unit_runs.includes(:test_unit).with_error.map(&:test_unit) - previous_run.test_unit_runs.includes(:test_unit).with_error.map(&:test_unit) - possibly_random
   end
 
   def gone_errors
     return [] unless previous_run
-    @gone_errors ||= previous_run.test_unit_runs.includes(:test_unit).with_error.map(&:test_unit) - test_unit_runs.includes(:test_unit).with_error.map(&:test_unit)
+    @gone_errors ||= previous_run.test_unit_runs.includes(:test_unit).with_error.map(&:test_unit) - test_unit_runs.includes(:test_unit).with_error.map(&:test_unit) - possibly_random
   end
 
   def random_errors
@@ -48,7 +48,7 @@ class TestSuiteRun < ActiveRecord::Base
     )
   end
 
-  def possibly_random(go_back = 10)
+  def possibly_random(go_back = 40)
     @possibly_random ||= (
       # OPTIMIZE FIXME!! This is AWFULLY suboptimal
       ret = random_errors.map(&:first)

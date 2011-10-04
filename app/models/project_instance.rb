@@ -19,12 +19,13 @@ class ProjectInstance < ActiveRecord::Base
     # redirection to file to avoid using ruby tricks to get both return status
     # and output. If there's any better way please fix.
     temp_file = Tempfile.new('execute.log')
-    command = "cd #{working_directory} && BUNDLE_GEMFILE=\"Gemfile\" bundle exec #{command} &> #{temp_file.path}"
+    command = "[[ -s \"$HOME/.rvm/scripts/rvm\" ]] && . \"$HOME/.rvm/scripts/rvm\" && rvm use 1.8.7 && cd #{working_directory} && BUNDLE_GEMFILE=\"Gemfile\" #{command} &> #{temp_file.path}"
     exit_status = nil
     info " executing #{command}"
     Bundler.with_clean_env do
       exit_status = system(command)
     end
+    output << "$ #{command}"
     output << File.read(temp_file.path)
     temp_file.unlink
     exit_status
@@ -37,6 +38,11 @@ class ProjectInstance < ActiveRecord::Base
   # Currently checked out commit
   def head_commit
     project.commits.find_by_number vcs.current_number
+  end
+
+  # TODO: some more human friendly names would be nice
+  def name
+    "#{project.name} ##{self.id}"
   end
 
   # Check for updates and run test suites if needed
@@ -83,7 +89,7 @@ class ProjectInstance < ActiveRecord::Base
 
       info " first time setup for #{commit.short_number}"
 
-      if execute("bundle install", output) && execute("rake db:migrate", output) && execute("rake db:structure:dump" , output)
+      if execute("bundle install", output) && execute("bundle exec rake db:migrate", output) && execute("bundle exec rake db:structure:dump" , output)
         pi_commit.preparation_log = output
         pi_commit.state = 'prepared'
         pi_commit.data = {
@@ -91,7 +97,11 @@ class ProjectInstance < ActiveRecord::Base
         }
         pi_commit.save!
       else
-        raise "failed to prepare commit" # TODO error handling
+        pi_commit.preparation_log = output
+        pi_commit.state = 'preparation_failed'
+        pi_commit.save!
+        raise "commit preparation failed for pi_commit##{pi_commit.id}"
+        #return false
       end
 
     end
@@ -108,6 +118,7 @@ class ProjectInstance < ActiveRecord::Base
   # - if it's true all suites are run
   # - if it's a number(N) those suites will be run that were run less than N times
   def run_test_suites(rerun = false)
+    return false if head_commit.skipped?
     run_anything = false
     project.test_suites.each do |suite|
       count = head_commit.test_suite_runs.where(:test_suite_id => suite.id).count
@@ -143,6 +154,7 @@ class ProjectInstance < ActiveRecord::Base
     #TODO:VCS type
     Moci::VCS::Git.new self
   end
+
 
   protected
 
