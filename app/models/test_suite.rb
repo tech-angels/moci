@@ -1,3 +1,5 @@
+require 'moci/test_runner/rspec' #FIXME this should not be necessary here
+
 class TestSuite < ActiveRecord::Base
 
   belongs_to :project
