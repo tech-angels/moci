@@ -46,7 +46,7 @@ module Moci
 
       # Checkout commit with given SHA
       def checkout_number(sha)
-        @g.checkout(sha)
+        @g.checkout(sha, :force => true)
       end
 
     end

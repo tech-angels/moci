@@ -14,7 +14,7 @@
   %br
   - if !last_commits.empty?
     %table{:style => 'width: 100%'}
-      - last_commits.reverse[-5..-1].reverse.each_with_index do |commit, i|
+      - last_commits[0..5].each_with_index do |commit, i|
         -# commit = @project.commits.order('committed_at DESC').first
         %tr{:class => "build_state #{commit.build_state}"}
           %td{:style => 'width: 20px;'}
