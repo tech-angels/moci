@@ -1,14 +1,16 @@
 module Moci
   module TestRunner
-    class RSpec < Base
+    class Spec < Base
 
-      # This is using custom formatter from lib/moci/test_runner/rspec/moci_formatter.rb
+      # This uses custom formatter from lib/moci/test_runner/rspec/moci_formatter.rb
+      # to get info about single test runs
       def run
         t0 = Time.now
         running = nil
         output = ""
+        specs = options['specs']
         formatter_path = File.expand_path File.join(File.dirname(__FILE__),'rspec','moci_formatter.rb')
-        cmd = "cd #{working_directory}; BUNDLE_GEMFILE=\"Gemfile\" rspec --require #{formatter_path} spec/models 2>&1" #FIXME spec/models hardcoded, Gemfile
+        cmd = "[[ -s \"$HOME/.rvm/scripts/rvm\" ]] && . \"$HOME/.rvm/scripts/rvm\" && cd #{working_directory}; BUNDLE_GEMFILE=\"Gemfile\" rspec --require #{formatter_path} #{specs} 2>&1" #FIXME spec/models hardcoded, Gemfile
         puts "!!!#{cmd}"
         Bundler.with_clean_env do
           IO.popen(cmd, 'r+') do |pipe|
@@ -18,7 +20,7 @@ module Moci
             while line = pipe.gets
               output += line
               line = line.strip
-              puts "LINE: #{line}"
+              #puts "LINE: #{line}"
               if line == "START"
                 dt0 = Time.now
               else

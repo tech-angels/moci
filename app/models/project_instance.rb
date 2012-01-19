@@ -19,7 +19,8 @@ class ProjectInstance < ActiveRecord::Base
     # redirection to file to avoid using ruby tricks to get both return status
     # and output. If there's any better way please fix.
     temp_file = Tempfile.new('execute.log')
-    command = "[[ -s \"$HOME/.rvm/scripts/rvm\" ]] && . \"$HOME/.rvm/scripts/rvm\" && rvm use 1.8.7 && cd #{working_directory} && BUNDLE_GEMFILE=\"Gemfile\" #{command} &> #{temp_file.path}"
+    # TODO handle rvm properly, checking if it's installed at first
+    command = "[[ -s \"$HOME/.rvm/scripts/rvm\" ]] && . \"$HOME/.rvm/scripts/rvm\" && cd #{working_directory} && BUNDLE_GEMFILE=\"Gemfile\" #{command} &> #{temp_file.path}"
     exit_status = nil
     info " executing #{command}"
     Bundler.with_clean_env do

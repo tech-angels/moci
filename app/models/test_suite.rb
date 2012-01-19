@@ -9,6 +9,8 @@ class TestSuite < ActiveRecord::Base
   validates_presence_of :suite_type #TODO validate value
   validates_presence_of :name
 
+  serialize :suite_options, Hash
+
   # Run TestSuite within given ProjectInstance
   def run(project_instance)
     puts " running test suite #{self.name}"
@@ -24,6 +26,11 @@ class TestSuite < ActiveRecord::Base
   # Returns given test suite runner implementation class
   def runner_class
     Moci::TestRunner.const_get suite_type
+  end
+
+  def options
+    # TODO merge on default suite_type options
+    suite_options
   end
 
 end
