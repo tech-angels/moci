@@ -68,6 +68,7 @@ ActiveRecord::Schema.define(:version => 20110612171733) do
   create_table "projects", :force => true do |t|
     t.string   "name"
     t.string   "vcs_branch_name"
+    t.string   "project_type",    :default => "Base"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

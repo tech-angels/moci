@@ -19,14 +19,13 @@ class ProjectInstance < ActiveRecord::Base
     # redirection to file to avoid using ruby tricks to get both return status
     # and output. If there's any better way please fix.
     temp_file = Tempfile.new('execute.log')
-    # TODO handle rvm properly, checking if it's installed at first
-    command = "[[ -s \"$HOME/.rvm/scripts/rvm\" ]] && . \"$HOME/.rvm/scripts/rvm\" && cd #{working_directory} && BUNDLE_GEMFILE=\"Gemfile\" #{command} &> #{temp_file.path}"
+    command = "cd #{working_directory} && #{command} &> #{temp_file.path}"
     exit_status = nil
-    info " executing #{command}"
-    Bundler.with_clean_env do
+    project_handler.execute_wrapper(command, output) do |command, output|
+      info " executing #{command}"
       exit_status = system(command)
     end
-    output << "$ #{command}"
+    output << "$ #{command}\n\n"
     output << File.read(temp_file.path)
     temp_file.unlink
     exit_status
@@ -69,42 +68,18 @@ class ProjectInstance < ActiveRecord::Base
     # Older commits should always be prepared first
     prepare_env(pi_commit.parent.commit) if pi_commit.parent && !pi_commit.parent.prepared?
 
-    #TODO this is rails specific, and not even works for every app (eg  2.x)
-    output = ''
     if pi_commit.prepared?
-
-      # check if there really is need for bundle install
-      unless execute "bundle check"
-        execute! "bundle install", output
-      end
-
-      # save some gigabytes
-      execute! "rm -f log/test.log"
-
-      # put development_structure for given version in place
-      File.open("#{working_directory}/db/development_structure.sql",'w') do |f|
-        f.puts pi_commit.data[:dev_structure]
-      end
-
+      project_handler.prepare_env pi_commit
     else
-
       info " first time setup for #{commit.short_number}"
-
-      if execute("bundle install", output) && execute("bundle exec rake db:migrate", output) && execute("bundle exec rake db:structure:dump" , output)
-        pi_commit.preparation_log = output
+      if project_handler.prepare_env_first_time pi_commit
         pi_commit.state = 'prepared'
-        pi_commit.data = {
-          :dev_structure => File.read("#{working_directory}/db/development_structure.sql")
-        }
         pi_commit.save!
       else
-        pi_commit.preparation_log = output
         pi_commit.state = 'preparation_failed'
         pi_commit.save!
         raise "commit preparation failed for pi_commit##{pi_commit.id}"
-        #return false
       end
-
     end
     true
   end
@@ -156,6 +131,13 @@ class ProjectInstance < ActiveRecord::Base
     Moci::VCS::Git.new self
   end
 
+  def project_handler
+    # TODO add validation in model for proper project_type
+    @project_handler ||= (
+      require "moci/project_handler/#{project.project_type.snake_case}"
+      Moci::ProjectHandler.const_get(project.project_type.camelize).new(self)
+    )
+  end
 
   protected
 
