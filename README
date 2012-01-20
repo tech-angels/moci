@@ -1,8 +1,20 @@
-== MOCI
+# MOCI
 
   Continuous Integration that sucks less.
 
-== TODOS
+## Architecture overview
+
+  MOCI - MOdular Continueous Integration.
+
+  Project aims to be as flexble as possble, enclosing all project type or version control system specific functionalties in modules.
+
+  * each *Project* have one or more *Project Instances*
+  * each *Project* have one ore more *Test Suites*
+
+  So when new commit arrives, and you have 3 test suites in project, they can be run all simultanuesly if you have set up 3 or more project instances. Project *Notifications* will be fired when all test suites are run for given commit.
+
+
+## TODOS
 
   Currently focused on making it work with rails tests and git as VCS.
 
@@ -19,7 +31,7 @@
   * even though it's gonna be ruby & git only for now, make it modular so that either test
     runner or VCS can be added without rewrites
 
-== AUTHOR
+## AUTHOR
 
   Kacper Cieśla (comboy) @ Tech-angels
   http://tech-angels.fr/
