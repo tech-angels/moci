@@ -36,7 +36,7 @@ ActiveRecord::Schema.define(:version => 20110612171733) do
   create_table "notifications", :force => true do |t|
     t.string   "name"
     t.string   "notification_type"
-    t.text     "notification_params_yaml"
+    t.text     "notification_options"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

@@ -4,19 +4,19 @@ class Notification < ActiveRecord::Base
   validates_presence_of :name
   validates_presence_of :notification_type #TODO validate
 
-  def notification_params
-    YAML.load(self.notification_params_yaml.to_s)
-  end
-
-  def notification_params=(params)
-    self.notification_params_yaml = params.to_yaml
-  end
+  serialize :notification_options, Hash
 
   def notificator
-    Moci::Notificator.const_get(notification_type).new(self.notification_params)
+    Moci::Notificator.const_get(notification_type).new(options)
+  end
+
+  def options
+    # TODO merge on top of default notificatior options
+    notification_options
   end
 
   def commit_built(commit)
     notificator.commit_built(commit)
   end
+
 end

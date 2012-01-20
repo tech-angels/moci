@@ -3,7 +3,7 @@ class CreateNotifications < ActiveRecord::Migration
     create_table :notifications do |t|
       t.string :name
       t.string :notification_type
-      t.text :notification_params_yaml
+      t.text :notification_options
       t.timestamps
     end
   end

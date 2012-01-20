@@ -1,6 +1,6 @@
 module Moci
   module Notificator
-    class Campfire
+    class Campfire < Base
       include HTTParty
 
       headers    'Content-Type' => 'application/json'
