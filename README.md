@@ -4,7 +4,7 @@
 
 ## Architecture overview
 
-  MOCI - MOdular Continueous Integration.
+  MOCI - MOdular Continuous Integration.
 
   Project aims to be as flexble as possble, enclosing all project type or version control system specific functionalties in modules.
 
@@ -50,9 +50,9 @@ It will periodically poll for changes and run test suites. Moci::Worker is not h
 
 Plug in some notification:
 
-   opts = { :room_id => 1234,  :room_url => 'https://EXAMPLE.campfirenow.com', :auth_token => 'yourcampfireauthtoken' }
-   notif = Notification.create! :name => 'campfire', :notification_type => 'Campfire', :options => opts
-   project.notifications << notif
+    opts = { :room_id => 1234,  :room_url => 'https://EXAMPLE.campfirenow.com', :auth_token => 'yourcampfireauthtoken' }
+    notif = Notification.create! :name => 'campfire', :notification_type => 'Campfire', :options => opts
+    project.notifications << notif
 
 
 ## AUTHOR
