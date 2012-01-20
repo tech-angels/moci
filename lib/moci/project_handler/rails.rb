@@ -8,7 +8,7 @@ module Moci
       def execute_wrapper(command, output='')
         guess_rvm = File.exist? File.join(working_directory, '.rvmrc')
         command = "[[ -s \"$HOME/.rvm/scripts/rvm\" ]] && . \"$HOME/.rvm/scripts/rvm\" && " + command if guess_rvm
-        command = "BUNDLE_GEMFILE=\"Gemfile\" #{command}"
+        command = "BUNDLE_GEMFILE=\"Gemfile\" && #{command}"
         Bundler.with_clean_env do
           yield(command, output)
         end
