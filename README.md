@@ -6,10 +6,10 @@
 
   MOCI - MOdular Continuous Integration.
 
-  Project aims to be as flexble as possble, enclosing all project type or version control system specific functionalties in modules.
+  Project aims to be as flexible as possible, enclosing all project type or version control system specific functionalties in modules.
 
   * each *Project* have one or more *Project Instances*
-  * each *Project* have one ore more *Test Suites*
+  * each *Project* have one or more *Test Suites*
 
   So when new commit arrives, and you have 3 test suites in project, they can be run all simultanuesly if you have set up 3 or more project instances. Project *Notifications* will be fired when all test suites are run for given commit.
 
@@ -58,6 +58,6 @@ Plug in some notification:
 ## AUTHOR
 
   Kacper Cieśla (comboy) @ Tech-angels
-  http://tech-angels.fr/
+  http://www.tech-angels.com/
 
 
