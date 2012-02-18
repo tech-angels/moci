@@ -18,6 +18,7 @@
   Currently focused on making it work with rails tests and git as VCS.
 
   Planned features that made me start this project (to keep in my mind while developing):
+
   * ability to tell on which commit given error appeared for the first time (and associated
     with this be able to tell if commit was OK even if some tests are still failing if they
     were failing already before)
@@ -27,6 +28,7 @@
     files changes and so on)
 
   Assumptions:
+
   * even though it's gonna be ruby & git only for now, make it modular so that either test
     runner or VCS can be added without rewrites
 

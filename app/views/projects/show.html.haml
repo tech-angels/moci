@@ -13,7 +13,7 @@
           &nbsp;
   %br
   - if !last_commits.empty?
-    %table{:style => 'width: 100%'}
+    %table.grid{:style => 'width: 100%'}
       - last_commits[0..5].each_with_index do |commit, i|
         -# commit = @project.commits.order('committed_at DESC').first
         %tr{:class => "build_state #{commit.build_state}"}

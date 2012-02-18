@@ -1,3 +1,73 @@
+body {
+  font-family: Trebuchet MS, Liberation Sans, DejaVu Sans, sans-serif;
+  font-size: 12px;
+}
+
+
+table {
+  color:#333333;
+  border-width: 1px;
+  border-color: #666;
+  border-collapse: collapse;
+}
+table th {
+  border-width: 1px;
+  padding: 4px;
+  border-style: solid;
+  border-color: #666;
+}
+table td {
+  border-width: 1px;
+  padding: 4px;
+  border-style: solid;
+  border-color: #666;
+}
+
+#header {
+  border: 1px solid #ddd;
+  border-width: 0px 0px 1px 0px;
+}
+#header .title {
+  font-size: 30px;
+  font-weight: bold;
+}
+
+#header h1 {
+  padding: 3px;
+}
+
+#menu ul li {
+  display: inline;
+  padding: 10px;
+}
+
+#menu ul {
+  display: inline;
+  list-style-type: none;
+  padding: 0px;
+  margin: 0px;
+}
+
+#sidebar .section {
+  font-weight: bold;
+  font-size: 1.5em;
+  padding-left: 30px;
+}
+
+#sidebar {
+  float:left;
+  width:215px;
+  margin-right:0;
+  background-color: #eee;
+}
+#content {margin-left:232px; overflow:visible;}
+
+/*
+  #cols {position:relative; margin:15px 0; padding-right:15px; }
+  html>body #sidebar {margin-right:20px;}
+  html>body #content {margin-left:0; overflow:hidden;}
+*/
+
 /* project show */
 .branch_title .name {
   float: left;

@@ -1,0 +1,17 @@
+!!!
+%head
+  = stylesheet_link_tag 'mystyle'
+  = javascript_include_tag "http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js"
+  = javascript_include_tag "jquery.simplemodal"
+%body
+
+  #header
+    .title moci
+    = render :partial => '/common/top_menu.html.haml'
+
+  #cols
+    #sidebar
+      = render :partial => '/common/sidebar'
+
+    #content
+      = yield
