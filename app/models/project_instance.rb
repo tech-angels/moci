@@ -113,10 +113,16 @@ class ProjectInstance < ActiveRecord::Base
     info "trying to acquire by #{handle}"
     # Since it's done within single query, database guarantees that lock won't
     # be given twice
-    success = self.class.update_all(
+    update_count = self.class.update_all(
       {:locked_by => handle},
-      {:locked_by => nil, :id => self.id}) == 1
-    info "ACQUIRED by #{handle}" if success
+      {:locked_by => nil, :id => self.id})
+    success = (update_count == 1)
+
+    if success
+      self.reload # update locked_by field
+      info "ACQUIRED by #{handle}"
+    end
+
     return success
   end
 

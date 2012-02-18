@@ -65,6 +65,7 @@
     (
     = link_to_function 'details', "$('#run_details_#{commit.id}_#{ts.id}').show();"
     )
+    %br
 
     %div{:id => "run_details_#{commit.id}_#{ts.id}", :style => "display: none;"}
       %br

@@ -1,9 +1,6 @@
 source 'http://rubygems.org'
 
-
-gem 'wirble'
-
-gem 'rails', '3.0.3'
+gem 'rails', '3.0.11'
 
 # DB
 
@@ -24,3 +21,8 @@ gem 'git'
 
 gem 'httparty'
 
+# Test suite
+
+group :development, :test do
+  gem 'factory_girl_rails'
+end
