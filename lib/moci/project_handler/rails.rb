@@ -24,10 +24,11 @@ module Moci
         # save some gigabytes
         execute! "rm -f log/test.log"
 
-        # put development_structure for given version in place
-        # TODO some projects only use schema.rb, handle that
-        File.open("#{working_directory}/db/development_structure.sql",'w') do |f|
-          f.puts commit.data[:dev_structure]
+        # put development_structure for given version in place if needed
+        if commit.data[:dev_structure]
+          File.open("#{working_directory}/db/development_structure.sql",'w') do |f|
+            f.puts commit.data[:dev_structure]
+          end
         end
 
         true
@@ -37,9 +38,11 @@ module Moci
         output = ''
         if execute("bundle install", output) && execute("bundle exec rake db:migrate", output) && execute("bundle exec rake db:structure:dump" , output)
           commit.preparation_log = output
-          commit.data = {
-            :dev_structure => File.read("#{working_directory}/db/development_structure.sql")
-          }
+          if File.exist?("#{working_directory}/db/development_structure.sql")
+            commit.data = {
+              :dev_structure => File.read("#{working_directory}/db/development_structure.sql")
+            }
+          end
           return true
         else
           commit.preparation_log = output
