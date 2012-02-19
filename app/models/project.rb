@@ -8,11 +8,11 @@
 class Project < ActiveRecord::Base
   validates_presence_of :name
 
-  has_many :commits
-  has_many :test_suites
-  has_many :project_instances
+  has_many :commits, :dependent => :destroy
+  has_many :test_suites, :dependent => :destroy
+  has_many :project_instances, :dependent => :destroy
 
-  has_many :test_suite_runs, :through => :project_instances
+  has_many :test_suite_runs, :through => :project_instances, :dependent => :destroy
 
   alias instances project_instances
 
