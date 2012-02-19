@@ -1,3 +1,11 @@
+# Attributes:
+# * id [integer, primary, not null] - primary key
+# * created_at [datetime] - creation time
+# * locked_by [string] - string handle of whoever locked the instance #TODO: add locked_at and timeouts
+# * project_id [integer] - belongs_to Project
+# * state [string, default=new] - TODO: document me
+# * updated_at [datetime] - last update time
+# * working_directory [string] - directory of the project we run tests on
 class ProjectInstance < ActiveRecord::Base
   belongs_to :project
 

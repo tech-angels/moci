@@ -2,6 +2,9 @@ source 'http://rubygems.org'
 
 gem 'rails', '3.0.11'
 
+# models annotations
+gem 'annotator'
+
 # live web notifications in rails
 gem 'juggernaut'
 

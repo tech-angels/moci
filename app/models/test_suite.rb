@@ -1,3 +1,11 @@
+# Attributes:
+# * id [integer, primary, not null] - primary key
+# * created_at [datetime] - creation time
+# * name [string]
+# * project_id [integer] - belongs_to Project
+# * suite_options [text] - test suite specific options to be passed to test runner (e.g' which files to include/exclude)
+# * suite_type [string] - test suite type, name same as test runner class name (inside Moci::TestRunner)
+# * updated_at [datetime] - last update time
 require 'moci/test_runner/spec' #FIXME this should not be necessary here
 
 class TestSuite < ActiveRecord::Base

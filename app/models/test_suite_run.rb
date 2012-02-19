@@ -1,3 +1,17 @@
+# Attributes:
+# * id [integer, primary, not null] - primary key
+# * assertions_count [integer] - number of assertions made
+# * commit_id [integer] - belongs_to Commit (TODO: shouldn't that be project_instance_commit?)
+# * created_at [datetime] - creation time
+# * errors_count [integer] - number of errors that occurred during test suite run
+# * failures_count [integer] - number of failures that occured during test suite run
+# * project_instance_id [integer] - belongs_to ProjectInstance
+# * run_log [text] - command output of test suite run
+# * run_time [float] - total test suite execution time
+# * state [string] - currently only 2 states: running -> finished
+# * test_suite_id [integer] - belongs_to TestSuite
+# * tests_count [integer] - number of tests in the test suite
+# * updated_at [datetime] - last update time
 class TestSuiteRun < ActiveRecord::Base
   belongs_to :commit
   belongs_to :project_instance

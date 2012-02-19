@@ -39,7 +39,7 @@
 .about
   %h3 About project
 
-  %table{:class => 'keyvalue nostyle', :style => 'width: 100%; float: right;'}
+  %table{:class => 'keyvalue nostyle', :style => 'width: 100%;'}
     %tr
       %td.key Monitored since
       %td.value= @project.created_at
@@ -48,3 +48,10 @@
       %td.value= @project.commits.count
 
 
+  %h3 Currently runnning
+
+  %table
+    - @project.test_suite_runs.order('updated_at DESC').limit(5).all.each do |tr|
+      %tr
+        %td= tr.updated_at
+        %td= tr.state

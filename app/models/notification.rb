@@ -1,3 +1,10 @@
+# Attributes:
+# * id [integer, primary, not null] - primary key
+# * created_at [datetime] - creation time
+# * name [string]
+# * notification_options [text] - serialized options specific to given handler
+# * notification_type [string] - class name of the handler (Moci::Notificator::..)
+# * updated_at [datetime] - last update time
 class Notification < ActiveRecord::Base
   has_and_belongs_to_many :projects
 

@@ -1,3 +1,9 @@
+# Attributes:
+# * id [integer, primary, not null] - primary key
+# * created_at [datetime] - creation time
+# * email [string]:w
+# * name [string]
+# * updated_at [datetime] - last update time
 class Author < ActiveRecord::Base
 
   has_many :commits
