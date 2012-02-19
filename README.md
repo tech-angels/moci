@@ -39,8 +39,8 @@ API can change completely. Here's how can you start playing:
 
     project = Project.create! :name => "MyProject", :vcs_branch_name => "master", :project_type => "Rails"
     project.instances.create! :working_directory => "/home/comboy/here_my_project_lives"
-    project.test_suites.create! :name => 'units', :suite_tye => 'RailsUnits'
-    project.test_suites.create! :name => 'functionals', :suite_tye => 'RailsFuctionals'
+    project.test_suites.create! :name => 'units', :suite_type => 'RailsUnits'
+    project.test_suites.create! :name => 'functionals', :suite_type => 'RailsFunctionals'
 
 Assuming you have properly configured rails project in *working_directory*, you can try:
 
