@@ -2,6 +2,8 @@ class ProjectInstance < ActiveRecord::Base
   belongs_to :project
 
   has_many :project_instance_commits
+  has_many :test_suite_runs
+
   alias commits project_instance_commits
 
   scope :free, :conditions => {:locked_by => nil}
@@ -13,22 +15,31 @@ class ProjectInstance < ActiveRecord::Base
   end
 
   # Execute shell command within project instance directory
-  # Output parameter can be used to pass a string where output will be appended.
+  #
+  # output parameter can be used to pass a string where output will be appended.
+  # if block is passed, output is not collected and block will receive 4 params same as for popen4:
+  #   pid, stdin, stdout, stderr
   # Returns true if exit code was 0
   def execute(command, output='')
     # redirection to file to avoid using ruby tricks to get both return status
     # and output. If there's any better way please fix.
-    temp_file = Tempfile.new('execute.log')
-    command = "cd #{working_directory} && #{command} &> #{temp_file.path}"
+    command = "cd #{working_directory} && #{command}"
     exit_status = nil
     project_handler.execute_wrapper(command, output) do |command, output|
       info " executing #{command}"
-      exit_status = system(command)
+      output << "$ #{command}\n\n" # I don't like it, but it here, but it's very useful information to know why it failed
+      status = Open4.popen4(command) do |pid, stdin, stdout, stderr|
+        if block_given?
+          yield(pid, stdin, stdout, stderr)
+        else
+          # IMPROVE: separate them?
+          output << stdout.read
+          output << stderr.read
+        end
+      end
+      exit_status = status.exitstatus
     end
-    output << "$ #{command}\n\n"
-    output << File.read(temp_file.path)
-    temp_file.unlink
-    exit_status
+    return exit_status == 0
   end
 
   def execute!(command, output='')

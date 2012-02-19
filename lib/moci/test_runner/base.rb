@@ -23,6 +23,10 @@ module Moci
         @tr.test_suite.options
       end
 
+      def execute(command, output='', &block)
+        @tr.project_instance.execute(command, output, &block)
+      end
+
       # Used by implementations to push info about test results
       # Two params with key and value can be given, or one param with a hash.
       def push(name, value = nil)

@@ -3,16 +3,16 @@ module Moci
     class RailsUnits < Base
 
       # TODO: maybe try some implementing some test runner to avoid parsing
-      # Parsing is safer however in case some other gems modified tests already somehow though.
+      # However parsing is safer in case when some other gems modified tests runner internals (which happens)
       # TODO: error messages parsing
       def run
         t0 = lt = Time.now
         output = ""
 
-        Bundler.with_clean_env do
-        IO.popen("cd #{working_directory}; BUNDLE_GEMFILE=\"Gemfile\" TESTOPTS=\"-v\" rake test:#{test_type} 2>&1", 'r+') do |pipe|
+        execute("TESTOPTS=\"-v\" rake test:#{test_type}") do |pid, stdin, stdout, stderr|
            running = false
 
+           pipe = stdout
            pipe.sync = true ### you can do this once
            buf = ''
 
@@ -64,7 +64,6 @@ module Moci
              end
            end
         end
-        end #bundle clean env
         push(
           :run_time => Time.now - t0,
           :output => output,

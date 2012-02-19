@@ -5,6 +5,9 @@ gem 'rails', '3.0.11'
 # live web notifications in rails
 gem 'juggernaut'
 
+# test runner
+gem 'open4'
+
 # DB
 
 gem 'sqlite3-ruby', :require => 'sqlite3'

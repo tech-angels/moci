@@ -5,6 +5,8 @@ class Project < ActiveRecord::Base
   has_many :test_suites
   has_many :project_instances
 
+  has_many :test_suite_runs, :through => :project_instances
+
   alias instances project_instances
 
   has_and_belongs_to_many :notifications
