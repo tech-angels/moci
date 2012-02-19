@@ -20,7 +20,7 @@
           %td{:style => 'width: 20px;'}
             = image_tag commit.author.gravatar_url :size => 15
           %td
-            = commit.short_description
+            = link_to commit.short_description, commit_path(commit)
           %td
             = commit.build_state
         - if i == 0

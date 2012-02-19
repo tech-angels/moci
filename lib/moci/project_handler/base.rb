@@ -31,11 +31,11 @@ module Moci
       end
 
       def execute(command, output='')
-        @project_instance.execute(command, output='')
+        @project_instance.execute(command, output)
       end
 
       def execute!(command, output='')
-        @project_instance.execute!(command, output='')
+        @project_instance.execute!(command, output)
       end
 
     end

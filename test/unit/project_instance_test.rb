@@ -17,5 +17,30 @@ class ProjectInstanceTest < ActiveSupport::TestCase
     assert_nil instance.locked_by
   end
 
+  test "collecting output from execution" do
+    instance = Factory.create :project_instance
+    output = ''
+    assert instance.execute "echo 'this is test'", output
+    lines = output.split("\n")
+    assert lines[0].starts_with? '$' # first line is command being executed
+    assert_equal lines[1], '' # second separating line
+    assert_equal lines[2], 'this is test'
+  end
+
+  test "collecting execution status" do
+    instance = Factory.create :project_instance
+    assert instance.execute("exit 0")
+    assert !instance.execute("exit 1")
+  end
+
+  test "execute!" do
+    instance = Factory.create :project_instance
+    instance.execute!("exit 0")
+    assert_raise RuntimeError do
+      instance.execute!("exit 1")
+    end
+  end
+
+
 end
 

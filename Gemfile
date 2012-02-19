@@ -28,4 +28,5 @@ gem 'httparty'
 
 group :development, :test do
   gem 'factory_girl_rails'
+  gem 'ZenTest'
 end
