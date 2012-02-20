@@ -16,27 +16,54 @@ describe ProjectInstance do
     assert_nil instance.locked_by
   end
 
-  it "should collect output from execution" do
-    instance = Factory.create :project_instance
-    output = ''
-    assert instance.execute "echo 'this is test'", output
-    lines = output.split("\n")
-    assert lines[0].starts_with? '$' # first line is command being executed
-    assert_equal lines[1], '' # second separating line
-    assert_equal lines[2], 'this is test'
+  context "execute" do
+    it "should collect output" do
+      instance = Factory.create :project_instance
+      output = ''
+      assert instance.execute "echo 'this is test'", output
+      lines = output.split("\n")
+      assert lines[0].starts_with? '$' # first line is command being executed
+      assert_equal lines[1], '' # second separating line
+      assert_equal lines[2], 'this is test'
+    end
+
+    it "should track exit status" do
+      instance = Factory.create :project_instance
+      assert instance.execute("exit 0")
+      assert !instance.execute("exit 1")
+    end
+
+    it "should raise on execute!" do
+      instance = Factory.create :project_instance
+      instance.execute!("exit 0")
+      assert_raise RuntimeError do
+        instance.execute!("exit 1")
+      end
+    end
   end
 
-  it "should track execution status" do
-    instance = Factory.create :project_instance
-    assert instance.execute("exit 0")
-    assert !instance.execute("exit 1")
+  context "VCS" do
+    it "shuold properly create VCS handler object" do
+      assert true
+      project = Factory :project, :vcs_type => 'Git'
+      instance = Factory :project_instance, :project => project
+      Git.stub :open
+      vcs = instance.vcs
+      vcs.should be_kind_of(Moci::VCS::Base)
+      vcs.should be_kind_of(Moci::VCS::Git)
+      vcs.should respond_to(:checkout)
+    end
   end
 
-  it "should raise on execute!" do
-    instance = Factory.create :project_instance
-    instance.execute!("exit 0")
-    assert_raise RuntimeError do
-      instance.execute!("exit 1")
+  context "Projcet handler" do
+    it "shuold properly create project handler object" do
+      assert true
+      project = Factory :project, :project_type => 'Rails'
+      instance = Factory :project_instance, :project => project
+      ph = instance.project_handler
+      ph.should be_kind_of(Moci::ProjectHandler::Base)
+      ph.should be_kind_of(Moci::ProjectHandler::Rails)
+      ph.should respond_to(:prepare_env)
     end
   end
 end
