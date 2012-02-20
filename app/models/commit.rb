@@ -52,11 +52,15 @@ class Commit < ActiveRecord::Base
     # OPTIMIZE like hell
     new_errors = latest_test_suite_runs.compact.map(&:new_errors).map(&:size).sum
     errors = latest_test_suite_runs.compact.map(&:errors).map(&:size).sum
+    exitstatuses = latest_test_suite_runs.compact.map(&:exitstatus)
     return 'running'  if first_test_suite_runs.compact.any?(&:running?)
     return 'preparation_failed' if project_instance_commits.any? {|c| c.state == 'preparation_failed'} # FIXME
     return 'pending'  if latest_test_suite_runs.any? {|x| x.nil?}
     return 'fail' if new_errors > 0
     return 'ok' if new_errors == 0 && errors > 0
+    # TODO name this tate differently probably, failed_to_run maybe?
+    # It's the case when test suite returned non-zero exitcode, but we had no test_unit_run errors
+    return 'fail' unless exitstatuses.all?
     return 'clean' if errors == 0
   end
 

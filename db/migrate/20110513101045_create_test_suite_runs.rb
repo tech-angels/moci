@@ -9,6 +9,7 @@ class CreateTestSuiteRuns < ActiveRecord::Migration
       t.integer :errors_count
       t.float :run_time
       t.string :state
+      t.boolean :exitstatus
       # consider moving to separate table, but pg should handle it nicely:
       t.text :run_log
       t.timestamps

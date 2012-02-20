@@ -45,6 +45,8 @@ module Moci
             @tr.failures_count = v
           when :errors_count
             @tr.errors_count = v
+          when :exitstatus
+            @tr.exitstatus = v
           when :run_time
             @tr.run_time = v
           when :finished

@@ -4,6 +4,7 @@
 # * commit_id [integer] - belongs_to Commit (TODO: shouldn't that be project_instance_commit?)
 # * created_at [datetime] - creation time
 # * errors_count [integer] - number of errors that occurred during test suite run
+# * exitstatus [boolean] - true if execution of the test suite was successful
 # * failures_count [integer] - number of failures that occured during test suite run
 # * project_instance_id [integer] - belongs_to ProjectInstance
 # * run_log [text] - command output of test suite run
@@ -30,7 +31,7 @@ class TestSuiteRun < ActiveRecord::Base
   end
 
   def build_state
-    return 'clean' if clean?
+    return 'clean' if clean? && exitstatus
     return 'ok' if new_errors.size == 0 && errors.size != 0
     return 'fail'
   end

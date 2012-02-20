@@ -83,6 +83,7 @@ ActiveRecord::Schema.define(:version => 20110612171733) do
     t.integer  "errors_count"
     t.float    "run_time"
     t.string   "state"
+    t.boolean  "exitstatus"
     t.text     "run_log"
     t.datetime "created_at"
     t.datetime "updated_at"
