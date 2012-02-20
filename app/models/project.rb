@@ -19,6 +19,8 @@ class Project < ActiveRecord::Base
 
   has_and_belongs_to_many :notifications
 
+  serialize :project_options, Hash
+
   def newest_commit
     commits.order('committed_at DESC').first
   end
@@ -42,6 +44,16 @@ class Project < ActiveRecord::Base
     else
       return free_instance
     end
+  end
+
+  def options
+    #TODO merge over defaults
+    project_options
+  end
+
+  #FIXME reorganize this
+  def vcs_branch_name
+    instances.first.vcs.branch_name
   end
 
 end

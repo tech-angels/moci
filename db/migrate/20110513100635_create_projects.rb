@@ -3,7 +3,8 @@ class CreateProjects < ActiveRecord::Migration
     create_table :projects do |t|
       t.string :name
       t.string :working_directory
-      t.string :vcs_branch_name
+      t.text :project_options
+      t.string :vcs_type, :default => 'Base'
       t.string :project_type, :default => 'Base'
       t.timestamps
     end

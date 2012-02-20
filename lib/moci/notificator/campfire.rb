@@ -15,7 +15,7 @@ module Moci
       end
 
       def commit_built(commit)
-        x = "#{commit.number[0..4]} #{commit.description[0..20]}.. @#{commit.author.name} on #{commit.project.vcs_branch_name}: #{commit.build_state.upcase}"
+        x = "#{commit.project.name} #{commit.number[0..4]} #{commit.description[0..20]}.. @#{commit.author.name} on #{commit.project.vcs_branch_name}: #{commit.build_state.upcase}"
         fixed = 0
         commit.latest_test_suite_runs.each do |tsr|
           m = ""

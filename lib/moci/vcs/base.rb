@@ -1,5 +1,7 @@
 module Moci
   module VCS
+
+    # TODO: make Base bahave like a dummy VCS, it should work for no VCS installed in the project
     class Base
 
       # Checkout given Commit object
@@ -11,6 +13,16 @@ module Moci
         #end
         checkout_number(commit.number)
         got_commit_number commit.number
+      end
+
+      def link_to_commit(number)
+      end
+
+      def default_branch_name
+      end
+
+      def branch_name
+        @project.options.try(:[],'vcs').try(:[], 'branch_name') || default_branch_name
       end
 
       protected
@@ -43,6 +55,7 @@ module Moci
           pi_commit.save!
         end
       end
+
     end
   end
 end

@@ -152,8 +152,11 @@ class ProjectInstance < ActiveRecord::Base
 
   # Instance of Version Control System class associated with this Project
   def vcs
-    #TODO:VCS type
-    Moci::VCS::Git.new self
+    # TODO add validation in model for proper vcs_type
+    @vcs ||= (
+      require "moci/vcs/#{project.vcs_type.snake_case}"
+      Moci::VCS.const_get(project.vcs_type.camelize).new(self)
+    )
   end
 
   def project_handler
