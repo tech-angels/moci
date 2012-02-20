@@ -1,9 +1,8 @@
-require 'test_helper'
+require 'spec_helper'
 
-class ProjectInstanceTest < ActiveSupport::TestCase
+describe ProjectInstance do
 
-  # Replace this with your real tests.
-  test "locking" do
+  it "should properly lock" do
     project = Factory.create :project
     instance = Factory.create :project_instance, :project => project
     assert instance.try_to_acquire("foo")
@@ -17,7 +16,7 @@ class ProjectInstanceTest < ActiveSupport::TestCase
     assert_nil instance.locked_by
   end
 
-  test "collecting output from execution" do
+  it "should collect output from execution" do
     instance = Factory.create :project_instance
     output = ''
     assert instance.execute "echo 'this is test'", output
@@ -27,20 +26,17 @@ class ProjectInstanceTest < ActiveSupport::TestCase
     assert_equal lines[2], 'this is test'
   end
 
-  test "collecting execution status" do
+  it "should track execution status" do
     instance = Factory.create :project_instance
     assert instance.execute("exit 0")
     assert !instance.execute("exit 1")
   end
 
-  test "execute!" do
+  it "should raise on execute!" do
     instance = Factory.create :project_instance
     instance.execute!("exit 0")
     assert_raise RuntimeError do
       instance.execute!("exit 1")
     end
   end
-
-
 end
-
