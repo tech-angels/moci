@@ -8,9 +8,7 @@ module Moci
         t0 = Time.now
         running = nil
         output = ""
-        specs = options['specs']
-        formatter_path = File.expand_path File.join(File.dirname(__FILE__),'rspec','moci_formatter.rb')
-        execute("rspec --require #{formatter_path} #{specs}") do |pid, stdin, stdout, stderr|
+        execute(command) do |pid, stdin, stdout, stderr|
           pipe = stdout
           pipe.sync = true
           dt0 = Time.now
@@ -45,6 +43,11 @@ module Moci
           )
         end
 
+      end
+
+      def command
+        formatter_path = File.expand_path File.join(File.dirname(__FILE__),'rspec','moci_formatter.rb')
+        "rspec --require #{formatter_path} #{options['specs']}"
       end
     end
   end

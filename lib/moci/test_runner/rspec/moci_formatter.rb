@@ -1,3 +1,4 @@
+require 'rspec'
 require 'rspec/core/formatters/base_text_formatter'
 
 module RSpec
@@ -27,6 +28,7 @@ module RSpec
         def example_failed(example)
           @output.puts "F--#{description example}"
           @output.flush
+          @failed_examples << example
         end
 
         def description(example)
@@ -36,7 +38,9 @@ module RSpec
 
         def dump_summary(duration, example_count, failure_count, pending_count)
           @output.puts "STATS: #{duration}, #{example_count}, #{failure_count}, #{pending_count}"
+          dump_failures
           @output.flush
+
         end
 
       end
