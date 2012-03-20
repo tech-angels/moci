@@ -4,6 +4,11 @@ module Moci
     # TODO: make Base bahave like a dummy VCS, it should work for no VCS installed in the project
     class Base
 
+
+      def initialize(project_instance)
+        raise "wat"
+      end
+
       # Checkout given Commit object
       # (Not commit number, but Commit model is passed)
       def checkout(commit)
