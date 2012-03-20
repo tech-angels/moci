@@ -23,6 +23,10 @@ table td {
   border-color: #666;
 }
 
+table.last_runs {
+  width: 100%;
+}
+
 #header {
   border: 1px solid #ddd;
   border-width: 0px 0px 1px 0px;

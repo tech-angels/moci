@@ -18,6 +18,10 @@ module Moci
       def commit_built(commit)
       end
 
+      def default_options
+        {}
+      end
+
       # TODO let's make it optional and call it from default commit_built if class responds to it?
       # def message(str)
       # end

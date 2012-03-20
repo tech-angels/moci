@@ -48,9 +48,9 @@
       %td.value= @project.commits.count
 
 
-  %h3 Currently runnning
+  %h3 Latest test suite runs
 
-  %table
+  %table.last_runs
     - @project.test_suite_runs.order('updated_at DESC').limit(5).all.each do |tr|
       %tr
         %td= tr.updated_at

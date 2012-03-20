@@ -34,7 +34,9 @@ class Commit < ActiveRecord::Base
 
   def parent
     #FIXME TODO XXX
-    project.commits.order('committed_at DESC').where('committed_at < ?',self.committed_at).first
+    parent = project.commits.order('committed_at DESC').where('committed_at < ?',self.committed_at).first
+    parent = parent.parent if parent.skipped?
+    parent
   end
 
   def next

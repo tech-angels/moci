@@ -12,24 +12,30 @@ module Moci
         self.class.basic_auth params[:auth_token],'x'
         #self.class.headers    'Content-Type' => 'application/json'
         @room_id = params[:room_id]
+        @params = params
+        super
       end
 
       def commit_built(commit)
         x = "#{commit.project.name} #{commit.number[0..4]} #{commit.description[0..20]}.. @#{commit.author.name} on #{commit.project.vcs_branch_name}: #{commit.build_state.upcase}"
         fixed = 0
-        commit.latest_test_suite_runs.each do |tsr|
-          m = ""
-          tsr.gone_errors.each do |error|
-            m += "\n    * FIXED [#{error.class_name}] - #{error.name}"
-            fixed += 1
+        if @options[:style] == 'verbose'
+          commit.latest_test_suite_runs.each do |tsr|
+            m = ""
+            tsr.gone_errors.each do |error|
+              m += "\n    * FIXED [#{error.class_name}] - #{error.name}"
+              fixed += 1
+            end
+            tsr.errors.each do |error|
+              m += "\n    * #{tsr.new_errors.include?(error) ? 'INTRODUCED' : 'ERR'} [#{error.class_name}] - #{error.name}"
+            end
+            x += "\n  #{tsr.test_suite.name}: #{tsr.build_state}#{m}" unless m.empty?
           end
-          tsr.errors.each do |error|
-            m += "\n    * #{tsr.new_errors.include?(error) ? 'INTRODUCED' : 'ERR'} [#{error.class_name}] - #{error.name}"
-          end
-          x += "\n  #{tsr.test_suite.name}: #{tsr.build_state}#{m}" unless m.empty?
+        else
+          # FIXME unharcode
+          x += " ( http://moci.tesuji.pl/c/#{commit.id} )"
         end
         pp msg x
-
         sound 'trombone' if commit.build_state == 'fail'
         sound 'rimshot' if commit.build_state == 'clean' && fixed > 0
         true
@@ -47,6 +53,10 @@ module Moci
         room = Room.new(@room_id)
         pp room
         room
+      end
+
+      def default_options
+        {:style => 'compact'}
       end
 
       protected

@@ -69,7 +69,7 @@ class ProjectInstance < ActiveRecord::Base
     info "PING received"
     vcs.update
     loop do
-      if prepare_env head_commit
+      if !head_commit.skipped? && prepare_env(head_commit)
         run_test_suites
       end
       break unless head_commit.next
