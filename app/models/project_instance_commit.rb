@@ -21,8 +21,8 @@ class ProjectInstanceCommit < ActiveRecord::Base
     self.state == 'prepared'
   end
 
-  def parent
-    commit.parent.try(:in_instance, project_instance)
+  def parents
+    commit.parents.map {|c| c.in_instance project_instance }
   end
 
   def data=(value)

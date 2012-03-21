@@ -4,7 +4,6 @@ class CreateCommits < ActiveRecord::Migration
       t.string :number
       t.text :description
       t.integer :author_id
-      t.integer :parent_id
       t.timestamp :committed_at
 
       # TODO: think about it, that's probably not the best place to keep it

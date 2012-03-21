@@ -20,7 +20,7 @@ module Moci
         @g.fetch rescue nil # FIXME better handling
         #@g.merge("origin/#{@project.vcs_branch_name}")
         # IMPROVE simplified branch handling
-        @g.log.between('HEAD',"origin/#{branch_name}").map(&:sha).each do |sha|
+        @g.log.between('HEAD',"origin/#{branch_name}").map(&:sha).reverse_each do |sha|
           got_commit_number sha
         end
       end
@@ -38,7 +38,8 @@ module Moci
           :author_name => c.author.name,
           :author_email => c.author.email,
           :committed_at => c.date,
-          :description => c.message
+          :description => c.message,
+          :parents => c.parents.map(&:sha)
         }
       end
 

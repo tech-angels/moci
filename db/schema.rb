@@ -1,4 +1,3 @@
-# encoding: UTF-8
 # This file is auto-generated from the current state of the database. Instead
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
@@ -11,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110612171733) do
+ActiveRecord::Schema.define(:version => 20120321184927) do
 
   create_table "authors", :force => true do |t|
     t.string   "name"
@@ -24,7 +23,6 @@ ActiveRecord::Schema.define(:version => 20110612171733) do
     t.string   "number"
     t.text     "description"
     t.integer  "author_id"
-    t.integer  "parent_id"
     t.datetime "committed_at"
     t.text     "preparation_log"
     t.text     "dev_structure"
@@ -32,6 +30,11 @@ ActiveRecord::Schema.define(:version => 20110612171733) do
     t.datetime "updated_at"
     t.integer  "project_id"
     t.boolean  "skipped",         :default => false
+  end
+
+  create_table "commits_parents", :id => false, :force => true do |t|
+    t.integer "commit_id"
+    t.integer "parent_id"
   end
 
   create_table "notifications", :force => true do |t|

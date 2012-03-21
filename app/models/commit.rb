@@ -20,6 +20,9 @@ class Commit < ActiveRecord::Base
   has_many :test_suite_runs
   has_many :project_instance_commits
 
+  has_and_belongs_to_many :parents,
+    :class_name => 'Commit', :association_foreign_key => 'parent_id', :join_table => 'commits_parents'
+
   def short_description
     desc = description.split("\n").first
     if desc.size > 100
@@ -30,13 +33,6 @@ class Commit < ActiveRecord::Base
 
   def short_number
     number[0..8]
-  end
-
-  def parent
-    #FIXME TODO XXX
-    parent = project.commits.order('committed_at DESC').where('committed_at < ?',self.committed_at).first
-    parent = parent.parent if parent.skipped?
-    parent
   end
 
   def next

@@ -1,7 +1,7 @@
 - introduced = fixed = []
 - if tsr = commit.test_suite_runs.order('created_at DESC').first
 - state = commit.build_state
-- if parent = commit.parent
+-# if parent = commit.parent
   -# if tsr && parent.test_suite_runs.first
     -# parent_errors =  parent.test_suite_runs.first.test_unit_runs.with_error
     -# my_errors = tsr.test_unit_runs.with_error
@@ -42,7 +42,8 @@
 
   - commit.test_suite_runs.finished.includes(:test_suite).order('test_suites.created_at').group_by(&:test_suite).each do |ts, tsrs|
     - prev_tsr = nil
-    - prev_tsr = parent.test_suite_runs.where(:test_suite_id => ts.id).first if parent
+    - # FIXME this is using only one parrent
+    - prev_tsr = commit.parents.first.test_suite_runs.where(:test_suite_id => ts.id).first if commit.parents.first
 
     %b= "#{ts.name}:"
     - tsr = tsrs.first

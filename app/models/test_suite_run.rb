@@ -36,9 +36,10 @@ class TestSuiteRun < ActiveRecord::Base
     return 'fail'
   end
 
+  # FIXME it's using only one parent (may fails for merges)
   def previous_run
-    @previous_run ||= (commit.parent &&
-      commit.parent.test_suite_runs.where(:test_suite_id => test_suite.id).
+    @previous_run ||= (commit.parents.first &&
+      commit.parents.first.test_suite_runs.where(:test_suite_id => test_suite.id).
       order('created_at DESC').first)
   end
 

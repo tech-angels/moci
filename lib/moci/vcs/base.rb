@@ -20,6 +20,18 @@ module Moci
         got_commit_number commit.number
       end
 
+      # Should return hash with data about commit with given number
+      # Recognized keys:
+      # :number - commit number
+      # :author_name
+      # :author_email
+      # :committed_at [Time]
+      # :description
+      # :parents - array with numbers of parent commits
+      def details(numbe)
+        raise "implement me"
+      end
+
       def link_to_commit(number)
       end
 
@@ -53,6 +65,15 @@ module Moci
           )
 
           commit.save!
+
+          if info[:parents]
+            info[:parents].each do |number|
+              if parent = @project.commits.find_by_number(number)
+                commit.parents << parent
+              end
+            end
+          end
+
         end
 
         unless pi_commit = @project_instance.commits.find_by_commit_id(commit.id)

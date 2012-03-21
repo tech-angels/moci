@@ -85,7 +85,9 @@ class ProjectInstance < ActiveRecord::Base
     pi_commit = commit.in_instance(self) #FIXME architect it better
 
     # Older commits should always be prepared first
-    prepare_env(pi_commit.parent.commit) if pi_commit.parent && !pi_commit.parent.prepared?
+    pi_commit.parents.each do |pic_parent|
+      prepare_env(pic_parrent.commit) unless pic_parent.prepared?
+    end
 
     if pi_commit.prepared?
       project_handler.prepare_env pi_commit
