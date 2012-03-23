@@ -1,0 +1,2 @@
+# Public URL under which moci rails app is available
+application_url: http://moci.example.com:3000/

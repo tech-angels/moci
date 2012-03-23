@@ -32,8 +32,7 @@ module Moci
             x += "\n  #{tsr.test_suite.name}: #{tsr.build_state}#{m}" unless m.empty?
           end
         else
-          # FIXME unharcode
-          x += " ( http://moci.tesuji.pl/c/#{commit.id} )"
+          x += " ( #{Moci.config[:application_url]}c/#{commit.id} )"
         end
         pp msg x
         sound 'trombone' if commit.build_state == 'fail'
