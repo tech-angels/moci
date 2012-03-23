@@ -86,8 +86,10 @@ class ProjectInstance < ActiveRecord::Base
 
     # Older commits should always be prepared first
     pi_commit.parents.each do |pic_parent|
-      prepare_env(pic_parrent.commit) unless pic_parent.prepared?
+      prepare_env(pic_parent.commit) unless pic_parent.prepared?
     end
+
+    return true if commit.skipped?
 
     if pi_commit.prepared?
       project_handler.prepare_env pi_commit
