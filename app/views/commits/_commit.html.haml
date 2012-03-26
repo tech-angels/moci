@@ -25,7 +25,10 @@
     %tt.title
       = link_to_p commit.description, :action => 'show', :id => commit.id
     (
-    = link_to commit.number[0..6], "https://github.com/tech-angels/betnet/commit/#{commit.number}"
+    - if commit.repo_url
+      = link_to commit.number[0..6], commit.repo_url
+    - else
+      = commit.number[0..6]
     )
     -# FIXME DEBUG
     = commit.id

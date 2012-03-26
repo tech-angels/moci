@@ -94,4 +94,11 @@ class Commit < ActiveRecord::Base
     ProjectInstanceCommit.where(:commit_id => self.id).any? &:prepared?
   end
 
+  # IMPROVE this doesn't really fit in here think about some abstraction for this
+  def repo_url
+    if project.options[:github]
+      "https://github.com/#{project.options[:github]}/commit/#{self.number}"
+    end
+  end
+
 end

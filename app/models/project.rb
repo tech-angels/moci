@@ -48,7 +48,7 @@ class Project < ActiveRecord::Base
 
   def options
     #TODO merge over defaults
-    project_options
+    (project_options || {}).with_indifferent_access
   end
 
   #FIXME reorganize this
