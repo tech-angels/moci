@@ -1,3 +1,5 @@
+require 'config_file'
+
 module Moci
 
   # IMPROVE: consider keeping config options in database, this way it will be easier

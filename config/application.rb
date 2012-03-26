@@ -47,3 +47,5 @@ module Moci
     @build_logger ||= Logger.new("#{Rails.root}/log/build.log")
   end
 end
+
+require 'moci'

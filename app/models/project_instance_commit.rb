@@ -18,7 +18,11 @@ class ProjectInstanceCommit < ActiveRecord::Base
   validates_uniqueness_of :commit_id, :scope => :project_instance_id
 
   def prepared?
-    self.state == 'prepared'
+    if commit.skipped?
+      parents.all? &:prepared?
+    else
+      self.state == 'prepared'
+    end
   end
 
   def parents

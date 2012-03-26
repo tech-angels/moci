@@ -79,7 +79,7 @@ class ProjectInstance < ActiveRecord::Base
 
   # Prevare project so that tests can be run for given commit.
   def prepare_env(commit)
-    info "Preparing env for #{commit.short_number}"
+    info "Preparing env for #{commit.short_number} [#{commit.id}]"
     checkout commit
 
     pi_commit = commit.in_instance(self) #FIXME architect it better
@@ -101,7 +101,12 @@ class ProjectInstance < ActiveRecord::Base
       else
         pi_commit.state = 'preparation_failed'
         pi_commit.save!
-        raise "commit preparation failed for pi_commit##{pi_commit.id}"
+
+        # Behavior to be decided or dependent on some config param
+        # Option 1:
+        # raise "commit preparation failed for pi_commit##{pi_commit.id}"
+        # Option 2:
+        pi_commit.commit.update_attribute :skipped, true
       end
     end
     true
