@@ -27,6 +27,14 @@ table.last_runs {
   width: 100%;
 }
 
+table.no_border {
+  border-width: 0px;
+}
+
+table.no_border td {
+  border-width: 0px;
+}
+
 #header {
   border: 1px solid #ddd;
   border-width: 0px 0px 1px 0px;
@@ -101,6 +109,9 @@ table.last_runs {
   text-align: right;
 }
 
+.commit_next {
+  float: right;
+}
 
 .commit {padding:10px; padding-left:20px; min-height: 80px;}
 

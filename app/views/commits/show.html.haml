@@ -1,5 +1,20 @@
 = render :partial => 'commit', :locals => {:commit => @commit}
 
+%table.no_border{:style => "width: 100%"}
+  %tr
+    %td
+      - if @commit.previous
+        .commit_prev
+          = link_to "< prev", commit_path(@commit.previous)
+    %td{:align => "middle"}
+      .commit_parent
+        parent:
+        != @commit.parents.map{|c| link_to(c.short_description, commit_path(c)) }.join(" & ")
+    %td
+      - if @commit.next
+        .commit_next
+          = link_to "next >", commit_path(@commit.next)
+
 %h2 Instances
 
 %table{:style => "width: 100%"}

@@ -36,8 +36,11 @@ class Commit < ActiveRecord::Base
   end
 
   def next
-    #FIXME TODO XXX
-    project.commits.order('committed_at ASC').where('committed_at > ?',self.committed_at).first
+    @next ||= project.commits.order('committed_at ASC').where('committed_at > ?',self.committed_at).first
+  end
+
+  def previous
+    @previous ||= project.commits.order('committed_at DESC').where('committed_at < ?',self.committed_at).first
   end
 
   def run_test_suites
