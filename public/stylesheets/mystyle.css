@@ -115,7 +115,13 @@ table.no_border td {
 
 .commit {padding:10px; padding-left:20px; min-height: 80px;}
 
+.commit ul.errors .blame {
+  display: none;
+}
 
+.commit ul.errors li:hover .blame {
+  display: inline;
+}
 
 /* WRITE YOUR CSS CODE HERE */
 .msg.warning {border:2px solid #F2DD8C; background-color:#FFF5CC;}

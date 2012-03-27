@@ -36,21 +36,39 @@ class TestSuiteRun < ActiveRecord::Base
     return 'fail'
   end
 
-  # FIXME it's using only one parent (may fails for merges)
+  # Returns commit where given TestUnit started failing.
+  # Returns false if given TestUnit was not failing in current test suite.
+  # IMPROVE we probably can include checking random_errors too, which should make work blaming for
+  # randomly failing tests (first occurence of failure) - needs some tests
+  def blame(test_unit)
+    return false unless errors.include? test_unit
+    parent_runs.each do |pr|
+      next unless pr
+      c = pr.blame(test_unit)
+      return c if c
+    end
+    return commit
+  end
+
+  def parent_runs
+    @parent_runs ||= (
+      commit.parents.map {|c| c.test_suite_runs.where(:test_suite_id => test_suite.id).order('created_at DESC').first }
+    )
+  end
+
+  # FIXME it's depricated DEPRECATED, it should not be used as it's only based on one parent
   def previous_run
-    @previous_run ||= (commit.parents.first &&
-      commit.parents.first.test_suite_runs.where(:test_suite_id => test_suite.id).
-      order('created_at DESC').first)
+    parent_runs.first
   end
 
   def new_errors
-    return errors unless previous_run
-    @new_errrors ||= test_unit_runs.includes(:test_unit).with_error.map(&:test_unit) - previous_run.test_unit_runs.includes(:test_unit).with_error.map(&:test_unit) - possibly_random
+    return errors if parent_runs.empty?
+    @new_errrors ||= test_unit_runs.includes(:test_unit).with_error.map(&:test_unit) - parent_runs.map{|pr| pr.test_unit_runs.includes(:test_unit).with_error.map(&:test_unit)}.flatten.uniq - possibly_random
   end
 
   def gone_errors
-    return [] unless previous_run
-    @gone_errors ||= previous_run.test_unit_runs.includes(:test_unit).with_error.map(&:test_unit) - test_unit_runs.includes(:test_unit).with_error.map(&:test_unit) - possibly_random
+    return [] if parent_runs.empty?
+    @gone_errors ||= parent_runs.map{|pr| pr.test_unit_runs.includes(:test_unit).with_error.map(&:test_unit)}.flatten.uniq - test_unit_runs.includes(:test_unit).with_error.map(&:test_unit) - possibly_random
   end
 
   def random_errors
@@ -65,12 +83,13 @@ class TestSuiteRun < ActiveRecord::Base
   end
 
   def possibly_random(go_back = 40)
+    # FIXME Fix that for multiple parents
     @possibly_random ||= (
       # OPTIMIZE FIXME!! This is AWFULLY suboptimal
       ret = random_errors.map(&:first)
-      if @previous_run && go_back > 0
-        ret += @previous_run.random_errors.map(&:first)
-        ret += @previous_run.possibly_random(go_back - 1)
+      if previous_run && go_back > 0
+        ret += previous_run.random_errors.map(&:first)
+        ret += previous_run.possibly_random(go_back - 1)
       end
       ret.uniq
     )

@@ -77,7 +77,7 @@
 
     - if prev = tsr.previous_run
       - prandom = tsr.possibly_random
-      %ul
+      %ul.errors
         - new_errors = tsr.new_errors
         - (tsr.gone_errors - prandom).each do |tu|
           %li.green
@@ -92,6 +92,8 @@
               %b FAILED
             %b= tu.class_name
             = tu.name
+            %span.blame
+              = link_to_function 'blame', "fetchBlame($(this),'#{tsr.id}','#{tu.id}');"
         - tsr.random_errors.each do |tu,probability|
           %li.warn
             %span.orange RANDOM (#{probability.round(2)*100}%)
