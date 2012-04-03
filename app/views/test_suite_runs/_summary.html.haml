@@ -1,7 +1,7 @@
 - if tsr.exitstatus
   %span.green PASSED
 - else
-  %span.red FAIL
+  %span.red FAILED
 
 - unless tsr.tests_count.nil? && tsr.assertions_count.nil?
   %b= tsr.tests_count

@@ -39,7 +39,16 @@ describe "git VCS in rails_test" do
 
       commit.description.should == "added test"
       commit.committed_at.to_date.should == Date.new(2011,5,13)
-      commit.parent.should == first_commit
+      commit.parents.should == [first_commit]
+    end
+
+    it "sholud assign parents properly for merge commits" do
+      commit = @project.commits.find_by_number("ac59aa698cb2a623cbb04a05dd3695178d424a3e")
+      p1 = @project.commits.find_by_number("f5879527d3c4e76261d2f47e3161ce2b01851d4b")
+      p1.description.should == "some master commit"
+      p2 = @project.commits.find_by_number("88ace409d165095fbbe85617415ced65a8592be5")
+      p2.description.should == "foo branch fix"
+      commit.parents.to_set.should == [p1,p2].to_set
     end
 
     it "should checkout properly" do
