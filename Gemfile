@@ -34,6 +34,7 @@ gem 'httparty'
 # Test suite
 
 group :development, :test do
+  gem 'faker'
   gem 'factory_girl_rails'
   gem 'ZenTest'
   gem 'sql_queries_count'
