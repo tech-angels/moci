@@ -2,14 +2,11 @@
   - test_suite_runs.each do |tsr|
     %tr{:class => cycle('bg2','bg')}
       %td
+        = tsr.test_suite.name
+      %td
         = "instance ##{tsr.project_instance.id}"
       %td
-        %b= tsr.tests_count
-        tests,
-        = bad_value tsr.errors_count
-        errors
-        = bad_value tsr.failures_count
-        failures
+        = render :partial => 'test_suite_runs/summary', :locals => {:tsr => tsr, :no_diff => true}
       %td
         = duration tsr.run_time
       %td

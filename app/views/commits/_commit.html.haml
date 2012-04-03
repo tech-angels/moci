@@ -44,28 +44,14 @@
     %br
 
   - commit.test_suite_runs.finished.includes(:test_suite).order('test_suites.created_at').group_by(&:test_suite).each do |ts, tsrs|
+    - tsr = tsrs.first
     - prev_tsr = nil
     - # FIXME this is using only one parrent
-    - prev_tsr = commit.parents.first.test_suite_runs.where(:test_suite_id => ts.id).first if commit.parents.first
+    - prev_tsr = tsr.previous_run
 
     %b= "#{ts.name}:"
-    - tsr = tsrs.first
     - random_errors = tsr.random_errors
-    %b= tsr.tests_count
-    - if prev_tsr && (diff = prev_tsr.tests_count.to_i - tsr.tests_count.to_i) != 0
-      (
-      - if diff > 0
-        %span.red= "-#{diff}"
-      - else
-        %span.green= "+#{diff.abs}"
-      )
-    tests,
-    %b= tsr.assertions_count
-    assertions,
-    = bad_value tsr.errors_count
-    errors,
-    = bad_value tsr.failures_count
-    failures
+    = render :partial => 'test_suite_runs/summary', :locals => {:tsr => tsr}
     (
     = link_to_function 'details', "$('#run_details_#{commit.id}_#{ts.id}').show();"
     )
