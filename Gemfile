@@ -36,4 +36,5 @@ gem 'httparty'
 group :development, :test do
   gem 'factory_girl_rails'
   gem 'ZenTest'
+  gem 'sql_queries_count'
 end
