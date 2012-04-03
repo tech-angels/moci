@@ -52,7 +52,7 @@ class TestSuiteRun < ActiveRecord::Base
 
   def parent_runs
     @parent_runs ||= (
-      commit.parents.map {|c| c.test_suite_runs.where(:test_suite_id => test_suite.id).order('created_at DESC').first }
+      commit.parents_without_skipped.map {|c| c.test_suite_runs.where(:test_suite_id => test_suite.id).order('created_at DESC').first }.compact
     )
   end
 
@@ -83,6 +83,9 @@ class TestSuiteRun < ActiveRecord::Base
   end
 
   def possibly_random(go_back = 40)
+    # FIXME TEMP disabling currently to speed up, below implementation is correct, but before this works fast
+    # test unit errors cache must be implemented
+    return []
     # FIXME Fix that for multiple parents
     @possibly_random ||= (
       # OPTIMIZE FIXME!! This is AWFULLY suboptimal

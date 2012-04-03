@@ -1,5 +1,6 @@
 = render :partial => 'commit', :locals => {:commit => @commit}
 
+
 %table.no_border{:style => "width: 100%"}
   %tr
     %td
@@ -14,7 +15,6 @@
       - if @commit.next
         .commit_next
           = link_to "next >", commit_path(@commit.next)
-
 %h2 Instances
 
 %table{:style => "width: 100%"}
@@ -31,4 +31,4 @@
 
 %h2 Test suite runs
 
-= render :partial => '/test_suite_runs/list', :locals => {:test_suite_runs => @commit.test_suite_runs}
+= render :partial => '/test_suite_runs/list', :locals => {:test_suite_runs => @commit.test_suite_runs.includes(:test_suite, :project_instance)}

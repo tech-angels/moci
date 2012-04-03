@@ -20,6 +20,7 @@ class ProjectInstance < ActiveRecord::Base
   def checkout(commit)
     info "Checking out #{commit.short_number}"
     vcs.checkout commit
+    info "Checked out #{commit.short_number}"
   end
 
   # Execute shell command within project instance directory

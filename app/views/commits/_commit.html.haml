@@ -14,7 +14,7 @@
     .avatar{:style => 'float: left; padding-right: 15px;'}
       = image_tag(commit.author.gravatar_url)
     .results{:style => 'float: right; text-align: right; padding-left: 10px'}
-      %span{:class => commit.build_state}= commit.build_state.upcase
+      %span{:class => state}= state.upcase
       %br
       - if state == 'preparation_failed'
         = link_to_longtext 'details', commit.project_instance_commits.where(:state => 'preparation_failed').first.preparation_log
@@ -43,7 +43,7 @@
       ago
     %br
 
-  - commit.test_suite_runs.finished.includes(:test_suite).order('test_suites.created_at').group_by(&:test_suite).each do |ts, tsrs|
+  - commit.test_suite_runs.finished.includes(:test_suite).includes(:project_instance).order('test_suites.created_at').group_by(&:test_suite).each do |ts, tsrs|
     - tsr = tsrs.first
     - prev_tsr = nil
     - # FIXME this is using only one parrent

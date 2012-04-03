@@ -43,6 +43,12 @@ class Commit < ActiveRecord::Base
     @previous ||= project.commits.order('committed_at DESC').where('committed_at < ?',self.committed_at).first
   end
 
+  def parents_without_skipped
+    parents.map do |parent|
+      parent.skipped? ? parent.parents_without_skipped : parent
+    end.flatten
+  end
+
   def run_test_suites
     checkout
     prepare

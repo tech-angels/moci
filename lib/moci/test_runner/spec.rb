@@ -1,5 +1,9 @@
 module Moci
   module TestRunner
+
+    # SPec tests runner
+    # Options:
+    # * specs - spec files to run in any format that is accepted by rspec
     class Spec < Base
 
       # This uses custom formatter from lib/moci/test_runner/rspec/moci_formatter.rb

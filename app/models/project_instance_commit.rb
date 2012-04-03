@@ -17,12 +17,16 @@ class ProjectInstanceCommit < ActiveRecord::Base
 
   validates_uniqueness_of :commit_id, :scope => :project_instance_id
 
-  def prepared?
+  def prepared?(chain_cache={})
+    ret = false
+    return chain_cache[self.id] if chain_cache[self.id]
     if commit.skipped?
-      parents.all? &:prepared?
+      ret = parents.all?{|x| x.prepared?(t+1)}
     else
-      self.state == 'prepared'
+      ret = (self.state == 'prepared')
     end
+    chain_cache[self.id] = ret
+    return ret
   end
 
   def parents

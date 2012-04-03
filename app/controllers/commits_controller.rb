@@ -2,7 +2,7 @@ class CommitsController < ApplicationController
 
   def index
     must_be_in_project
-    @commits = @project.commits.order('committed_at DESC').paginate(:page => params[:page], :per_page => 30)
+    @commits = @project.commits.order('committed_at DESC').paginate(:page => params[:page], :per_page => 5)
   end
 
   def show
