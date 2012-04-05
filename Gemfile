@@ -1,6 +1,6 @@
 source 'http://rubygems.org'
 
-gem 'rails', '3.0.11'
+gem 'rails', '3.2.3'
 gem 'rspec-rails'
 
 # models annotations
@@ -19,9 +19,9 @@ gem 'pg'
 
 # UI
 
-gem 'haml'
+gem "haml-rails"
 gem 'gravtastic'
-gem 'will_paginate'
+gem 'kaminari'
 
 # VCS
 
