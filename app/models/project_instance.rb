@@ -71,11 +71,19 @@ class ProjectInstance < ActiveRecord::Base
     vcs.update
     loop do
       if !head_commit.skipped? && prepare_env(head_commit)
-        run_test_suites
+        run_test_suites_for_commit(head_commit)
       end
       break unless head_commit.next
       checkout head_commit.next
     end
+  end
+
+  def run_test_suites_for_commit(commit, recursive = true)
+    commit.parents_without_skipped.each do |parent|
+      run_test_suites_for_commit(parent) if parent.pending?
+    end if recursive
+    checkout commit
+    run_test_suites
   end
 
   # Prevare project so that tests can be run for given commit.

@@ -21,7 +21,7 @@ class ProjectInstanceCommit < ActiveRecord::Base
     ret = false
     return chain_cache[self.id] if chain_cache[self.id]
     if commit.skipped?
-      ret = parents.all?{|x| x.prepared?(t+1)}
+      ret = parents.all?{|x| x.prepared?(chain_cache)}
     else
       ret = (self.state == 'prepared')
     end

@@ -14,6 +14,7 @@ class TestSuite < ActiveRecord::Base
   belongs_to :project
 
   has_many :test_units
+  has_many :test_suite_runs
 
   validates_presence_of :suite_type #TODO validate value
   validates_presence_of :name

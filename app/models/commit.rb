@@ -55,6 +55,10 @@ class Commit < ActiveRecord::Base
     project.run_test_suites(true)
   end
 
+  def pending?
+    latest_test_suite_runs.any? {|x| x.nil?}
+  end
+
   def build_state
     # OPTIMIZE like hell
     new_errors = latest_test_suite_runs.compact.map(&:new_errors).map(&:size).sum
