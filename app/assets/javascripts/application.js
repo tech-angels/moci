@@ -1,6 +1,9 @@
 // Place your application-specific JavaScript functions and classes here
 // This file is automatically included by javascript_include_tag :defaults
 
+//= require jquery
+//= require jquery_ujs
+
 function fetchBlame(el, tsr_id, tu_id) {
   console.log(el);
   el.parent('.blame').css('display','inline');

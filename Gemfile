@@ -22,6 +22,7 @@ gem 'pg'
 gem "haml-rails"
 gem 'gravtastic'
 gem 'kaminari'
+gem 'jquery-rails'
 
 # VCS
 
