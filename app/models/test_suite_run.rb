@@ -114,4 +114,11 @@ class TestSuiteRun < ActiveRecord::Base
     self.commit.notify_test_suite_done(self) if before_me_count == 0
   end
 
+
+  # Live web notifications TODO: move to observer
+
+  after_save do
+    Webs.notify :test_suite_run, self
+  end
+
 end

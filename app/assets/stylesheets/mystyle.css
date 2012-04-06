@@ -27,6 +27,15 @@ table.last_runs {
   width: 100%;
 }
 
+table.last_runs tr.state_running.details {
+  display: table-row;
+  text-align: center;
+}
+
+table.last_runs tr.state_finished.details {
+  display: none;
+}
+
 table.no_border {
   border-width: 0px;
 }
@@ -91,10 +100,11 @@ table.no_border td {
   min-height: 30px;
 }
 
-.state {
+.project_state {
   width: 48%;
   float: left;
 }
+
 .about {
   width: 48%;
   float: right;

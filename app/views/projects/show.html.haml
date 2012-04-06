@@ -1,6 +1,6 @@
-%h1= @project.name
+%h1.project{'data-project-id' => @project.id, 'data-project-name' => @project.name}= @project.name
 
-.state
+.project_state
   %h3 Current state
   .branch_title
     .name
@@ -51,7 +51,5 @@
   %h3 Latest test suite runs
 
   %table.last_runs
-    - @project.test_suite_runs.order('updated_at DESC').limit(5).all.each do |tr|
-      %tr
-        %td= tr.updated_at
-        %td= tr.state
+    - @project.test_suite_runs.order('updated_at DESC').limit(5).all.each do |tsr|
+      = render :partial => 'tr_last_run', :locals => {:tsr => tsr}

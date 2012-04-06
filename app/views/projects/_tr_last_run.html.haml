@@ -1,0 +1,8 @@
+%tr{:class => "test_suite_run_#{tsr.id} state_#{tsr.state}"}
+  %td= tsr.updated_at
+  %td= tsr.test_suite.name
+  %td.state= tsr.state
+%tr{:class => "test_suite_run_#{tsr.id} details state_#{tsr.state}"}
+  %td{:colspan => 3}
+    = image_tag 'ajax_inline2.gif'
+    %span.current_test_unit

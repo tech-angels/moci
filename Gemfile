@@ -19,10 +19,11 @@ gem 'pg'
 
 # UI
 
-gem "haml-rails"
-gem 'gravtastic'
-gem 'kaminari'
+gem 'coffee-rails'
 gem 'jquery-rails'
+gem "haml-rails"
+gem 'gravtastic' # avatars from gravatar
+gem 'kaminari' # pagination
 
 # VCS
 
