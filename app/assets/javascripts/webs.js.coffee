@@ -1,6 +1,5 @@
 
 $(document).ready ->
-  window.WEB_SOCKET_SWF_LOCATION = '/WebSocketMain.swf'
   jug = new Juggernaut
   jug.subscribe "moci", (data) ->
     console.log("Got data: " + JSON.stringify(data))
@@ -35,10 +34,19 @@ $(document).ready ->
            tr_details = $('.last_runs .details.test_suite_run_'+tsr_id)
            if tr_details.length != 0
              tr_details.find('.current_test_unit').html(d['test_unit']['class_name'] + ' :: ' + d['test_unit']['name'])
+             tr_details.removeClass('tu_state_waiting')
+             tr_details.removeClass('tu_state_ok')
+             tr_details.removeClass('tu_state_fail')
+             switch d['result']
+               when 'W'
+                  tr_details.addClass('tu_state_waiting')
+               when 'E', 'F'
+                  tr_details.addClass('tu_state_fail')
+               when '.'
+                  tr_details.addClass('tu_state_ok')
            else
-
-     if $('.last_runs tr').length > 12
-       $('.last_runs tr.state_finished').slice(-6).hide()
+      if $('.last_runs tr.state_finished').length > 12
+        $('.last_runs tr.state_finished').slice(-6).remove()
 
 
 

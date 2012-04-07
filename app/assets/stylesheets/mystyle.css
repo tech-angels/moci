@@ -29,11 +29,43 @@ table.last_runs {
 
 table.last_runs tr.state_running.details {
   display: table-row;
-  text-align: center;
+  text-align: left;
 }
 
 table.last_runs tr.state_finished.details {
   display: none;
+}
+
+table.last_runs tr.state_finished td.info .time {
+  display: inline;
+}
+
+table.last_runs tr.state_finished td.info .spinner {
+  display: none;
+}
+
+table.last_runs tr.state_running td.info .time {
+  display: none;
+}
+
+table.last_runs tr.state_running td.info .spinner {
+  display: inline;
+}
+
+table.last_runs tr.details .current_test_unit {
+  font-size: 9px;
+}
+
+table.last_runs tr.details.tu_state_ok {
+  background-color:#FFF5CC;
+}
+
+table.last_runs tr.details.tu_state_waiting {
+  background-color:#FFF5CC;
+}
+
+table.last_runs tr.details.tu_state_fail {
+  background-color:#FEEBEB;
 }
 
 table.no_border {
