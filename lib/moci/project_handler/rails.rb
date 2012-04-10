@@ -25,7 +25,7 @@ module Moci
         execute! "rm -f log/test.log"
 
         # put development_structure for given version in place if needed
-        if commit.data[:dev_structure]
+        if options[:db_structure_dump] && commit.data[:dev_structure]
           File.open("#{working_directory}/db/development_structure.sql",'w') do |f|
             f.puts commit.data[:dev_structure]
           end
@@ -36,9 +36,9 @@ module Moci
 
       def prepare_env_first_time(commit)
         output = ''
-        if execute("bundle install", output) && execute("bundle exec rake db:migrate", output) && execute("bundle exec rake db:structure:dump" , output)
+        if execute("bundle install", output) && execute("bundle exec rake db:migrate", output) && (!options[:db_structure_dump] || execute("bundle exec rake db:structure:dump" , output))
           commit.preparation_log = output
-          if File.exist?("#{working_directory}/db/development_structure.sql")
+          if options[:db_structure_dump] && File.exist?("#{working_directory}/db/development_structure.sql")
             commit.data = {
               :dev_structure => File.read("#{working_directory}/db/development_structure.sql")
             }
@@ -48,6 +48,18 @@ module Moci
           commit.preparation_log = output
           return false
         end
+      end
+
+      protected
+
+      def options
+        default_options.merge(@project_instance.project.options[:rails] || {})
+      end
+
+      def default_options
+        {
+          :db_structure_dump => true
+        }
       end
 
     end
