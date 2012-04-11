@@ -50,6 +50,30 @@ describe Moci::TestRunner::Spec do
       @tsr.test_unit_runs.find{|t| t.test_unit.name == "should fail sometimes"}.run_time.should > 0.2
     end
 
+    it "should save proper exitstatus" do
+      @tsr.exitstatus.should == false
+    end
+  end
+
+  context "with another example spec" do
+    before :all do
+      @ts = Factory.create :test_suite, :suite_type => 'Spec', :suite_options => {'specs' => 'spec/foo_spec.rb'}
+      @tsr = Factory.create :test_suite_run
+      spec_dir = File.join(@tsr.project_instance.working_directory, 'spec')
+      FileUtils.mkdir_p(File.join(@tsr.project_instance.working_directory, 'spec'))
+      FileUtils.cp(File.join(Rails.root,'spec','fixtures','example_spec2.txt'), File.join(spec_dir,'foo_spec.rb'))
+      @spec = Moci::TestRunner::Spec.new @tsr
+      @spec.run
+      @tsr.reload
+    end
+
+    it "should find 2 tests" do
+      @tsr.tests_count.should == 2
+    end
+
+    it "should save proper exit status" do
+      @tsr.exitstatus.should == true
+    end
   end
 
 end
