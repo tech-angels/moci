@@ -14,7 +14,7 @@ gem 'open4'
 
 # DB
 
-gem 'sqlite3-ruby', :require => 'sqlite3'
+gem 'sqlite3'
 gem 'pg'
 
 # UI

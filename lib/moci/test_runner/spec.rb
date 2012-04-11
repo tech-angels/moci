@@ -12,7 +12,7 @@ module Moci
         t0 = Time.now
         running = nil
         output = ""
-        execute(command) do |pid, stdin, stdout, stderr|
+        exitstatus = execute(command) do |pid, stdin, stdout, stderr|
           pipe = stdout
           pipe.sync = true
           dt0 = Time.now
@@ -43,6 +43,7 @@ module Moci
           push(
             :run_time => Time.now - t0,
             :output => output,
+            :exitstatus => exitstatus,
             :finished => true
           )
         end

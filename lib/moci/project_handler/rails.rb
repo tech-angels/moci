@@ -59,7 +59,7 @@ module Moci
       def default_options
         {
           :db_structure_dump => true
-        }
+        }.with_indifferent_access
       end
 
     end
