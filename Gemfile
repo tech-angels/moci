@@ -1,8 +1,6 @@
 source 'http://rubygems.org'
 
 gem 'rails', '3.2.3'
-gem 'rspec-rails'
-gem 'rspec-mocks'
 
 # models annotations
 gem 'annotator'
@@ -37,6 +35,8 @@ gem 'httparty'
 # Test suite
 
 group :development, :test do
+  gem 'rspec-rails'
+  gem 'rspec-mocks'
   gem 'faker'
   gem 'factory_girl_rails'
   gem 'ZenTest'

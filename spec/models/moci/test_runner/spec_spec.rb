@@ -1,0 +1,55 @@
+require 'spec_helper'
+require 'fileutils'
+
+describe Moci::TestRunner::Spec do
+
+  context "using example spec" do
+    before :all do
+      @ts = Factory.create :test_suite, :suite_type => 'Spec', :suite_options => {'specs' => 'spec/foo_spec.rb'}
+      @tsr = Factory.create :test_suite_run
+      spec_dir = File.join(@tsr.project_instance.working_directory, 'spec')
+      FileUtils.mkdir_p(File.join(@tsr.project_instance.working_directory, 'spec'))
+      FileUtils.cp(File.join(Rails.root,'spec','fixtures','example_spec.txt'), File.join(spec_dir,'foo_spec.rb'))
+      @spec = Moci::TestRunner::Spec.new @tsr
+      @spec.run
+      @tsr.reload
+    end
+
+    it "should find 4 tests" do
+      @tsr.tests_count.should == 4
+    end
+
+    it "should count 3 failures" do
+      @tsr.errors_count.should == 3
+    end
+
+    it "should properly recognize test cases names" do
+      @tsr.test_unit_runs.size.should == 4
+      @tsr.test_unit_runs.map(&:test_unit).each do |tu|
+        tu.class_name.should == "Foo"
+      end
+
+      names = ["Boo should assert truth","should raise sometimes","should fail sometimes","should baz"]
+      @tsr.test_unit_runs.map(&:test_unit).map(&:name).to_set.should == names.to_set
+    end
+
+    it "should properly recognize ok result" do
+      @tsr.test_unit_runs.find{|t| t.test_unit.name == "should baz"}.result.should == '.'
+    end
+
+    it "should properly recognize fail result" do
+      @tsr.test_unit_runs.find{|t| t.test_unit.name == "should fail sometimes"}.result.should == 'F'
+    end
+
+    it "should properly recognize another result" do
+      @tsr.test_unit_runs.find{|t| t.test_unit.name == "should raise sometimes"}.result.should == 'F'
+    end
+
+    it "should properly gather run times" do
+      # test case has sleep 0.2 inserted
+      @tsr.test_unit_runs.find{|t| t.test_unit.name == "should fail sometimes"}.run_time.should > 0.2
+    end
+
+  end
+
+end

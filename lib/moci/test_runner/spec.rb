@@ -1,3 +1,4 @@
+
 module Moci
   module TestRunner
 
@@ -6,8 +7,10 @@ module Moci
     # * specs - spec files to run in any format that is accepted by rspec
     class Spec < Base
 
-      # This uses custom formatter from lib/moci/test_runner/rspec/moci_formatter.rb
-      # to get info about single test runs
+      require 'moci/test_runner/rspec/moci_formatter'
+      include RSpec::Core::Formatters::MociFormatter::Patterns
+      # It uses custom formatter from lib/moci/test_runner/rspec/moci_formatter.rb
+      # to get info about single test runs as they appear
       def run
         t0 = Time.now
         running = nil
@@ -20,21 +23,21 @@ module Moci
           while line = pipe.gets
             output += line
             line = line.strip
-            if line == "START"
+            if line == P_TEST_START
               dt0 = Time.now
             else
-              if line.match(/^.--EX\[/)
-                result, stuff = line.split('--',2)
-                class_name = stuff.match(/EX\[\[(.*?)\]\]/)[1]
-                name = stuff.split(']]',2).last
+              if line.match(/^(#{Regexp.escape(P_TEST_PASSED)}|#{Regexp.escape(P_TEST_PENDING)}|#{Regexp.escape(P_TEST_FAILED)})/)
+                result = line[0].chr
+                class_name = line.match(/#{Regexp.escape(P_GROUP_NAME_START)}(.*?)#{Regexp.escape(P_GROUP_NAME_END)}/)[1]
+                name = line.split(P_GROUP_NAME_END,2).last.strip
                 push_test name, class_name
                 last_test result, (Time.now - dt0)
               end
-              if line.match(/^STATS:/)
-                stats = line.split("STATS:",2)[1].split(',').map(&:to_f)
+              if line.starts_with? P_STATS
+                stats = line.split(P_STATS,2)[1].split(',').map(&:to_f)
                 push(
                   :tests_count => stats[1],
-                  :assertions_count => stats[1],
+                  :assertions_count => stats[1], # rspec only provide "examples count"
                   :errors_count => stats[2]
                 )
               end
