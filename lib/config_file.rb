@@ -11,6 +11,10 @@ module ConfigFile
       @config_options = options
     end
 
+    def default_config
+      {}
+    end
+
     def config
       @config ||= read_config
     end
@@ -26,7 +30,7 @@ module ConfigFile
     def read_config
       hash = HashWithIndifferentAccess.new(YAML.load_file(config_file))
       hash = hash[Rails.env] unless @config_options[:environments] == false
-      hash
+      default_config.with_indifferent_access.merge(hash)
     end
 
   end

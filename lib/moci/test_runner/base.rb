@@ -1,5 +1,10 @@
+require 'timeout'
+
 module Moci
   module TestRunner
+
+    # Base TestRunner class. It provides basic API for all specific test runners implementations
+    # All TestRunner implementations should have it in ancestors.
     class Base
 
       # Run tests according to given TestSuiteRun params
@@ -24,7 +29,17 @@ module Moci
       end
 
       def execute(command, output='', &block)
-        @tr.project_instance.execute(command, output, &block)
+        exitstatus = false
+        max_time = Moci.config[:default_timeout]
+        begin
+          Timeout.timeout(max_time) do
+            exitvalue = @tr.project_instance.execute(command, output, &block)
+          end
+        rescue Timeout::Error
+          output << "\nTimeout::Error"
+          push :finished => true, :output => output, :run_time => max_time, :exitstatus => exitstatus
+        end
+        return exitstatus
       end
 
       # Used by implementations to push info about test results

@@ -7,4 +7,10 @@ module Moci
   include ConfigFile
   has_config 'moci.yml', :environments => false
 
+  def default_config
+    {
+      :default_timeout => 40.minutes
+    }
+  end
+
 end

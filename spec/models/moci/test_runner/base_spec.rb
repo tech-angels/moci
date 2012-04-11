@@ -78,4 +78,19 @@ describe Moci::TestRunner::Base do
     @base.send :execute, 'foo', 'bar'
   end
 
+  it "should kill execution after timeout" do
+    tsr = Factory.create(:test_suite_run)
+    pi = double('project instance')
+    tsr.stub(:project_instance) { pi }
+    pi.stub(:execute) { sleep 5 }
+    Moci.stub(:config) { {:default_timeout => 1} }
+    @base = Moci::TestRunner::Base.new(tsr)
+    @base.send :execute, 'foo'
+    tsr.reload.state.should == 'finished'
+    tsr.run_log.should include("Timeout::Error")
+    tsr.run_time.should == 1
+    tsr.exitstatus.should == false
+    tsr.build_state.should == 'fail'
+  end
+
 end
