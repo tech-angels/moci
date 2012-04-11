@@ -156,6 +156,7 @@ DEPENDENCIES
   open4
   pg
   rails (= 3.2.3)
+  rspec-mocks
   rspec-rails
   sql_queries_count
   sqlite3
