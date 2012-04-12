@@ -37,7 +37,11 @@ gem 'httparty'
 group :development, :test do
   gem 'rspec-rails'
   gem 'rspec-mocks'
-  gem 'ruby-debug'
+  if RUBY_VERSION.include?('1.9')
+    gem 'ruby-debug19'
+  else
+    gem 'ruby-debug'
+  end
   gem 'faker'
   gem 'factory_girl_rails'
   gem 'ZenTest'
