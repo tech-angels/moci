@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'ruby-debug'
 
 describe Moci::TestRunner::Base do
   before :each do
@@ -91,6 +92,11 @@ describe Moci::TestRunner::Base do
     tsr.run_time.should == 1
     tsr.exitstatus.should == false
     tsr.build_state.should == 'fail'
+  end
+
+  it "should properly track status of executed commands" do
+    @base.send(:execute, "exit 0").should == true
+    @base.send(:execute, "exit 1").should == false
   end
 
 end

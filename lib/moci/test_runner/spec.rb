@@ -43,14 +43,13 @@ module Moci
               end
             end
           end
-          push(
-            :run_time => Time.now - t0,
-            :output => output,
-            :exitstatus => exitstatus,
-            :finished => true
-          )
         end
-
+        push(
+          :run_time => Time.now - t0,
+          :output => output,
+          :exitstatus => exitstatus,
+          :finished => true
+        )
       end
 
       def command

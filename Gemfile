@@ -37,6 +37,7 @@ gem 'httparty'
 group :development, :test do
   gem 'rspec-rails'
   gem 'rspec-mocks'
+  gem 'ruby-debug'
   gem 'faker'
   gem 'factory_girl_rails'
   gem 'ZenTest'

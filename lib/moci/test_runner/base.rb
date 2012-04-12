@@ -33,7 +33,7 @@ module Moci
         max_time = Moci.config[:default_timeout]
         begin
           Timeout.timeout(max_time) do
-            exitvalue = @tr.project_instance.execute(command, output, &block)
+            exitstatus = @tr.project_instance.execute(command, output, &block)
           end
         rescue Timeout::Error
           output << "\nTimeout::Error"
