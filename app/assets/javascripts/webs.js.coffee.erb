@@ -1,6 +1,6 @@
 
 $(document).ready ->
-  jug = new Juggernaut
+  jug = new Juggernaut(host: '<%= Moci.config[:juggernaut_host] || 'localhost' %>', port: <%= Moci.config[:juggernaut_port] || 8080 %>)
   jug.subscribe "moci", (data) ->
     console.log("Got data: " + JSON.stringify(data))
 
