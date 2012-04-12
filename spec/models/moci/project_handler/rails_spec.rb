@@ -22,4 +22,19 @@ describe Moci::ProjectHandler::Rails do
     options = rails_instance.project_handler.send(:options)
     options[:db_structure_dump].should == false
   end
+
+  it "should include rvm command when rvm option is set" do
+    pi = rails_instance
+    pr = pi.project.update_attributes! :project_options => {:rails => {:rvm => '1.8.7@foo'}}
+
+    pi.project_handler.execute_wrapper("moo") do |command, output|
+      command.should include('rvm use 1.8.7@foo &&')
+    end
+  end
+
+  it "should not include rvm command when rvm option is not set" do
+    rails_instance.project_handler.execute_wrapper("moo") do |command, output|
+      command.should_not include('rvm use')
+    end
+  end
 end

@@ -3,11 +3,14 @@ module Moci
 
     # Handler for rails projects
     # TODO this is was mostly thinking about rails 3+, we should add compatibility for older versions too
+    # Options: (project_instance.options[:rails]
+    # * db_structure_dump - should database structure be preseverved between commits (default true)
+    # * rvm - if set, it is assummed rvm with given ruby version is installed, and it will be used
+    #         for all commands executed within project instance (example value: 1.8.7@moci)
     class Rails < Base
 
       def execute_wrapper(command, output='')
-        guess_rvm = File.exist? File.join(working_directory, '.rvmrc')
-        command = "[[ -s \"$HOME/.rvm/scripts/rvm\" ]] && . \"$HOME/.rvm/scripts/rvm\" && " + command if guess_rvm
+        command = "rvm use #{options[:rvm]} &&" if options[:rvm]
         command = "BUNDLE_GEMFILE=\"Gemfile\" && #{command}"
         Bundler.with_clean_env do
           yield(command, output)
