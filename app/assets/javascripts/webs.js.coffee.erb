@@ -9,6 +9,19 @@ $(document).ready ->
     project_name = $('h1.project').attr('data-project-name')
     channel = 'moci_project_' + project_id
     console.log("Subsribing to project channel " + channel)
+    setInterval ->
+      $('.last_runs tr.state_running .info .progress').each (index) ->
+        now_time = new Date().getTime() / 1000
+        creation_time = parseInt($(this).parents('tr').attr('data-created-at'))
+        total = $(this).parents('tr').attr('data-time-est')
+        run_time = now_time - creation_time
+        if run_time > total
+          percentage = 100
+        else
+          percentage = Math.round((run_time / total)*100)
+        $(this).progressbar({value: percentage})
+    , 500
+
     jug.subscribe channel, (data) ->
       console.log("Got project data: " + JSON.stringify(data))
       d = data['data']

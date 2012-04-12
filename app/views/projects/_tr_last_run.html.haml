@@ -1,9 +1,9 @@
-%tr{:class => "test_suite_run_#{tsr.id} state_#{tsr.state}"}
+%tr{:class => "test_suite_run_#{tsr.id} state_#{tsr.state}", 'data-created-at' => tsr.created_at.to_i, 'data-time-est' => tsr.try(:previous_run).try(:run_time).to_i}
   %td.info
     .time
       = tsr.updated_at
     .spinner
-      = image_tag 'ajax_inline2.gif'
+      .progress
   %td= tsr.test_suite.name
   %td.state= tsr.state
 %tr{:class => "test_suite_run_#{tsr.id} details state_#{tsr.state}"}
