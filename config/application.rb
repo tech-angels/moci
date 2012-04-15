@@ -50,4 +50,3 @@ module Moci
   end
 end
 
-require 'moci'

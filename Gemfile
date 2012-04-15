@@ -9,6 +9,7 @@ gem 'cancan'
 
 # adimn panel
 gem 'activeadmin'
+gem "formtastic", "~> 2.1.1" # formtasting 2.2 breaks activeadmin ;(
 
 # models annotations
 gem 'annotator'
@@ -40,11 +41,12 @@ gem 'httparty' # used by campfire
 
 # test suite
 group :development, :test do
+  gem 'factory_girl_rails'
+  gem 'faker'
   gem 'rspec-rails'
   gem 'rspec-mocks'
-  gem RUBY_VERSION.include?('1.9') ? 'ruby-debug19' : 'ruby-debug'
-  gem 'faker'
-  gem 'factory_girl_rails'
-  gem 'ZenTest'
+  gem 'shoulda-matchers'
   gem 'sql_queries_count'
+  gem RUBY_VERSION.include?('1.9') ? 'ruby-debug19' : 'ruby-debug'
+  gem 'ZenTest'
 end

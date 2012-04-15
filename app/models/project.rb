@@ -22,6 +22,11 @@ class Project < ActiveRecord::Base
 
   serialize :project_options, Hash
 
+  validates :name, :presence => true
+  validates :project_type, :presence => true, :inclusion => { :in => Moci::ProjectHandler.types}
+  validates :vcs_type, :presence => true, :inclusion => { :in => Moci::VCS.types}
+
+
   def newest_commit
     commits.order('committed_at DESC').first
   end

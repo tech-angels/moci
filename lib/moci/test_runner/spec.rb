@@ -7,7 +7,7 @@ module Moci
     # * specs - spec files to run in any format that is accepted by rspec
     class Spec < Base
 
-      require 'moci/test_runner/rspec/moci_formatter'
+      require 'rspec/moci_formatter'
       include RSpec::Core::Formatters::MociFormatter::Patterns
       # It uses custom formatter from lib/moci/test_runner/rspec/moci_formatter.rb
       # to get info about single test runs as they appear
@@ -53,7 +53,7 @@ module Moci
       end
 
       def command
-        formatter_path = File.expand_path File.join(File.dirname(__FILE__),'rspec','moci_formatter.rb')
+        formatter_path = File.expand_path File.join(Rails.root,'lib','rspec','moci_formatter.rb')
         "rspec --require #{formatter_path} #{options['specs']}"
       end
     end
