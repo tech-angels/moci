@@ -7,17 +7,19 @@ gem 'devise'
 # users authorization
 gem 'cancan'
 
+# adimn panel
+gem 'activeadmin'
+
 # models annotations
 gem 'annotator'
 
-# live web notifications in rails
+# live web notifications
 gem 'juggernaut'
 
 # test runner
 gem 'open4'
 
 # DB
-
 gem 'sqlite3'
 gem 'pg'
 
@@ -25,28 +27,22 @@ gem 'pg'
 
 gem 'coffee-rails'
 gem 'jquery-rails'
+gem 'sass-rails'
 gem "haml-rails"
 gem 'gravtastic' # avatars from gravatar
 gem 'kaminari' # pagination
 
 # VCS
-
 gem 'git'
 
-# Notifications
+# notifications
+gem 'httparty' # used by campfire
 
-gem 'httparty'
-
-# Test suite
-
+# test suite
 group :development, :test do
   gem 'rspec-rails'
   gem 'rspec-mocks'
-  if RUBY_VERSION.include?('1.9')
-    gem 'ruby-debug19'
-  else
-    gem 'ruby-debug'
-  end
+  gem RUBY_VERSION.include?('1.9') ? 'ruby-debug19' : 'ruby-debug'
   gem 'faker'
   gem 'factory_girl_rails'
   gem 'ZenTest'
