@@ -26,6 +26,7 @@ class Project < ActiveRecord::Base
   validates :project_type, :presence => true, :inclusion => { :in => Moci::ProjectHandler.types}
   validates :vcs_type, :presence => true, :inclusion => { :in => Moci::VCS.types}
 
+  scope :public, where(:public => true)
 
   def newest_commit
     commits.order('committed_at DESC').first
@@ -59,7 +60,7 @@ class Project < ActiveRecord::Base
 
   #FIXME reorganize this
   def vcs_branch_name
-    instances.first.vcs.branch_name
+    instances.first.try(:vcs).try(:branch_name)
   end
 
 end

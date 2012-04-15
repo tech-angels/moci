@@ -8,10 +8,23 @@ class ApplicationController < ActionController::Base
   end
 
   def must_be_in_project
-    @project = Project.find_by_name params[:project_name]
+    @project = projects.find_by_name params[:project_name]
     unless @project
       redirect_to :action => :choose, :controller => '/projects'
       return false
     end
+  end
+
+  helper_method :projects
+  def projects
+    if user_signed_in?
+      Project.where(:id => visible_projects.map(&:id))
+    else
+      Project.public
+    end
+  end
+
+  def visible_projects
+    Project.all.select { |project| project.public? || can?(:view, project) }
   end
 end

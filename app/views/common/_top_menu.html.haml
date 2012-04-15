@@ -1,7 +1,7 @@
 #menu
   Projects:
   %ul
-    - Project.order('name').all.each do |project|
+    - projects.order('name').all.each do |project|
       - if project == @project
         %li.active
           %span= @project.name

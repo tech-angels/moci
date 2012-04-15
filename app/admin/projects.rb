@@ -6,9 +6,10 @@ ActiveAdmin.register Project do
   form do |f|
     f.inputs do
       f.input :name
-      f.input :project_options
+      #f.input :project_options
       f.input :vcs_type, :as => :select, :collection => Moci::VCS.types
       f.input :project_type, :as => :select, :collection => Moci::ProjectHandler.types
+      f.input :public
     end
     f.buttons
   end

@@ -76,6 +76,27 @@ table.no_border td {
   border-width: 0px;
 }
 
+#account {
+  float: right;
+  text-align: right;
+}
+
+.flash {
+  width: 100%;
+  border: 1px solid #555;
+  padding: 7px;
+  text-align: center;
+  margin: 5px;
+}
+
+.flash.alert {
+  background-color: #FEEBEB;
+}
+
+.flash.notice {
+  background-color: #EAF7D9;
+}
+
 #header {
   border: 1px solid #ddd;
   border-width: 0px 0px 1px 0px;
