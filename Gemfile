@@ -2,6 +2,11 @@ source 'http://rubygems.org'
 
 gem 'rails', '3.2.3'
 
+# users authentication
+gem 'devise'
+# users authorization
+gem 'cancan'
+
 # models annotations
 gem 'annotator'
 
