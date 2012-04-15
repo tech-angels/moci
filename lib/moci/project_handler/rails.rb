@@ -10,7 +10,7 @@ module Moci
     class Rails < Base
 
       def execute_wrapper(command, output='')
-        command = "rvm use #{options[:rvm]} &&" if options[:rvm]
+        command = "rvm use #{options[:rvm]} && #{command}" if options[:rvm]
         command = "BUNDLE_GEMFILE=\"Gemfile\" && #{command}"
         Bundler.with_clean_env do
           yield(command, output)
