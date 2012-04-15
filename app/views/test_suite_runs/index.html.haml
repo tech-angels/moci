@@ -28,15 +28,13 @@
         %td
           = link_to tsr.state.humanize, :action => :show, :id => tsr.id
         %td
-          %b= tsr.tests_count
-          tests,
-          = bad_value tsr.errors_count
-          errors
-          = bad_value tsr.failures_count
-          failures
+          = render :partial => 'summary', :locals => {:tsr => tsr}
         %td
           = duration tsr.run_time
 
+%p
+
+  = paginate @test_suite_runs
 
 
 

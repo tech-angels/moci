@@ -1,10 +1,11 @@
 %tr{:class => "test_suite_run_#{tsr.id} state_#{tsr.state}", 'data-created-at' => tsr.created_at.to_i, 'data-time-est' => tsr.try(:previous_run).try(:run_time).to_i}
   %td.info
     .time
-      = tsr.updated_at
+      = l tsr.updated_at, :format => :short
     .spinner
       .progress
   %td= tsr.test_suite.name
+  %td= link_to tsr.commit.short_number, commit_path(tsr.commit)
   %td.state= tsr.state
 %tr{:class => "test_suite_run_#{tsr.id} details state_#{tsr.state}"}
   %td{:colspan => 3}

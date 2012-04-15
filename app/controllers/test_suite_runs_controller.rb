@@ -2,7 +2,7 @@ class TestSuiteRunsController < ApplicationController
 
   def index
     #TODO: paginate
-    @test_suite_runs = TestSuiteRun.order('created_at DESC').includes(:commit => :author).includes(:test_suite => :project).all
+    @test_suite_runs = TestSuiteRun.order('created_at DESC').includes(:commit => :author).includes(:test_suite => :project).page(params[:page]).per(20)
   end
 
   def show
