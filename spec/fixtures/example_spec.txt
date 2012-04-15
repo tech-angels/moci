@@ -10,7 +10,7 @@ describe Foo do
   end
 
   it "should fail sometimes" do
-    sleep 0.2
+    sleep 2
     2.should == 3
   end
 

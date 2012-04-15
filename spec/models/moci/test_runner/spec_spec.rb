@@ -47,7 +47,10 @@ describe Moci::TestRunner::Spec do
 
     it "should properly gather run times" do
       # test case has sleep 0.2 inserted
-      @tsr.test_unit_runs.find{|t| t.test_unit.name == "should fail sometimes"}.run_time.should > 0.2
+      # it turns out that some pipe dolay possibly? can make it a bit less than 2
+      # that's why it's only checked if greater than 1.5, check if we can IMPROVE
+      # Ideally we want these sleeps to be more like 0.2s than 2s
+      @tsr.test_unit_runs.find{|t| t.test_unit.name == "should fail sometimes"}.run_time.should > 1.5
     end
 
     it "should save proper exitstatus" do
