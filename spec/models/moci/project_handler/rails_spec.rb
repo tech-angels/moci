@@ -8,8 +8,8 @@ describe Moci::ProjectHandler::Rails do
 
   it "should track exit status correctly" do
     rails_instance.project_handler.should be_kind_of(Moci::ProjectHandler::Rails)
-    rails_instance.execute("exit 0").should == true
-    rails_instance.execute("exit 1").should == false
+    rails_instance.execute("/bin/true").should == true
+    rails_instance.execute("/bin/false").should == false
   end
 
   it "should have default options" do
@@ -23,18 +23,53 @@ describe Moci::ProjectHandler::Rails do
     options[:db_structure_dump].should == false
   end
 
-  it "should include rvm command when rvm option is set" do
-    pi = rails_instance
-    pr = pi.project.update_attributes! :project_options => {:rails => {:rvm => '1.8.7@foo'}}
+  context "rvm" do
+    it "should include rvm command when rvm option is set" do
+      pi = rails_instance
+      pr = pi.project.update_attributes! :project_options => {:rails => {:rvm => '1.8.7@foo'}}
 
-    pi.project_handler.execute_wrapper("moo") do |command, output|
-      command.should include('rvm use 1.8.7@foo &&')
+      pi.project_handler.execute_wrapper("moo") do |command, output|
+        command.should include('rvm use 1.8.7@foo &&')
+      end
+    end
+
+    it "should not include rvm command when rvm option is not set" do
+      rails_instance.project_handler.execute_wrapper("moo") do |command, output|
+        command.should_not include('rvm use')
+      end
     end
   end
 
-  it "should not include rvm command when rvm option is not set" do
-    rails_instance.project_handler.execute_wrapper("moo") do |command, output|
-      command.should_not include('rvm use')
+  context "bundler" do
+    it "should include bundle exec when executing commands if bundler is enabled" do
+      rails_instance.project_handler.execute_wrapper("moo") do |command, output|
+        command.should include('bundle exec moo')
+      end
     end
+
+    it "should not include bundle exec when executing commands if bundler is not enabled" do
+      pi = rails_instance
+      pr = pi.project.update_attributes! :project_options => {:rails => {:bundler => false}}
+      pi.project_handler.execute_wrapper("moo") do |command, output|
+        command.should_not include('bundle exec moo')
+      end
+    end
+
+    it "should not include bundle exec for bundler commands" do
+      rails_instance.project_handler.execute_wrapper("bundle install") do |command, output|
+        command.should_not include('bundle exec')
+      end
+
+      rails_instance.project_handler.execute_wrapper("bundle check") do |command, output|
+        command.should_not include('bundle exec')
+      end
+    end
+
+    it "should not include bundle exec if it's already in there" do
+      rails_instance.project_handler.execute_wrapper("bundle exec moo") do |command, output|
+        command.split('bundle exec').size.should == 2
+      end
+    end
+
   end
 end

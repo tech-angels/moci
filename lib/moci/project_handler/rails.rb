@@ -7,21 +7,27 @@ module Moci
     # * db_structure_dump - should database structure be preseverved between commits (default true)
     # * rvm - if set, it is assummed rvm with given ruby version is installed, and it will be used
     #         for all commands executed within project instance (example value: 1.8.7@moci)
+    # * bundler - if true, means project is using bundler (default true)
     class Rails < Base
 
       def execute_wrapper(command, output='')
-        command = "rvm use #{options[:rvm]} && #{command}" if options[:rvm]
-        command = "BUNDLE_GEMFILE=\"Gemfile\" && #{command}"
-        Bundler.with_clean_env do
-          yield(command, output)
+        if options[:bundler]
+          command = "bundle exec #{command}" unless command.match(/bundle (install|check|exec)/)
+          command = "BUNDLE_GEMFILE=\"Gemfile\" && #{command}"
         end
+
+        if options[:rvm]
+          command = "rvm use #{options[:rvm]} && #{command}"
+        end
+
+        Bundler.with_clean_env { yield(command, output) }
       end
 
       def prepare_env(commit)
         output = ''
-        # check if there really is need for bundle install
-        unless execute "bundle check"
-          execute! "bundle install", output
+
+        if options[:bundler]
+          execute! "bundle install", output unless execute "bundle check"
         end
 
         # save some gigabytes
@@ -39,7 +45,12 @@ module Moci
 
       def prepare_env_first_time(commit)
         output = ''
-        if execute("bundle install", output) && execute("bundle exec rake db:migrate", output) && (!options[:db_structure_dump] || execute("bundle exec rake db:structure:dump" , output))
+
+        preparation_ok = ( !options[:bundler] || execute("bundle install", output) ) &&
+          execute("rake db:migrate", output) &&
+          (!options[:db_structure_dump] || execute("rake db:structure:dump" , output))
+
+        if preparation_ok
           commit.preparation_log = output
           if options[:db_structure_dump] && File.exist?("#{working_directory}/db/development_structure.sql")
             commit.data = {
@@ -61,7 +72,8 @@ module Moci
 
       def default_options
         {
-          :db_structure_dump => true
+          :db_structure_dump => true,
+          :bundler => true
         }.with_indifferent_access
       end
 

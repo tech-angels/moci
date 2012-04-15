@@ -9,7 +9,7 @@ module Moci
         t0 = lt = Time.now
         output = ""
 
-        exitstatus = execute("TESTOPTS=\"-v\" rake test:#{test_type}") do |pid, stdin, stdout, stderr|
+        exitstatus = execute("rake test:#{test_type} TESTOPTS=\"-v\"") do |pid, stdin, stdout, stderr|
            running = false
 
            pipe = stdout
@@ -63,6 +63,7 @@ module Moci
                )
              end
            end
+           output << stderr.read
         end
         push(
           :run_time => Time.now - t0,

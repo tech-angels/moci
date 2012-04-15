@@ -95,8 +95,8 @@ describe Moci::TestRunner::Base do
   end
 
   it "should properly track status of executed commands" do
-    @base.send(:execute, "exit 0").should == true
-    @base.send(:execute, "exit 1").should == false
+    @base.send(:execute, "/bin/true").should == true
+    @base.send(:execute, "/bin/false").should == false
   end
 
 end

@@ -29,15 +29,15 @@ describe ProjectInstance do
 
     it "should track exit status" do
       instance = Factory.create :project_instance
-      assert instance.execute("exit 0")
-      assert !instance.execute("exit 1")
+      assert instance.execute("/bin/true")
+      assert !instance.execute("/bin/false")
     end
 
     it "should raise on execute!" do
       instance = Factory.create :project_instance
-      instance.execute!("exit 0")
+      instance.execute!("/bin/true")
       assert_raise RuntimeError do
-        instance.execute!("exit 1")
+        instance.execute!("/bin/false")
       end
     end
   end
