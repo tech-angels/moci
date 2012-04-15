@@ -6,7 +6,6 @@
 # * description [text] - description provided inside commit
 # * dev_structure [text] - keeps database structure FIXME: reorganize, make it some data_yaml or whatever
 # * number [string] - commit number as in VCS (e.g. sha hash in git)
-# * parent_id [integer] - belongs_to parent Commit
 # * preparation_log [text] - FIXME: remove me, it's present in ProjectInstanceCommit
 # * project_id [integer] - belongs_to Project
 # * skipped [boolean] - commit can be marked as skipped if we don't want moci to run it

@@ -2,10 +2,11 @@
 # * id [integer, primary, not null] - primary key
 # * created_at [datetime] - creation time
 # * name [string]
+# * project_options [text]
 # * project_type [string, default=Base] - same as class name that will be used as project handler
 #   (Moci::ProjectHandler::..)
 # * updated_at [datetime] - last update time
-# * vcs_branch_name [string]
+# * vcs_type [string, default=Base] - VCS type e.g. Git, Mercurial (see Moci::VCS::Base)
 class Project < ActiveRecord::Base
   validates_presence_of :name
 
