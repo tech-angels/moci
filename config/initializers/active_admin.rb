@@ -109,7 +109,7 @@ ActiveAdmin.setup do |config|
   # You can add before, after and around filters to all of your
   # Active Admin resources from here.
   #
-  # config.before_filter :do_something_awesome
+  config.before_filter :authenticate_admin!
 
 
   # == Register Stylesheets & Javascripts

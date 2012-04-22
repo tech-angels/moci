@@ -7,6 +7,11 @@ class ApplicationController < ActionController::Base
     before_filter :must_be_in_project
   end
 
+  def authenticate_admin!
+    authenticate_user!
+    redirect_to root_path, :alert => "You don't have have admin privileges" unless current_user.admin?
+  end
+
   def must_be_in_project
     @project = projects.find_by_name params[:project_name]
     unless @project
@@ -27,4 +32,5 @@ class ApplicationController < ActionController::Base
   def visible_projects
     Project.all.select { |project| project.public? || can?(:view, project) }
   end
+
 end
