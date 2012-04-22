@@ -5,16 +5,19 @@
 # * project_options [text]
 # * project_type [string, default=Base] - same as class name that will be used as project handler
 #   (Moci::ProjectHandler::..)
+# * public [boolean] - TODO: document me
 # * updated_at [datetime] - last update time
 # * vcs_type [string, default=Base] - VCS type e.g. Git, Mercurial (see Moci::VCS::Base)
 class Project < ActiveRecord::Base
   validates_presence_of :name
+  validates_uniqueness_of :name
 
   has_many :commits, :dependent => :destroy
   has_many :test_suites, :dependent => :destroy
   has_many :project_instances, :dependent => :destroy
-
   has_many :test_suite_runs, :through => :project_instances, :dependent => :destroy
+  has_many :project_permissions
+  has_many :users, :through => :project_permission
 
   alias instances project_instances
 

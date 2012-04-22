@@ -1,5 +1,6 @@
 # Attributes:
 # * id [integer, primary, not null] - primary key
+# * admin [boolean, not null] - TODO: document me
 # * created_at [datetime, not null] - creation time
 # * current_sign_in_at [datetime] - devise trackable
 # * current_sign_in_ip [string] - devise trackable
@@ -24,4 +25,13 @@ class User < ActiveRecord::Base
   # attr_accessible :title, :body
 
   validates :email, :presence => true, :uniqueness => true
+
+  has_many :project_permissions
+  has_many :projects, :through => :project_permissions
+
+  has_many :view_project_permissions, :class_name => 'ProjectPermission', :conditions => {:name => 'view'}
+  has_many :projects_can_view, :through => :view_project_permissions, :source => :project
+
+  has_many :manage_project_permissions, :class_name => 'ProjectPermission', :conditions => {:name => 'manage'}
+  has_many :projects_can_manage, :through => :manage_project_permissions, :source => :project
 end

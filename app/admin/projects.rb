@@ -22,6 +22,7 @@ ActiveAdmin.register Project do
       f.input :project_type, :as => :select, :collection => Moci::ProjectHandler.types
       f.input :public
     end
+
     f.buttons
   end
 end

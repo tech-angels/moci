@@ -11,13 +11,22 @@ ActiveAdmin.register User do
   form do |f|
     f.inputs "Details" do
       f.input :email
+      f.input :admin
     end
 
-    f.inputs "New password" do
-      f.input :password
-      f.input :password_confirmation
+    f.inputs "Permissions", :class => 'inputs permissions' do
+      f.input :projects_can_view, :as => :select, :multiple => true, :collection => Project.all
+      f.input :projects_can_manage, :as => :select, :multiple => true, :collection => Project.all
     end
 
     f.buttons
+  end
+
+  controller do
+    def update
+      @user = User.find params[:id]
+      @user.assign_attributes params[:user], :without_protection => true
+      update!
+    end
   end
 end

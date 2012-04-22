@@ -8,5 +8,5 @@ ActiveAdmin.register TestSuiteRun do
     column :run_time
     default_actions
   end
-  
+
 end

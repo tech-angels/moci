@@ -47,6 +47,6 @@ group :development, :test do
   gem 'rspec-mocks'
   gem 'shoulda-matchers'
   gem 'sql_queries_count'
-  gem RUBY_VERSION.include?('1.9') ? 'ruby-debug19' : 'ruby-debug'
+  #gem RUBY_VERSION.include?('1.9') ? 'ruby-debug19' : 'ruby-debug'
   gem 'ZenTest'
 end
