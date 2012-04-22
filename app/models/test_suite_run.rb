@@ -18,6 +18,8 @@ class TestSuiteRun < ActiveRecord::Base
   belongs_to :project_instance
   belongs_to :test_suite
 
+  delegate :project, :to => :test_suite
+
   has_many :test_unit_runs, :dependent => :destroy
 
   scope :finished, :conditions => {:state => 'finished'}
