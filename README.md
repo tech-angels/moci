@@ -59,7 +59,7 @@ If you want to have live updates in your app, you'll need to run juggernaut.
 
 ## Extending and diving into moci
 
-The core of moci is under [lib/moci](https://github.com/tech-angels/moci/tree/master/lib/moci). You'll find there API for implementing own [[test runner](https://github.com/tech-angels/moci/blob/master/lib/moci/test_runner/base.rb), [VCS](https://github.com/tech-angels/moci/blob/master/lib/moci/vcs/base.rb) or [project handler](https://github.com/tech-angels/moci/blob/master/lib/moci/project_handler/base.rb)
+The core of moci is under [lib/moci](https://github.com/tech-angels/moci/tree/master/lib/moci). You'll find there API for implementing own [test runner](https://github.com/tech-angels/moci/blob/master/lib/moci/test_runner/base.rb), [VCS](https://github.com/tech-angels/moci/blob/master/lib/moci/vcs/base.rb) or [project handler](https://github.com/tech-angels/moci/blob/master/lib/moci/project_handler/base.rb)
 
 There is still slight chance that this API may change, but these should not be dramatic changes.
 

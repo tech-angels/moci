@@ -2,44 +2,53 @@ module Moci
   module VCS
 
     # TODO: make Base bahave like a dummy VCS, it should work for no VCS installed in the project
+    # Base class that all VCS implementations should as an ancestor.
     class Base
 
-
+      # VCS object is initialized separately for each project instance, once it's initialized, it operates within the same working_direcotry
       def initialize(project_instance)
-        raise "wat"
+        @project_instance = project_instance
+        @project = project_instance.project
+      end
+
+      # Currently project is associated with only one branch, this method returns it's name
+      def branch_name
+        @project.options.try(:[],'vcs').try(:[], 'branch_name') || default_branch_name
       end
 
       # Checkout given Commit object
       # (Not commit number, but Commit model is passed)
       def checkout(commit)
         update unless pic = @project_instance.commits.find_by_commit_id(commit.id)
-        #unless pic || @project_instance.commits.find_by_commit_id(commit.id)
-          #raise "could not find commit #{commit.id} on instance #{@project_instance.id}"
-        #end
-        checkout_number(commit.number)
-        got_commit_number commit.number
+        checkout_number commit.number
       end
 
-      # Should return hash with data about commit with given number
-      # Recognized keys:
-      # :number - commit number
-      # :author_name
-      # :author_email
-      # :committed_at [Time]
-      # :description
-      # :parents - array with numbers of parent commits
-      def details(numbe)
+      # Returns number of currently checked out commit
+      def current_number
         raise "implement me"
-      end
-
-      def link_to_commit(number)
       end
 
       def default_branch_name
       end
 
-      def branch_name
-        @project.options.try(:[],'vcs').try(:[], 'branch_name') || default_branch_name
+
+      # Should return hash with data about commit with given number
+      # Recognized keys:
+      # * :number - commit number
+      # * :author_name
+      # * :author_email
+      # * :committed_at [Time]
+      # * :description
+      # * :parents - array with numbers of parent commits
+      def details(numbe)
+        raise "implement me"
+      end
+
+
+      # It should update local checkout with main repository, and call .got_commit_number
+      # for each new commit that was found.
+      def update
+        raise "implement me"
       end
 
       protected

@@ -4,8 +4,7 @@ module Moci
     class Git < Base
 
       def initialize(project_instance)
-        @project_instance = project_instance
-        @project = project_instance.project
+        super
         @g = ::Git.open(@project_instance.working_directory)# , :log => Logger.new(STDOUT))
       end
 
