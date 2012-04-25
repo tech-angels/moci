@@ -17,7 +17,10 @@ module Moci
         end
 
         if options[:rvm]
-          command = "rvm use #{options[:rvm]} && #{command}"
+          # It totally sucks that we have to load bash just for RVM
+          # TODO: http://beginrescueend.com/workflow/scripting/ (use global installation if present
+          # TODO we should check if ruby is installed first, and raise some exceptions
+          command = "bash -c 'source \"$HOME/.rvm/scripts/rvm\" && rvm #{options[:rvm]} && #{command}'"
         end
 
         Bundler.with_clean_env { yield(command, output) }

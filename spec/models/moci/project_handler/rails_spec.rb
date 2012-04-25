@@ -29,13 +29,13 @@ describe Moci::ProjectHandler::Rails do
       pr = pi.project.update_attributes! :project_options => {:rails => {:rvm => '1.8.7@foo'}}
 
       pi.project_handler.execute_wrapper("moo") do |command, output|
-        command.should include('rvm use 1.8.7@foo &&')
+        command.should include('rvm 1.8.7@foo &&')
       end
     end
 
     it "should not include rvm command when rvm option is not set" do
       rails_instance.project_handler.execute_wrapper("moo") do |command, output|
-        command.should_not include('rvm use')
+        command.should_not include('rvm')
       end
     end
   end
