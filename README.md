@@ -2,7 +2,7 @@
 
   Continuous Integration that sucks less.
   
-  [![Dependency Status](https://gemnasium.com/tech-angels/moci.png)]
+  ![Dependency Status](https://gemnasium.com/tech-angels/moci.png)
 
 ## What is MOCI?
 
