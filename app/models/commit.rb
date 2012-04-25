@@ -11,8 +11,6 @@
 # * skipped [boolean] - commit can be marked as skipped if we don't want moci to run it
 # * updated_at [datetime] - last update time
 class Commit < ActiveRecord::Base
-  #TODO? maybe: commiter? multiple parents?
-  #
   belongs_to :author
   belongs_to :project
 
@@ -21,6 +19,21 @@ class Commit < ActiveRecord::Base
 
   has_and_belongs_to_many :parents,
     :class_name => 'Commit', :association_foreign_key => 'parent_id', :join_table => 'commits_parents'
+
+  def compute_build_state
+    new_errors = latest_test_suite_runs.compact.map(&:new_errors).map(&:size).sum
+    errors = latest_test_suite_runs.compact.map(&:errors).map(&:size).sum
+    exitstatuses = latest_test_suite_runs.compact.map(&:exitstatus)
+    return 'running'  if first_test_suite_runs.compact.any?(&:running?)
+    return 'preparation_failed' if project_instance_commits.any? {|c| c.state == 'preparation_failed'} # FIXME
+    return 'pending'  if latest_test_suite_runs.any? {|x| x.nil?}
+    return 'fail' if new_errors > 0
+    return 'ok' if new_errors == 0 && errors > 0
+    # TODO name this tate differently probably, failed_to_run maybe?
+    # It's the case when test suite returned non-zero exitcode, but we had no test_unit_run errors
+    return 'fail' unless exitstatuses.all?
+    return 'clean' if errors == 0
+  end
 
   def short_description
     desc = description.split("\n").first
@@ -56,22 +69,6 @@ class Commit < ActiveRecord::Base
 
   def pending?
     latest_test_suite_runs.any? {|x| x.nil?}
-  end
-
-  def build_state
-    # OPTIMIZE like hell
-    new_errors = latest_test_suite_runs.compact.map(&:new_errors).map(&:size).sum
-    errors = latest_test_suite_runs.compact.map(&:errors).map(&:size).sum
-    exitstatuses = latest_test_suite_runs.compact.map(&:exitstatus)
-    return 'running'  if first_test_suite_runs.compact.any?(&:running?)
-    return 'preparation_failed' if project_instance_commits.any? {|c| c.state == 'preparation_failed'} # FIXME
-    return 'pending'  if latest_test_suite_runs.any? {|x| x.nil?}
-    return 'fail' if new_errors > 0
-    return 'ok' if new_errors == 0 && errors > 0
-    # TODO name this tate differently probably, failed_to_run maybe?
-    # It's the case when test suite returned non-zero exitcode, but we had no test_unit_run errors
-    return 'fail' unless exitstatuses.all?
-    return 'clean' if errors == 0
   end
 
   def notify_test_suite_done(tsr)
@@ -112,5 +109,15 @@ class Commit < ActiveRecord::Base
       "https://github.com/#{project.options[:github]}/commit/#{self.number}"
     end
   end
+
+  def update_build_state!
+    new_build_state = compute_build_state
+    if new_build_state != build_state
+      self.build_state = new_build_state
+      save!
+      # TODO this semes like a good place to move notification firing
+    end
+  end
+
 
 end

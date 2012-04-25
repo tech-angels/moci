@@ -24,6 +24,9 @@ class TestSuiteRun < ActiveRecord::Base
 
   scope :finished, :conditions => {:state => 'finished'}
 
+  after_save :update_commit_build_state
+  after_destroy :update_commit_build_state
+
   def running?
     state == 'running'
   end
@@ -116,11 +119,19 @@ class TestSuiteRun < ActiveRecord::Base
     self.commit.notify_test_suite_done(self) if before_me_count == 0
   end
 
+  def update_commit_build_state
+    if state_changed?
+      commit.update_build_state!
+    end
+  end
 
   # Live web notifications TODO: move to observer
 
   after_save do
     Webs.notify :test_suite_run, self
   end
+
+  protected
+
 
 end

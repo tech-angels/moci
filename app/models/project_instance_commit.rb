@@ -17,6 +17,8 @@ class ProjectInstanceCommit < ActiveRecord::Base
 
   validates_uniqueness_of :commit_id, :scope => :project_instance_id
 
+  after_save :update_commit_build_state
+
   def prepared?(chain_cache={})
     ret = false
     return chain_cache[self.id] if chain_cache[self.id]
@@ -39,6 +41,12 @@ class ProjectInstanceCommit < ActiveRecord::Base
 
   def data
     self.data_yaml ? YAML.load(self.data_yaml) : {}
+  end
+
+  protected
+
+  def update_commit_build_state
+    commit.update_build_state! if state_changed?
   end
 
 end
