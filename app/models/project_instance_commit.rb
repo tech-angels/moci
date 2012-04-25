@@ -34,11 +34,11 @@ class ProjectInstanceCommit < ActiveRecord::Base
   end
 
   def data=(value)
-    self.data_yaml = value.to_yaml
+    self.data_yaml = (value || {}).to_yaml
   end
 
   def data
-    YAML.load(self.data_yaml)
+    self.data_yaml ? YAML.load(self.data_yaml) : {}
   end
 
 end

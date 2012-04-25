@@ -29,7 +29,7 @@ class TestSuiteRun < ActiveRecord::Base
   end
 
   def clean?
-    errors_count == 0 && failures_count == 0
+    errors_count.to_i == 0 && failures_count.to_i == 0
   end
 
   def build_state

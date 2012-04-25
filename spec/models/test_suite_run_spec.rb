@@ -23,5 +23,48 @@ describe TestSuiteRun do
     tsr.parent_runs.should == [tsr2]
   end
 
+  context "build state" do
+    let(:tsr) { Factory :test_suite_run, :state => 'finished' }
+
+    it "should be clean if there are no errors" do
+      tsr.errors_count = 0
+      tsr.clean?.should == true
+      tsr.failures_count = 0
+      tsr.clean?.should == true
+      tsr.failures_count = nil
+      tsr.failures_count = 0
+    end
+
+    it "should not be clean if errors count != 0" do
+      tsr.errors_count = 1
+      tsr.clean?.should == false
+      tsr.errors_count = 0
+      tsr.failures_count = 1
+      tsr.clean?.should == false
+    end
+
+    it "should have clean state only if exitstatus is true" do
+      tsr.errors_count = 0
+      tsr.exitstatus = false
+      tsr.build_state.should_not == 'clean'
+      tsr.exitstatus = true
+      tsr.build_state.should == 'clean'
+    end
+
+    it "should be ok if there are no new errors" do
+      tsr.stub(:errors) { Array.new(2) { Factory :test_unit, :test_suite => tsr.test_suite } }
+      tsr.stub(:new_errors) { [] }
+      tsr.errors_count = 2
+      tsr.build_state.should == 'ok'
+    end
+
+    it "should be fail if there are new errors" do
+      errs = [ Factory(:test_unit, :test_suite => tsr.test_suite) ]
+      tsr.stub(:new_errors) { errs }
+      tsr.stub(:errors) { errs }
+      tsr.errors_count = 1
+      tsr.build_state.should == 'fail'
+    end
+  end
 
 end
