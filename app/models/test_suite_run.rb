@@ -24,7 +24,6 @@ class TestSuiteRun < ActiveRecord::Base
 
   scope :finished, :conditions => {:state => 'finished'}
 
-  after_save :update_commit_build_state
   after_destroy :update_commit_build_state
 
   def running?
@@ -109,15 +108,17 @@ class TestSuiteRun < ActiveRecord::Base
 
   #TODO this should be handled by some events
   def after_run
-    # Notification
+    commit.update_build_state!
 
-    # We want it to fire only after first run
+    # Notification. We want it to fire it only after first run
     before_me_count = TestSuiteRun.where(
       :test_suite_id => test_suite.id,
       :commit_id => commit.id).
       where('created_at < ?', self.created_at).count
-    self.commit.notify_test_suite_done(self) if before_me_count == 0
+    commit.notify_test_suite_done(self) if before_me_count == 0
   end
+
+  protected
 
   def update_commit_build_state
     if state_changed?
@@ -131,7 +132,6 @@ class TestSuiteRun < ActiveRecord::Base
     Webs.notify :test_suite_run, self
   end
 
-  protected
 
 
 end

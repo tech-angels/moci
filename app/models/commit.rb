@@ -20,7 +20,11 @@ class Commit < ActiveRecord::Base
   has_and_belongs_to_many :parents,
     :class_name => 'Commit', :association_foreign_key => 'parent_id', :join_table => 'commits_parents'
 
+  has_and_belongs_to_many :children,
+    :class_name => 'Commit', :association_foreign_key => 'commit_id', :foreign_key => 'parent_id', :join_table => 'commits_parents'
+
   def compute_build_state
+    # OPTIMIZE
     new_errors = latest_test_suite_runs.compact.map(&:new_errors).map(&:size).sum
     errors = latest_test_suite_runs.compact.map(&:errors).map(&:size).sum
     exitstatuses = latest_test_suite_runs.compact.map(&:exitstatus)
@@ -115,7 +119,9 @@ class Commit < ActiveRecord::Base
     if new_build_state != build_state
       self.build_state = new_build_state
       save!
-      # TODO this semes like a good place to move notification firing
+      # TODO handle skipped ccommits (probably something like children without skipped will do)
+      children.each {|c| c.update_build_state! if c.build_state}
+      # TODO this seems like a good place to move notification firing
     end
   end
 

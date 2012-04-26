@@ -42,6 +42,15 @@ describe Commit do
       c1.reload.parents.to_set.should == [c2, c3].to_set
     end
 
+    it "should have children" do
+      c1,c2,c3 = Array.new(3) { Factory.create :commit }
+      c1.parents.should be_empty
+      c1.parents << c2
+      c2.reload.children.should == [c1]
+      c3.parents << c2
+      c2.reload.children.to_set.should == [c1, c3].to_set
+    end
+
     it "should handle skipped commits properly in parents_without_skipped" do
       c1,c2,c3 = Array.new(3) { Factory.create :commit }
       c1.parents << c2
