@@ -43,6 +43,8 @@ module Moci
               end
             end
           end
+          err = stderr.read
+          output += "\n\nSTDERR: #{err}" unless err.to_s.strip.empty?
         end
         push(
           :run_time => Time.now - t0,

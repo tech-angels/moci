@@ -77,6 +77,11 @@ describe Moci::TestRunner::Spec do
     it "should save proper exit status" do
       @tsr.exitstatus.should == true
     end
+
+    it "sholud gather stderr output" do
+      @tsr.run_log.should include("This is something on STDERR")
+    end
+
   end
 
 end
