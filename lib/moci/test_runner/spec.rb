@@ -1,3 +1,4 @@
+require 'json'
 
 module Moci
   module TestRunner
@@ -7,8 +8,6 @@ module Moci
     # * specs - spec files to run in any format that is accepted by rspec
     class Spec < Base
 
-      require 'rspec/moci_formatter'
-      include RSpec::Core::Formatters::MociFormatter::Patterns
       # It uses custom formatter from lib/moci/test_runner/rspec/moci_formatter.rb
       # to get info about single test runs as they appear
       def run
@@ -16,33 +15,37 @@ module Moci
         running = nil
         output = ""
         exitstatus = execute(command) do |pid, stdin, stdout, stderr|
-          pipe = stdout
-          pipe.sync = true
+          stdout.sync = true
           dt0 = Time.now
 
-          while line = pipe.gets
+          while line = stdout.gets
             output += line
-            line = line.strip
-            if line == P_TEST_START
-              dt0 = Time.now
-            else
-              if line.match(/^(#{Regexp.escape(P_TEST_PASSED)}|#{Regexp.escape(P_TEST_PENDING)}|#{Regexp.escape(P_TEST_FAILED)})/)
-                result = line[0].chr
-                class_name = line.match(/#{Regexp.escape(P_GROUP_NAME_START)}(.*?)#{Regexp.escape(P_GROUP_NAME_END)}/)[1]
-                name = line.split(P_GROUP_NAME_END,2).last.strip
-                push_test name, class_name
-                last_test result, (Time.now - dt0)
-              end
-              if line.starts_with? P_STATS
-                stats = line.split(P_STATS,2)[1].split(',').map(&:to_f)
+
+            # All moci information is within MOCI[[...]]
+            if m = line.match(/MOCI\[\[(.*?)\]\]/)
+              data = JSON.load(m[1]) rescue {}
+              data = data.with_indifferent_access
+
+              case data[:event]
+
+              when "start"
+                dt0 = Time.now
+
+              when "result"
+                push_test data[:example][:name], data[:example][:group]
+                last_test data[:result], Time.now - dt0
+
+              when "stats"
                 push(
-                  :tests_count => stats[1],
-                  :assertions_count => stats[1], # rspec only provide "examples count"
-                  :errors_count => stats[2]
+                  :tests_count => data[:example_count],
+                  :assertions_count => data[:exmaple_count], # rspec only provides "examples count"
+                  :errors_count => data[:failure_count]
                 )
               end
             end
           end
+
+          # If there was eny output on stderr, append it at the end
           err = stderr.read
           output += "\n\nSTDERR: #{err}" unless err.to_s.strip.empty?
         end
