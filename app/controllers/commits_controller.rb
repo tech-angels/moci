@@ -8,5 +8,6 @@ class CommitsController < ApplicationController
   def show
     @commit = Commit.find params[:id]
     @project = @commit.project
+    must_be_in_project
   end
 end

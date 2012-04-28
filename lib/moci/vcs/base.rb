@@ -19,6 +19,7 @@ module Moci
       # Checkout given Commit object
       # (Not commit number, but Commit model is passed)
       def checkout(commit)
+        # We could know about this commit from different instance, if ProjectInstanceCommit is not found, update
         update unless pic = @project_instance.commits.find_by_commit_id(commit.id)
         checkout_number commit.number
       end
