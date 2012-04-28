@@ -4,6 +4,8 @@ module Moci
     # ProjectHandler interface
     class Base
 
+      extend DynamicOptions::Definition
+
       def initialize(project_instance)
         @project_instance = project_instance
       end

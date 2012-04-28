@@ -31,6 +31,10 @@ class Project < ActiveRecord::Base
 
   scope :public, where(:public => true)
 
+  include DynamicOptions::Model
+
+  has_dynamic_options :definition => lambda { project_handler_class.options_definition.merge(vcs_class.options_definition) }
+
   def newest_commit
     commits.order('committed_at DESC').first
   end
@@ -59,6 +63,18 @@ class Project < ActiveRecord::Base
   def options
     #TODO merge over defaults
     (project_options || {}).with_indifferent_access
+  end
+
+  def options=(new_options)
+    self.project_options = new_options
+  end
+
+  def project_handler_class
+    @project_handler_class ||= ::Moci::ProjectHandler.const_get(project_type.camelize)
+  end
+
+  def vcs_class
+    @vcs_class ||= ::Moci::VCS.const_get(vcs_type.camelize)
   end
 
   #FIXME reorganize this

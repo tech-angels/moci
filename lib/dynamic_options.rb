@@ -1,0 +1,92 @@
+module DynamicOptions
+  module Model
+
+    module ClassMethods
+      def has_dynamic_options(opts)
+        @dynamic_options = opts
+      end
+
+      def dynamic_options
+        @dynamic_options
+      end
+    end
+
+    def dynamic_options_defaults
+      defaults = {}.with_indifferent_access
+      dynamic_options_definition.each_pair do |key,opts|
+        defaults[key] = opts[:default] if opts[:default]
+      end
+      defaults
+    end
+
+    def dynamic_options
+      dynamic_options_defaults.merge(options)
+    end
+
+    def dynamic_options=(new_options)
+      # TODO validate if keys are valid
+      self.options = (options || {}).merge(new_options)
+    end
+
+    def self.included(klass)
+      klass.extend(ClassMethods)
+    end
+
+    def dynamic_options_definition
+      definition = self.class.dynamic_options[:definition]
+      definition.kind_of?(Proc) ? definition.bind(self).call : definition
+    end
+  end
+
+  module Definition
+    # TODO consider addirng some DSL instead of just providing hash
+    def define_options(&block)
+      @options_definition = options_definition.merge(block.call)
+    end
+
+    def options_definition
+      @options_definition || {}
+    end
+  end
+
+  module View
+    def dynamic_options(f)
+      default_options = {
+        :type => :text
+      }
+      f.inputs "Options", :for => :dynamic_options do |o|
+        html = "" # this seems so weird to do to make formtastic works
+        f.object.dynamic_options_definition.each_pair do |name, options|
+
+          options.reverse_merge!(default_options)
+
+          field_options = {
+            #FIXME boolean select does not get displayed properly
+            :input_html => { :value => f.object.dynamic_options[name]},
+            :label => options[:name] || name.to_s.humanize,
+            :hint => options[:description]
+          }
+
+          case options[:type]
+          when :boolean
+            field_options.merge!(:as => :select, :column_type => :boolean)
+          end
+
+          html = o.input name, field_options
+        end
+        html
+      end
+    end
+
+    def display_options(object)
+      #TODO cleanup
+      html = "<ul>"
+      object.dynamic_options_definition.each_pair do |name, opts|
+        html << "<li>#{opts[:name] || name.to_s.humanize}: <strong>#{object.dynamic_options[name]}</strong></li>"
+      end
+      html << "</ul>"
+      html
+    end
+
+  end
+end

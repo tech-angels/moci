@@ -4,6 +4,8 @@ module Moci
     # Notificator interface
     class Base
 
+      extend DynamicOptions::Definition
+
       # TODO Plan some nice API.
       # By default things like commit_built could use methods like #message or #short_message
       # So to add new basic notificator, it would be enough for class to respond to #massage for example.

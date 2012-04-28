@@ -1,8 +1,30 @@
 module Moci
   module Notificator
     class Campfire < Base
-      include HTTParty
 
+      define_options do
+        {
+          :room_url => {
+            :description => "e.g. https://your-awesome-company.campfirenew.com",
+            :required => true
+          },
+          :auth_token => {
+            :required => true
+          },
+          :room_id => {
+            :required => true
+          },
+          :style => {
+            :type => :select,
+            :options => ['verbose','compact'],
+            :default => "verbose",
+            :descritption => "verbose: full list of fixed/introduced errors, compact: just build status and link to moci commit page"
+          }
+        }
+      end
+
+
+      include HTTParty
       headers    'Content-Type' => 'application/json'
 
       def initialize(params)

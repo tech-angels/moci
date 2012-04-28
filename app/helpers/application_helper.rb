@@ -1,4 +1,5 @@
 module ApplicationHelper
+  include DynamicOptions::View
 
   def link_to_p(name, url_params)
     url_params.merge!(:project_name => @project.name) if @project

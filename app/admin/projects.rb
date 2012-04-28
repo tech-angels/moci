@@ -27,6 +27,24 @@ ActiveAdmin.register Project do
       f.input :notifications, :as => :check_boxes
     end
 
+    dynamic_options f
+
     f.buttons
   end
+
+  show do
+    attributes_table do
+      row :id
+      row :name
+      row :vcs_type
+      row :project_type
+      row :public
+      row :options do
+        raw display_options(resource)
+      end
+      row :created_at
+      row :updated_at
+    end
+  end
+
 end

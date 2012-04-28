@@ -5,6 +5,8 @@ module Moci
     # Base class that all VCS implementations should as an ancestor.
     class Base
 
+      extend DynamicOptions::Definition
+
       # VCS object is initialized separately for each project instance, once it's initialized, it operates within the same working_direcotry
       def initialize(project_instance)
         @project_instance = project_instance

@@ -13,8 +13,12 @@ class Notification < ActiveRecord::Base
 
   serialize :notification_options, Hash
 
+  include DynamicOptions::Model
+
+  has_dynamic_options :definition => lambda { notificator.class.options_definition }
+
   def notificator
-    Moci::Notificator.const_get(notification_type).new(options)
+    @notificator ||= Moci::Notificator.const_get(notification_type).new(options)
   end
 
   def options

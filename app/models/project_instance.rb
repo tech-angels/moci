@@ -171,19 +171,11 @@ class ProjectInstance < ActiveRecord::Base
 
   # Instance of Version Control System class associated with this Project
   def vcs
-    # TODO add validation in model for proper vcs_type
-    @vcs ||= (
-      require "moci/vcs/#{project.vcs_type.snake_case}"
-      Moci::VCS.const_get(project.vcs_type.camelize).new(self)
-    )
+    @vcs ||=  project.vcs_class.new(self)
   end
 
   def project_handler
-    # TODO add validation in model for proper project_type
-    @project_handler ||= (
-      require "moci/project_handler/#{project.project_type.snake_case}"
-      Moci::ProjectHandler.const_get(project.project_type.camelize).new(self)
-    )
+    @project_handler ||= project.project_handler_class.new(self)
   end
 
   protected

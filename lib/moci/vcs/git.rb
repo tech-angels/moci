@@ -3,6 +3,16 @@ module Moci
   module VCS
     class Git < Base
 
+      define_options do
+        {
+          :github => {
+            :name => "Github project",
+            :type => :text,
+            :description => "Optional. Github project associated with the project e.g. tech-angels/moci (used to generate links to commits)"
+          }
+        }
+      end
+
       def initialize(project_instance)
         super
         @g = ::Git.open(@project_instance.working_directory)# , :log => Logger.new(STDOUT))
