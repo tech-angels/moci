@@ -15,12 +15,16 @@ ActiveAdmin.register Project do
   end
 
   form do |f|
-    f.inputs do
+    f.inputs "General" do
       f.input :name
       #f.input :project_options
       f.input :vcs_type, :as => :select, :collection => Moci::VCS.types
       f.input :project_type, :as => :select, :collection => Moci::ProjectHandler.types
       f.input :public
+    end
+
+    f.inputs "Notifications" do
+      f.input :notifications, :as => :check_boxes
     end
 
     f.buttons
