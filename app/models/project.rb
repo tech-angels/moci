@@ -33,7 +33,7 @@ class Project < ActiveRecord::Base
 
   include DynamicOptions::Model
 
-  has_dynamic_options :definition => lambda { project_handler_class.options_definition.merge(vcs_class.options_definition) }
+  has_dynamic_options :definition => lambda {  (project_handler_class.try(:options_definition) || {}).merge(vcs_class.try(:options_definition) || {}) }
 
   def newest_commit
     commits.order('committed_at DESC').first
@@ -70,11 +70,11 @@ class Project < ActiveRecord::Base
   end
 
   def project_handler_class
-    @project_handler_class ||= ::Moci::ProjectHandler.const_get(project_type.camelize)
+    @project_handler_class ||= ::Moci::ProjectHandler.const_get(project_type.camelize) unless project_type.blank?
   end
 
   def vcs_class
-    @vcs_class ||= ::Moci::VCS.const_get(vcs_type.camelize)
+    @vcs_class ||= ::Moci::VCS.const_get(vcs_type.camelize) unless vcs_type.blank?
   end
 
   #FIXME reorganize this
