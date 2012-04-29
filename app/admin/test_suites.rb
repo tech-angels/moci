@@ -33,6 +33,7 @@ ActiveAdmin.register TestSuite do
     end
   end
 
+  # Used when changing test_runner to dynamically render apropriate option fields
   collection_action :option_fields do
     @test_suite = TestSuite.find_by_id(params[:id]) || TestSuite.new
     @test_suite.suite_type = params[:type]

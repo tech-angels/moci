@@ -70,11 +70,11 @@ class Project < ActiveRecord::Base
   end
 
   def project_handler_class
-    @project_handler_class ||= ::Moci::ProjectHandler.const_get(project_type.camelize) unless project_type.blank?
+    @project_handler_class = ::Moci::ProjectHandler.const_get(project_type.camelize) unless project_type.blank?
   end
 
   def vcs_class
-    @vcs_class ||= ::Moci::VCS.const_get(vcs_type.camelize) unless vcs_type.blank?
+    @vcs_class = ::Moci::VCS.const_get(vcs_type.camelize) unless vcs_type.blank?
   end
 
   #FIXME reorganize this

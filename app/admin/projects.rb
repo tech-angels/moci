@@ -47,4 +47,13 @@ ActiveAdmin.register Project do
     end
   end
 
+  # Used when changing vcs_type or project_type to dynamically render apropriate option fields
+  collection_action :option_fields do
+    @project = Project.find_by_id(params[:id]) || Project.new
+    @project.vcs_type = params[:vcs_type]
+    @project.project_type = params[:project_type]
+    # FIXME it works by some kind of luck, there should be no form rendered here,
+    # we only need FormBuilder object to pass to dynamic_options
+    render :inline => "<%= raw(form_for(@project, :url => '', :builder => ActiveAdmin::FormBuilder) {|f| dynamic_options(f) } ) %>"
+  end
 end

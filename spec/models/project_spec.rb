@@ -41,7 +41,7 @@ describe Project do
     end
 
     it "should not raise when vcs_type is blank" do
-      subject.vcs_type = ""l
+      subject.vcs_type = ""
       subject.vcs_class.should be_nil
     end
 
@@ -49,5 +49,6 @@ describe Project do
       subject.vcs_type = "Git"
       subject.vcs_class.should == ::Moci::VCS::Git
     end
+
   end
 end
