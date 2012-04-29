@@ -14,7 +14,7 @@ ActiveAdmin.register Notification do
       f.input :notification_type, :as => :select, :collection => Moci::Notificator.types
     end
 
-    dynamic_options f
+    dynamic_options f # IMPROVE, implement as formtastic module, so that we have f.dynamic_options
 
     f.inputs "Enabled on projects" do
       f.input :projects, :as => :check_boxes
@@ -35,5 +35,6 @@ ActiveAdmin.register Notification do
       row :updated_at
     end
   end
+
 
 end

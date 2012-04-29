@@ -3,11 +3,18 @@ module Moci
 
     # Simplest runner to execute arbitrary commands
     # It only cares about exit code
-    # Options:
-    # * *command*  - command to execute, which exit code is taken as a result
-    # * pre_command - optional command to execute before
-    # * post_command - optional command to execute after (no matter what result was)
     class Command < Base
+
+      define_options do
+        {
+          :command => { :description => "Command to execute, which exit code is taken as a result",
+            :required => true
+          },
+          :pre_command => { :description => "Optional command to execute before" },
+          :post_command => {  :description => "Optional command to execute after (no matter what result was)" }
+        }
+      end
+
       def run
         t0 = Time.now
         output = ''

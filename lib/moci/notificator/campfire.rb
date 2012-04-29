@@ -18,7 +18,7 @@ module Moci
             :type => :select,
             :options => ['verbose','compact'],
             :default => "verbose",
-            :descritption => "verbose: full list of fixed/introduced errors, compact: just build status and link to moci commit page"
+            :description => "verbose: full list of fixed/introduced errors, compact: just build status and link to moci commit page"
           }
         }
       end

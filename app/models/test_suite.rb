@@ -21,6 +21,10 @@ class TestSuite < ActiveRecord::Base
 
   serialize :suite_options, Hash
 
+  include DynamicOptions::Model
+
+  has_dynamic_options :definition => lambda { runner_class ? runner_class.options_definition : {} }
+
   # Run TestSuite within given ProjectInstance
   def run(project_instance)
     puts " running test suite #{self.name}"
@@ -35,7 +39,7 @@ class TestSuite < ActiveRecord::Base
 
   # Returns given test suite runner implementation class
   def runner_class
-    Moci::TestRunner.const_get suite_type
+    Moci::TestRunner.const_get suite_type if suite_type
   end
 
   def options

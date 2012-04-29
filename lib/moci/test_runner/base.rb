@@ -7,6 +7,8 @@ module Moci
     # All TestRunner implementations should have it in ancestors.
     class Base
 
+      extend DynamicOptions::Definition
+
       # Run tests according to given TestSuiteRun params
       def self.run(tr)
         new(tr).run

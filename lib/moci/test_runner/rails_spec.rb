@@ -8,6 +8,13 @@ module Moci
     # * spec - SPEC variable to pass, e.g. "spec/my_weird_tests"
     #
     class RailsSpec < Spec
+      define_options do
+        {
+          :specs => { :description => 'specs type to run e.g. models, it will be run like: rake spec:YOUR_VALUE' },
+          :spec => { :description => 'You can use it instead of or with "specs" option, to provide specific directory'+
+            ' with specs e.g. "spec/acceptance", it will be run like: rake spec SPEC=YOUR_VALUE' }
+        }
+      end
 
       def command
         formatter_path = File.expand_path File.join(Rails.root,'lib','rspec','moci_formatter.rb')

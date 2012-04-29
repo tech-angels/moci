@@ -54,22 +54,26 @@ module DynamicOptions
       default_options = {
         :type => :text
       }
-      f.inputs "Options", :for => :dynamic_options do |o|
+
+      f.inputs "Options", :for => :dynamic_options, :class => "inputs options", "data-object-id" => f.object.id do |o|
         html = "" # this seems so weird to do to make formtastic works
+        # this is not very elegant way to have object id when rendering option fields again
         f.object.dynamic_options_definition.each_pair do |name, options|
 
           options.reverse_merge!(default_options)
+          value = f.object.dynamic_options[name]
 
           field_options = {
-            #FIXME boolean select does not get displayed properly
-            :input_html => { :value => f.object.dynamic_options[name]},
+            :input_html => { :value => value },
             :label => options[:name] || name.to_s.humanize,
             :hint => options[:description]
           }
 
           case options[:type]
           when :boolean
-            field_options.merge!(:as => :select, :column_type => :boolean)
+            field_options.merge!(:as => :select, :column_type => :boolean, :selected => value, :include_blank => false)
+          when :select
+            field_options.merge!(:as => :select, :collection => options[:options], :column_type => :text, :selected => value, :include_blank => false)
           end
 
           html = o.input name, field_options
