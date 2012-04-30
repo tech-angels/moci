@@ -6,13 +6,9 @@ module Moci
     class Command < Base
 
       define_options do
-        {
-          :command => { :description => "Command to execute, which exit code is taken as a result",
-            :required => true
-          },
-          :pre_command => { :description => "Optional command to execute before" },
-          :post_command => {  :description => "Optional command to execute after (no matter what result was)" }
-        }
+        o :command,      "Command to execute, which exit code is taken as a result", :required => true
+        o :pre_command,  "Optional command to execute before"
+        o :post_command, "Optional command to execute after (no matter what result was)"
       end
 
       def run
@@ -29,6 +25,7 @@ module Moci
           :output => output
         )
       end
+
     end
   end
 end

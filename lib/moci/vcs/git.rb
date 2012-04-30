@@ -4,13 +4,7 @@ module Moci
     class Git < Base
 
       define_options do
-        {
-          :github => {
-            :name => "Github project",
-            :type => :text,
-            :description => "Optional. Github project associated with the project e.g. tech-angels/moci (used to generate links to commits)"
-          }
-        }
+        o :github, "Optional. Github project associated with the project e.g. tech-angels/moci (used to generate links to commits)"
       end
 
       def initialize(project_instance)

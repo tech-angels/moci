@@ -9,11 +9,9 @@ module Moci
     #
     class RailsSpec < Spec
       define_options do
-        {
-          :specs => { :description => 'specs type to run e.g. models, it will be run like: rake spec:YOUR_VALUE' },
-          :spec => { :description => 'You can use it instead of or with "specs" option, to provide specific directory'+
-            ' with specs e.g. "spec/acceptance", it will be run like: rake spec SPEC=YOUR_VALUE' }
-        }
+        o :specs, 'Specs type to run e.g. models, it will be run like: rake spec:YOUR_VALUE'
+        o :spec, 'You can use it instead of or with "specs" option, to provide specific directory'\
+                 ' with specs e.g. "spec/acceptance", it will be run like: rake spec SPEC=YOUR_VALUE'
       end
 
       def command

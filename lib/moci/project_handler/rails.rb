@@ -11,18 +11,9 @@ module Moci
     class Rails < Base
 
       define_options do
-        {
-          :bundler => {
-            :name => "Enable bundler",
-            :type => :boolean,
-            :default => true,
-            :description => "Does this project use bundler?"
-          },
-          :rvm => {
-            :name => "RVM",
-            :description => "If set, it is assummed rvm with given ruby version is installed, and it will be used for all commands executed within project instance (example value: 1.8.7@moci)"
-          }
-        }
+        o :bundler,  "Does this project use bundler?", :type => :boolean, :default => true
+        o :rvm,       "If set, it is assummed rvm with given ruby version is installed, and it will be used"\
+                      "for all commands executed within project instance (example value: 1.8.7@moci)", :name => "RVM"
       end
 
       def execute_wrapper(command, output='')

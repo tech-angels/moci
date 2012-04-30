@@ -3,26 +3,12 @@ module Moci
     class Campfire < Base
 
       define_options do
-        {
-          :room_url => {
-            :description => "e.g. https://your-awesome-company.campfirenew.com",
-            :required => true
-          },
-          :auth_token => {
-            :required => true
-          },
-          :room_id => {
-            :required => true
-          },
-          :style => {
-            :type => :select,
-            :options => ['verbose','compact'],
-            :default => "verbose",
-            :description => "verbose: full list of fixed/introduced errors, compact: just build status and link to moci commit page"
-          }
-        }
+        o :room_url,   "e.g. https://your-awesome-company.campfirenew.com", :required => true
+        o :auth_token, :required => true
+        o :room_id,    :required => true
+        o :style,      "verbose: full list of fixed/introduced errors, compact: just build status and link to moci commit page",
+                       :type => :select, :options => ['verbose','compact'], :default => "verbose"
       end
-
 
       include HTTParty
       headers    'Content-Type' => 'application/json'

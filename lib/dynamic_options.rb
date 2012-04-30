@@ -39,9 +39,28 @@ module DynamicOptions
   end
 
   module Definition
-    # TODO consider addirng some DSL instead of just providing hash
+    class Definer
+      def initialize
+        @hash = {}
+      end
+
+      def o(name, description, options = nil)
+        options = description if description.kind_of? Hash
+        options ||= {}
+        options[:description] = description if description && options
+        @hash[name] = options
+      end
+
+      def to_hash
+        @hash
+      end
+
+    end
+
     def define_options(&block)
-      @options_definition = options_definition.merge(block.call)
+      definer = Definer.new
+      definer.instance_eval(&block)
+      @options_definition = options_definition.merge(definer.to_hash)
     end
 
     def options_definition
