@@ -11,8 +11,13 @@ TestSuiteForm =
   update_options: (suite_type)->
     url = '/admin/test_suites/option_fields?type='+suite_type
     url += '&id='+$('form.test_suite .inputs.options').attr('data-object-id')
-    $.get url, (data) ->
-      $('form.test_suite .inputs.options').replaceWith(data)
+    $('form.test_suite .inputs.options').load(url + ' .inputs.options')
+
+NotificationForm =
+  update_options: (notification_type)->
+    url = '/admin/notifications/option_fields?type='+notification_type
+    url += '&id='+$('form.notification .inputs.options').attr('data-object-id')
+    $('form.notification .inputs.options').load(url + ' .inputs.options')
 
 ProjectForm =
   update_options: ->
@@ -20,8 +25,7 @@ ProjectForm =
     url += 'vcs_type='+$('#project_vcs_type').val()
     url += '&project_type='+$('#project_project_type').val()
     url += '&id='+$('form.project .inputs.options').attr('data-object-id')
-    $.get url, (data) ->
-      $('form.project .inputs.options').replaceWith(data)
+    $('form.project .inputs.options').load(url + ' .inputs.options')
 
 $().ready ->
   UserForm.update_permission_view()
@@ -31,5 +35,9 @@ $().ready ->
   $('form.test_suite #test_suite_suite_type').on 'change', () ->
     TestSuiteForm.update_options($(this).val())
 
+  $('form.notification #notification_notification_type').on 'change', () ->
+    NotificationForm.update_options($(this).val())
+
   $('form.project #project_project_type, form.project #project_vcs_type').on 'change', () ->
     ProjectForm.update_options()
+

@@ -16,7 +16,7 @@ ActiveAdmin.register TestSuite do
       f.input :suite_type, :as => :select, :collection => Moci::TestRunner.types
     end
 
-    dynamic_options f
+    f.dynamic_options
 
     f.buttons
 
@@ -37,7 +37,7 @@ ActiveAdmin.register TestSuite do
   collection_action :option_fields do
     @test_suite = TestSuite.find_by_id(params[:id]) || TestSuite.new
     @test_suite.suite_type = params[:type]
-    render :inline => "<%= raw(form_for(@test_suite, :url => '', :builder => ActiveAdmin::FormBuilder) {|f| dynamic_options(f) } ) %>"
+    render :inline => "<%= raw(form_for(@test_suite, :url => '', :builder => ActiveAdmin::FormBuilder) {|f| f.dynamic_options } ) %>"
   end
 
 

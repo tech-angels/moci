@@ -49,48 +49,61 @@ module DynamicOptions
     end
   end
 
-  module View
-    def dynamic_options(f)
-      default_options = {
-        :type => :text
-      }
 
-      f.inputs "Options", :for => :dynamic_options, :class => "inputs options", "data-object-id" => f.object.id do |o|
-        html = "" # this seems so weird to do to make formtastic works
-        # this is not very elegant way to have object id when rendering option fields again
-        f.object.dynamic_options_definition.each_pair do |name, options|
+  module Formtastic
+    module Helper
+      def dynamic_options
+        f = self
 
-          options.reverse_merge!(default_options)
-          value = f.object.dynamic_options[name]
+        f.inputs "Options", :for => :dynamic_options, :class => "inputs options", "data-object-id" => f.object.id do |o|
+          html = "" # this seems so weird to do to make formtastic works
+          f.object.dynamic_options_definition.each_pair do |name, options|
 
-          field_options = {
-            :input_html => { :value => value },
-            :label => options[:name] || name.to_s.humanize,
-            :hint => options[:description]
-          }
+            value = f.object.dynamic_options[name]
 
-          case options[:type]
-          when :boolean
-            field_options.merge!(:as => :select, :column_type => :boolean, :selected => value, :include_blank => false)
-          when :select
-            field_options.merge!(:as => :select, :collection => options[:options], :column_type => :text, :selected => value, :include_blank => false)
+            field_options = {
+              :input_html => { :value => value },
+              :label => options[:name] || name.to_s.humanize,
+              :hint => options[:description]
+            }
+
+            case options[:type]
+            when :boolean
+              field_options.merge!(:as => :select,
+                :column_type => :boolean,
+                :selected => value,
+                :include_blank => false)
+            when :select
+              field_options.merge!(:as => :select,
+                :collection => options[:options],
+                :column_type => :text,
+                :selected => value,
+                :include_blank => false)
+            end
+
+            html = o.input name, field_options
           end
-
-          html = o.input name, field_options
+          html
         end
-        html
       end
     end
+  end
+
+  module View
 
     def display_options(object)
-      #TODO cleanup
       html = "<ul>"
       object.dynamic_options_definition.each_pair do |name, opts|
         html << "<li>#{opts[:name] || name.to_s.humanize}: <strong>#{object.dynamic_options[name]}</strong></li>"
       end
       html << "</ul>"
-      html
     end
 
+  end
+end
+
+module Formtastic
+  class FormBuilder < ActionView::Helpers::FormBuilder
+    include DynamicOptions::Formtastic::Helper
   end
 end

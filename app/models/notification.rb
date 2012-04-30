@@ -15,10 +15,10 @@ class Notification < ActiveRecord::Base
 
   include DynamicOptions::Model
 
-  has_dynamic_options :definition => lambda { notificator.class.options_definition }
+  has_dynamic_options :definition => lambda { notificator.try(:class).try(:options_definition) || {} }
 
   def notificator
-    @notificator ||= Moci::Notificator.const_get(notification_type).new(options)
+    @notificator ||= Moci::Notificator.const_get(notification_type).new(options) unless notification_type.blank?
   end
 
   def options

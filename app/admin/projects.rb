@@ -17,7 +17,6 @@ ActiveAdmin.register Project do
   form do |f|
     f.inputs "General" do
       f.input :name
-      #f.input :project_options
       f.input :vcs_type, :as => :select, :collection => Moci::VCS.types
       f.input :project_type, :as => :select, :collection => Moci::ProjectHandler.types
       f.input :public
@@ -27,7 +26,7 @@ ActiveAdmin.register Project do
       f.input :notifications, :as => :check_boxes
     end
 
-    dynamic_options f
+    f.dynamic_options
 
     f.buttons
   end
@@ -52,8 +51,6 @@ ActiveAdmin.register Project do
     @project = Project.find_by_id(params[:id]) || Project.new
     @project.vcs_type = params[:vcs_type]
     @project.project_type = params[:project_type]
-    # FIXME it works by some kind of luck, there should be no form rendered here,
-    # we only need FormBuilder object to pass to dynamic_options
-    render :inline => "<%= raw(form_for(@project, :url => '', :builder => ActiveAdmin::FormBuilder) {|f| dynamic_options(f) } ) %>"
+    render :inline => "<%= raw(form_for(@project, :url => '', :builder => ActiveAdmin::FormBuilder) {|f| f.dynamic_options } ) %>"
   end
 end

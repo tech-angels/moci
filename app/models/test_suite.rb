@@ -39,7 +39,7 @@ class TestSuite < ActiveRecord::Base
 
   # Returns given test suite runner implementation class
   def runner_class
-    Moci::TestRunner.const_get suite_type if suite_type
+    Moci::TestRunner.const_get suite_type unless suite_type.blank?
   end
 
   def options
