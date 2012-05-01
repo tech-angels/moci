@@ -8,20 +8,22 @@
 %body
 
 
-  #account
-    - if user_signed_in?
-      Signed in as
-      %b= current_user.email
-      %br
-      - if current_user.admin?
-        = link_to 'admin panel', '/admin'
-        |
-      = link_to 'log out', destroy_user_session_path, :method => :delete
-    - else
-      = link_to 'log in', new_user_session_path
-
   #header
+    #account
+      - if user_signed_in?
+        Signed in as
+        %b= current_user.email
+        %br
+        - if current_user.admin?
+          = link_to 'admin panel', '/admin'
+          |
+        = link_to 'log out', destroy_user_session_path, :method => :delete
+      - else
+        = link_to 'log in', new_user_session_path
+
     .title moci
+
+  #top_menu
     = render :partial => '/common/top_menu.html.haml'
 
   - if flash[:alert]

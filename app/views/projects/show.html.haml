@@ -1,4 +1,6 @@
-%h1.project{'data-project-id' => @project.id, 'data-project-name' => @project.name}= @project.name
+-# TODO if we don't display this h1 here use other tag to pass project informations to JS
+%h1.project{'data-project-id' => @project.id, 'data-project-name' => @project.name, :style => 'display: none'}= @project.name
+
 
 .project_state
   %h3 Current state
@@ -51,5 +53,5 @@
   %h3 Latest test suite runs
 
   %table.last_runs
-    - @project.test_suite_runs.order('updated_at DESC').limit(5).all.each do |tsr|
+    - @project.test_suite_runs.order('updated_at DESC').limit(7).all.each do |tsr|
       = render :partial => 'tr_last_run', :locals => {:tsr => tsr}

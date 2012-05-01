@@ -1,14 +1,19 @@
 body {
   font-family: Trebuchet MS, Liberation Sans, DejaVu Sans, sans-serif;
-  font-size: 12px;
+  font-size: 13px;
+  margin: 0px;
+  padding: 0px;
+}
+
+a {
+  color: #00f;
+  text-decoration: none;
 }
 
 
 table {
-  color:#333333;
-  border-width: 1px;
-  border-color: #666;
   border-collapse: collapse;
+  box-shadow: 0px 3px 5px #ddd;
 }
 table th {
   border-width: 1px;
@@ -20,7 +25,7 @@ table td {
   border-width: 1px;
   padding: 4px;
   border-style: solid;
-  border-color: #666;
+  border-color: #bbb;
 }
 
 table.last_runs {
@@ -98,12 +103,22 @@ table.no_border td {
 }
 
 #header {
-  border: 1px solid #ddd;
-  border-width: 0px 0px 1px 0px;
+    background: #eee;
+    background: -webkit-gradient(linear, left top, left bottom, from(#f8f8f8), to(#dadada));
+    background: -moz-linear-gradient(top, #f8f8f8, #dadada);
+    border-bottom: 1px solid #888;
+    box-shadow: 0px 3px 5px #ddd;
+    padding: 7px;
 }
 #header .title {
-  font-size: 30px;
+  font-size: 34px;
   font-weight: bold;
+  padding-left: 10px;
+}
+
+#top_menu {
+  padding: 7px;
+  border-bottom: 1px solid #ddd;
 }
 
 #header h1 {
@@ -123,18 +138,29 @@ table.no_border td {
 }
 
 #sidebar .section {
+  text-align: center;
   font-weight: bold;
   font-size: 1.5em;
-  padding-left: 30px;
 }
 
 #sidebar {
   float:left;
-  width:215px;
+  width:190px;
   margin-right:0;
+  padding: 5px;
   background-color: #eee;
+  background: #eee;
+  border: 1px solid #ccc;
+  margin: 20px 20px 0px 20px;
+  box-shadow: 0px 3px 5px #ddd;
 }
-#content {margin-left:232px; overflow:visible;}
+
+#content {
+  overflow:visible;
+  padding: 5px 20px 0px 20px;
+  margin: 0px 0px 0px 232px;
+
+}
 
 /*
   #cols {position:relative; margin:15px 0; padding-right:15px; }
@@ -176,7 +202,12 @@ table.no_border td {
   float: right;
 }
 
-.commit {padding:10px; padding-left:20px; min-height: 80px;}
+.commit {
+  padding:10px;
+  padding-left:20px;
+  min-height: 80px;
+  box-shadow: 0px 3px 5px #ddd;
+}
 
 .commit ul.errors .blame {
   display: none;
@@ -187,14 +218,14 @@ table.no_border td {
 }
 
 /* WRITE YOUR CSS CODE HERE */
-.msg.warning {border:2px solid #F2DD8C; background-color:#FFF5CC;}
+.msg.warning {border:1px solid #F2DD8C; background-color:#FFF5CC;}
 .msg.warning a {color:#df0000;} .msg.warning a:hover, .msg.warning a:active, .msg.warning a:focus {color:#303030;}
-.commit.running {border:2px solid #B8E2FB; background-color:#E8F6FF;}
-.commit.clean {border:2px solid #BBDF8D; background-color:#EAF7D9;}
-.commit.ok {border:2px solid #F2DD8C; background-color:#FFF5CC;}
-.commit.pending {border:2px solid #AAAAAA; background-color:#EEEEEE;}
-.commit.fail {border:2px solid #FFAEAE; background-color:#FEEBEB;}
-.commit.preparation_failed {border:2px solid #FFAEAE; background-color:#FEEBEB;}
+.commit.running {border:1px solid #B8E2FB; background-color:#E8F6FF;}
+.commit.clean {border:1px solid #BBDF8D; background-color:#EAF7D9;}
+.commit.ok {border:1px solid #F2DD8C; background-color:#FFF5CC;}
+.commit.pending {border:1px solid #AAAAAA; background-color:#EEEEEE;}
+.commit.fail {border:1px solid #FFAEAE; background-color:#FEEBEB;}
+.commit.preparation_failed {border:1px solid #FFAEAE; background-color:#FEEBEB;}
 
 .build_state.running {border-color: #B8E2FB; background-color:#E8F6FF;}
 .build_state.clean {border-color: #BBDF8D; background-color:#EAF7D9;}

@@ -1,12 +1,13 @@
-%ul
-  = menu_li "Latest test runs", :controller => '/test_suite_runs', :action => 'index'
-
 - if @project
   .section= @project.name
   %ul
     = menu_li "Project info", :controller => '/projects', :action => 'show'
     = menu_li "Latest commits", :controller => '/commits', :action => 'index', :project_name => @project.name
     = menu_li "Statistics", :controller => '/projects', :action => 'stats', :project_name => @project.name
+
+%ul
+  = menu_li "Latest test runs", :controller => '/test_suite_runs', :action => 'index'
+
 
 
 
