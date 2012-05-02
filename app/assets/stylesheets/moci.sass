@@ -1,3 +1,9 @@
+$clean-color: #EAF7D9
+$ok-color: #FFF5CC
+$pending-color: #EEEEEE
+$fail-color: #FEEBEB
+$running-color: #E8F6FF
+
 body
   font-family: Trebuchet MS, Liberation Sans, DejaVu Sans, sans-serif
   font-size: 13px
@@ -170,39 +176,23 @@ table
     &:hover, &:active, &:focus
       color: #303030
 
-.commit
-  &.running
-    border: 1px solid #B8E2FB
-    background-color: #E8F6FF
-  &.clean
-    border: 1px solid #BBDF8D
-    background-color: #EAF7D9
-  &.ok
-    border: 1px solid #F2DD8C
-    background-color: #FFF5CC
-  &.pending
-    border: 1px solid #AAAAAA
-    background-color: #EEEEEE
-  &.fail, &.preparation_failed
-    border: 1px solid #FFAEAE
-    background-color: #FEEBEB
 
-.build_state
+.commit, .build_state
   &.running
-    border-color: #B8E2FB
-    background-color: #E8F6FF
+    border: 1px solid darken($running-color, 20%)
+    background-color: $running-color
   &.clean
-    border-color: #BBDF8D
-    background-color: #EAF7D9
+    border: 1px solid darken($clean-color, 20%)
+    background-color: $clean-color
   &.ok
-    border-color: #F2DD8C
-    background-color: #FFF5CC
+    border: 1px solid darken($ok-color, 20%)
+    background-color: $ok-color
   &.pending
-    border-color: #AAAAAA
-    background-color: #EEEEEE
+    border: 1px solid darken($pending-color, 20%)
+    background-color: $pending-color
   &.fail, &.preparation_failed
-    border-color: #FFAEAE
-    background-color: #FEEBEB
+    border: 1px solid darken($fail-color, 20%)
+    background-color: $fail-color
 
 .latest_commits_mini
   float: right
