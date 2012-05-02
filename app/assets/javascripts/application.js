@@ -5,6 +5,7 @@
 //= require jquery_ujs
 //= require jquery-ui
 //= require jquery.simplemodal
+//= require moci
 //= require webs
 
 function fetchBlame(el, tsr_id, tu_id) {

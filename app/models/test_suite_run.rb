@@ -128,7 +128,7 @@ class TestSuiteRun < ActiveRecord::Base
 
   # Live web notifications TODO: move to observer
 
-  after_save do
+  after_commit do
     Webs.notify :test_suite_run, self
   end
 
