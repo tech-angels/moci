@@ -15,7 +15,7 @@
           &nbsp;
   %br
   - if !last_commits.empty?
-    %table.grid{:style => 'width: 100%'}
+    %table.last_commits{:style => 'width: 100%'}
       - last_commits[0..5].each_with_index do |commit, i|
         -# commit = @project.commits.order('committed_at DESC').first
         %tr{:class => "build_state #{commit.build_state}"}
@@ -23,20 +23,18 @@
             = image_tag commit.author.gravatar_url :size => 15
           %td
             = link_to commit.short_description, commit_path(commit)
-          %td
+          %td.state_name
             = commit.build_state
         - if i == 0
           - @project.test_suites.each do |ts|
-            %tr
+            - tsr = commit.test_suite_runs.where(:test_suite_id => ts.id).first
+            - build_state = tsr ? tsr.build_state : 'pending'
+            %tr{:class => "build_state #{build_state}"}
               %td
               %td
                 = ts.name
-              %td
-                - tsr = commit.test_suite_runs.where(:test_suite_id => ts.id).first
-                - if tsr
-                  = tsr.build_state
-                - else
-                  %i pending
+              %td.state_name
+                = build_state
 
 .about
   %h3 About project

@@ -128,6 +128,12 @@ table
 
 /* project show
 
+table.last_commits td.state_name
+  text-align: center
+  text-transform: uppercase
+  font-size: 11px
+  font-weight: bold
+
 .branch_title
   .name
     float: left
@@ -182,15 +188,21 @@ table
     border: 1px solid darken($running-color, 20%)
     background-color: $running-color
   &.clean
+    .state_name
+      color:  darken($clean-color, 50%)
     border: 1px solid darken($clean-color, 20%)
     background-color: $clean-color
   &.ok
+    .state_name
+      color:  darken($ok-color, 50%)
     border: 1px solid darken($ok-color, 20%)
     background-color: $ok-color
   &.pending
     border: 1px solid darken($pending-color, 20%)
     background-color: $pending-color
   &.fail, &.preparation_failed
+    .state_name
+      color:  darken($fail-color, 50%)
     border: 1px solid darken($fail-color, 20%)
     background-color: $fail-color
 
