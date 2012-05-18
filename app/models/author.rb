@@ -12,5 +12,5 @@ class Author < ActiveRecord::Base
   validates_uniqueness_of :email
 
   include Gravtastic
-  gravtastic
+  gravtastic :secure => true
 end
