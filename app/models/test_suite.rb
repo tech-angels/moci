@@ -44,7 +44,11 @@ class TestSuite < ActiveRecord::Base
 
   def options
     # TODO merge on default suite_type options
-    suite_options
+    (suite_options || {}).with_indifferent_access
+  end
+
+  def options=(new_options)
+    self.suite_options = new_options
   end
 
 end

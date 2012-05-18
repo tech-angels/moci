@@ -15,7 +15,7 @@ class Commit < ActiveRecord::Base
   belongs_to :project
 
   has_many :test_suite_runs
-  has_many :project_instance_commits
+  has_many :project_instance_commits, :dependent => :destroy
 
   has_and_belongs_to_many :parents,
     :class_name => 'Commit', :association_foreign_key => 'parent_id', :join_table => 'commits_parents'
