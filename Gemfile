@@ -41,6 +41,7 @@ gem 'httparty' # used by campfire
 
 # test suite
 group :development, :test do
+  gem 'capybara'
   gem 'factory_girl_rails'
   gem 'faker'
   gem 'rspec-rails'

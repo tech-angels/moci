@@ -22,7 +22,7 @@ $test_app_skel_dir = test_app_skel_dir
 
 unless File.exists?(test_app_skel_dir)
   FileUtils.mkdir_p(tmp_spec)
-  system("cd #{tmp_spec} && git clone git://github.com/comboy/rails_test.git #{test_app_skel_dir}") || raise("failed to clone test application")
+  system("cd #{tmp_spec} && git clone git://github.com/comboy/rails_test.git #{test_app_skel_dir} && cd #{test_app_skel_dir} && git checkout 836db4770495") || raise("failed to clone test application")
 end
 
 FileUtils.rm_rf("#{Rails.root}/tmp/spec_run") if File.exists? Rails.root
@@ -50,4 +50,10 @@ RSpec.configure do |config|
   # automatically. This will be the default behavior in future versions of
   # rspec-rails.
   config.infer_base_class_for_anonymous_controllers = false
+
+  config.include FactoryGirl::Syntax::Methods
 end
+
+Capybara.default_driver = :rack_test
+Capybara.javascript_driver = :selenium
+

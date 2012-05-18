@@ -26,6 +26,10 @@ class Notification < ActiveRecord::Base
     notification_options
   end
 
+  def options=(new_options)
+    self.notification_options = new_options
+  end
+
   def commit_built(commit)
     notificator.commit_built(commit)
   end
