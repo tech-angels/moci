@@ -23,6 +23,11 @@ describe TestSuiteRun do
     tsr.parent_runs.should == [tsr2]
   end
 
+  it "should fill assertions count if only tests count is provided" do
+    tsr = Factory.create(:test_suite_run, :tests_count => 123, :assertions_count => nil)
+    tsr.assertions_count.should == 123
+  end
+
   context "build state" do
     let(:tsr) { Factory :test_suite_run, :state => 'finished' }
 

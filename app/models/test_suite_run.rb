@@ -24,6 +24,7 @@ class TestSuiteRun < ActiveRecord::Base
 
   scope :finished, :conditions => {:state => 'finished'}
 
+  before_save :fill_assertions_count
   after_destroy :update_commit_build_state
 
   def running?
@@ -124,6 +125,10 @@ class TestSuiteRun < ActiveRecord::Base
     if state_changed?
       commit.update_build_state!
     end
+  end
+
+  def fill_assertions_count
+    self.assertions_count ||= tests_count
   end
 
   # Live web notifications TODO: move to observer
