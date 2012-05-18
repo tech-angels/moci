@@ -5,6 +5,7 @@
 //= require jquery_ujs
 //= require jquery-ui
 //= require jquery.simplemodal
+//= require juggernaut
 //= require moci
 //= require webs
 

@@ -3,7 +3,6 @@
   = stylesheet_link_tag 'jquery-ui'
   = stylesheet_link_tag 'moci'
   = javascript_include_tag 'application.js'
-  = javascript_include_tag "http://#{Moci.config[:juggernaut_host] || request.host}:#{Moci.config[:juggernaut_port] || 8080}/application.js"
   = yield :head
 %body
 
