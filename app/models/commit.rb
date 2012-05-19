@@ -14,7 +14,7 @@ class Commit < ActiveRecord::Base
   belongs_to :author
   belongs_to :project
 
-  has_many :test_suite_runs
+  has_many :test_suite_runs, :dependent => :destroy
   has_many :project_instance_commits, :dependent => :destroy
 
   has_and_belongs_to_many :parents,
