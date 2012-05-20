@@ -122,7 +122,7 @@ class TestSuiteRun < ActiveRecord::Base
   protected
 
   def update_commit_build_state
-    if state_changed?
+    if state_changed? || !persisted? # state changed or it's called from after_destroy
       commit.update_build_state!
     end
   end

@@ -82,6 +82,17 @@ describe Commit do
     end
   end
 
+  it "should return all_children" do
+    c1,c2,c3,c4,c5 = Array.new(5) { Factory.create(:commit) }
+    c2.parents << c1
+    c3.parents << c1
+
+    c4.parents << c2
+    c5.parents << c2
+
+    c1.reload.all_children.to_set.should == [c2,c3,c4,c5].to_set
+  end
+
   context "prepared?" do
     it "should be prepared if there's one instance commit and it's prepared" do
       pic = Factory :project_instance_commit, :state => 'prepared'

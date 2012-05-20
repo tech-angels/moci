@@ -20,6 +20,12 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def permission_denied!
+    # TODO: rescue_from and render some nice permisison denied, however there should never be link visible
+    # to the action that cannot be taken
+    raise "Permission denied!"
+  end
+
   helper_method :projects
   def projects
     if user_signed_in?

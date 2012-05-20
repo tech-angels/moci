@@ -32,3 +32,9 @@
 %h2 Test suite runs
 
 = render :partial => '/test_suite_runs/list', :locals => {:test_suite_runs => @commit.test_suite_runs.includes(:test_suite, :project_instance)}
+
+%h2 Actions
+
+%ul
+  %li
+    = link_to "Rerun all tests suites for this commit and all it's children", rerun_all_children_commit_path(@commit), :method => :post

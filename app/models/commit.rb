@@ -1,6 +1,7 @@
 # Attributes:
 # * id [integer, primary, not null] - primary key
 # * author_id [integer] - belongs_to Author
+# * build_state [string, default=pending] - TODO: document me
 # * committed_at [datetime] - when commit was created in repo
 # * created_at [datetime] - creation time (in our database)
 # * description [text] - description provided inside commit
@@ -51,6 +52,10 @@ class Commit < ActiveRecord::Base
     number[0..8]
   end
 
+  def all_children
+    (children + children.map(&:all_children)).flatten.uniq
+  end
+
   def next
     @next ||= project.commits.order('committed_at ASC').where('committed_at > ?',self.committed_at).first
   end
@@ -63,6 +68,11 @@ class Commit < ActiveRecord::Base
     parents.map do |parent|
       parent.skipped? ? parent.parents_without_skipped : parent
     end.flatten
+  end
+
+  def rerun_test_suites
+    # TODO once queue is there, reenque them right away
+    test_suite_runs.destroy_all
   end
 
   def run_test_suites
