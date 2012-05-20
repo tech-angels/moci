@@ -32,6 +32,7 @@ Webs =
          tsr_id = d['test_suite_run']['id']
          tr_details = $('.last_runs .details.test_suite_run_'+tsr_id)
          if tr_details.length != 0
+           tr_details.show()
            tr_details.find('.current_test_unit').html(d['test_unit']['class_name'] + ' :: ' + d['test_unit']['name'])
            tr_details.removeClass('tu_state_waiting')
            tr_details.removeClass('tu_state_ok')

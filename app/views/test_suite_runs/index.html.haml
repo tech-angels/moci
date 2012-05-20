@@ -23,7 +23,7 @@
           = tsr.test_suite.name
         %td
           = image_tag tsr.commit.author.gravatar_url :size => 15
-          %b= tsr.commit.short_number[0..6]
+          %b= link_to tsr.commit.short_number[0..6], commit_path(tsr.commit)
           = tsr.commit.short_description
         %td
           = link_to tsr.state.humanize, :action => :show, :id => tsr.id

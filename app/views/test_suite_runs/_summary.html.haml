@@ -1,23 +1,26 @@
-- if tsr.exitstatus
-  %span.green PASSED
+- if tsr.running? 
+  = "-"
 - else
-  %span.red FAILED
+  - if tsr.exitstatus
+    %span.green PASSED
+  - else
+    %span.red FAILED
 
-- unless tsr.tests_count.nil? && tsr.assertions_count.nil?
-  %b= tsr.tests_count
-  - if !defined?(no_diff)
-    - prev_tsr = tsr.previous_run
-    -if prev_tsr && (diff = prev_tsr.tests_count.to_i - tsr.tests_count.to_i) != 0
-      (
-      - if diff > 0
-        %span.red= "-#{diff}"
-      - else
-        %span.green= "+#{diff.abs}"
-      )
-  tests,
-  %b= tsr.assertions_count
-  assertions,
-  = bad_value tsr.errors_count
-  errors,
-  = bad_value tsr.failures_count
-  failures
+  - unless tsr.tests_count.nil? && tsr.assertions_count.nil?
+    %b= tsr.tests_count
+    - if !defined?(no_diff)
+      - prev_tsr = tsr.previous_run
+      -if prev_tsr && (diff = prev_tsr.tests_count.to_i - tsr.tests_count.to_i) != 0
+        (
+        - if diff > 0
+          %span.red= "-#{diff}"
+        - else
+          %span.green= "+#{diff.abs}"
+        )
+    tests,
+    %b= tsr.assertions_count
+    assertions,
+    = bad_value tsr.errors_count
+    errors,
+    = bad_value tsr.failures_count
+    failures
