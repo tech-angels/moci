@@ -3,7 +3,7 @@ require 'spec_helper'
 
 describe "rails units in rails_test" do
     before :all do
-      @project = Factory.create(:project, :vcs_type => "Git", :project_type => 'Rails')
+      @project = Factory.create(:project, :vcs_type => "Git", :project_type => 'Rails', :project_options => {:rails => {:rvm => "1.8.7"}})
       @instance = Factory.create(:project_instance, :project => @project)
       FileUtils.cp_r "#{$test_app_skel_dir}//.", @instance.working_directory
 
