@@ -70,9 +70,10 @@ There is still slight chance that this API may change, but these should not be d
 
 In case of any questions or problems, just open an issue.
 
-## AUTHOR
+## Credits
 
-  Kacper Cieśla (comboy) @ Tech-angels
-  http://www.tech-angels.com/
+  Kacper Cieśla (comboy) @ Tech-angels - http://www.tech-angels.com/
+  
+  [![Tech-Angels](http://media.tumblr.com/tumblr_m5ay3bQiER1qa44ov.png)](http://www.tech-angels.com)
 
 
