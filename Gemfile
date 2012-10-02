@@ -1,5 +1,7 @@
 source 'http://rubygems.org'
 
+ruby '1.9.3'
+
 gem 'rails', '3.2.8'
 
 # users authentication
@@ -38,13 +40,16 @@ gem 'git'
 # notifications
 gem 'httparty' # used by campfire
 
-# Unicorn
-gem 'unicorn'
+group :production do
+  # Unicorn
+  gem 'unicorn'
+end
 
 # test suite
 group :development, :test do
   gem 'capistrano'
   gem 'capistrano-helpers'
+  gem 'capistrano-ext'
   gem 'rvm-capistrano'
   gem 'capybara'
   gem 'factory_girl_rails'
@@ -53,7 +58,6 @@ group :development, :test do
   gem 'rspec-mocks'
   gem 'shoulda-matchers'
   gem 'sql_queries_count'
-  #gem RUBY_VERSION.include?('1.9') ? 'ruby-debug19' : 'ruby-debug'
   gem 'ZenTest'
   gem 'debugger'
 end

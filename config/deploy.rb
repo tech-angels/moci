@@ -1,7 +1,6 @@
 require 'capistrano/ext/multistage'
 require 'capistrano-helpers/git'
-require 'yaml'
-require 'pathname'
+require 'capistrano-helpers/shared'
 
 # RVM
 set :rvm_path,          '/usr/local/rvm'
@@ -10,10 +9,10 @@ require 'rvm/capistrano'
 
 # Set ruby version to use
 set :rvm_ruby_string, 'ruby-1.9.3-p194@moci'
+set :rvm_type, :system
+set :using_rvm, true
 
 # Campfire notifications
-# $: << File.join(File.dirname(__FILE__),'..')
-# require 'lib/dev_helpers/campfire_deploy_notif'
 require 'capistrano-helpers/campfire'
 set :campfire_config, "#{ENV['HOME']}/.moci.yml"
 
@@ -34,15 +33,10 @@ set :application,     'moci'
 set :user,            'deploy'
 set :group,           'www-data'
 set :repository,      'git@github.com:tech-angels/moci.git'
-set(:deploy_to)       { "/var/www/#{application}/#{stage}" }
-set(:shared_path)     { "/var/www/#{application}/#{stage}/shared" }
 set :ssh_options,     { :forward_agent => true }
-
 set :stages,          %w(production)
 set :default_stage,   'production'
-
 set :use_sudo,        false
-set :sudo_prompt,     ''
 
 # ==============================================================================
 # Server Settings
@@ -55,7 +49,7 @@ set :app_server,      'unicorn'
 # ==============================================================================
 
 require 'capistrano-helpers/shared'
-set(:shared) { ["config/environments/#{stage}.yml", "config/database.yml", "config/moci.yml"] }
+set :shared, %w(config/database.yml config/moci.yml)
 
 # ==============================================================================
 # Unicorn
