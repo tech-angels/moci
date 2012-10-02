@@ -3,6 +3,7 @@ ActiveAdmin.register TestSuite do
   filter :name
 
   index do
+    selectable_column
     column :id
     column :project
     column :name

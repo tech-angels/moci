@@ -6,7 +6,7 @@ ActiveAdmin.register ProjectInstance do
       f.input :project
       f.input :working_directory
     end
-    
+
     f.buttons
   end
 end

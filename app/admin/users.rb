@@ -2,6 +2,7 @@ ActiveAdmin.register User do
   filter :email
 
   index do
+    selectable_column
     column :email
     column :admin
     column :created_at

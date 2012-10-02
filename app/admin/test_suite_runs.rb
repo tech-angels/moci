@@ -1,5 +1,8 @@
 ActiveAdmin.register TestSuiteRun do
+  actions :all, :except => [:new]
+
   index do
+    selectable_column
     column :project
     column :test_suite
     column :state
