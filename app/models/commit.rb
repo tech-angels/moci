@@ -36,7 +36,7 @@ class Commit < ActiveRecord::Base
     return 'ok' if new_errors == 0 && errors > 0
     # TODO name this tate differently probably, failed_to_run maybe?
     # It's the case when test suite returned non-zero exitcode, but we had no test_unit_run errors
-    return 'fail' unless exitstatuses.all?
+    return 'failed_to_run' unless exitstatuses.all?
     return 'clean' if errors == 0
   end
 

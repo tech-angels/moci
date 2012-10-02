@@ -11,7 +11,7 @@
         %span{:class => state}= state.upcase
         %br
         - if state == 'preparation_failed'
-          = link_to_longtext 'details', commit.project_instance_commits.where(:state => 'preparation_failed').first.preparation_log
+          = link_to_longtext 'details', commit.project_instance_commits.where(:state => 'preparation_failed').first.try(:preparation_log)
         - elsif commit.prepared?
           = link_to 'prep log', '#'
         - else

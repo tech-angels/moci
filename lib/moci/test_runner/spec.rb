@@ -45,7 +45,7 @@ module Moci
             end
           end
 
-          # If there was eny output on stderr, append it at the end
+          # If there was any output on stderr, append it at the end
           err = stderr.read
           output += "\n\nSTDERR: #{err}" unless err.to_s.strip.empty?
         end
