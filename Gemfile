@@ -39,8 +39,14 @@ gem 'git'
 # notifications
 gem 'httparty' # used by campfire
 
+# Unicorn
+gem 'unicorn'
+
 # test suite
 group :development, :test do
+  gem 'capistrano'
+  gem 'capistrano-helpers'
+  gem 'rvm-capistrano'
   gem 'capybara'
   gem 'factory_girl_rails'
   gem 'faker'
