@@ -1,6 +1,6 @@
 source 'http://rubygems.org'
 
-gem 'rails', '3.2.3'
+gem 'rails', '3.2.8'
 
 # users authentication
 gem 'devise'
@@ -9,7 +9,6 @@ gem 'cancan'
 
 # adimn panel
 gem 'activeadmin'
-gem "formtastic", "~> 2.1.1" # formtasting 2.2 breaks activeadmin ;(
 
 # models annotations
 gem 'annotator'
@@ -50,4 +49,5 @@ group :development, :test do
   gem 'sql_queries_count'
   #gem RUBY_VERSION.include?('1.9') ? 'ruby-debug19' : 'ruby-debug'
   gem 'ZenTest'
+  gem 'debugger'
 end
