@@ -3,7 +3,7 @@ require 'json'
 module Moci
   module TestRunner
 
-    # SPec tests runner
+    # Spec tests runner
     # Options:
     # * specs - spec files to run in any format that is accepted by rspec
     class Spec < Base
@@ -45,7 +45,7 @@ module Moci
             end
           end
 
-          # If there was eny output on stderr, append it at the end
+          # If there was any output on stderr, append it at the end
           err = stderr.read
           output += "\n\nSTDERR: #{err}" unless err.to_s.strip.empty?
         end

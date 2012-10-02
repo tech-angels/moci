@@ -3,7 +3,7 @@ require 'spec_helper'
 
 describe "rails units in rails_test" do
     before :all do
-      @project = Factory.create(:project, :vcs_type => "Git", :project_type => 'Rails', :project_options => {:rails => {:rvm => "1.8.7"}})
+      @project = Factory.create(:project, :vcs_type => "Git", :project_type => 'Rails', :project_options => {:rails => {:rvm => "1.9.3"}})
       @instance = Factory.create(:project_instance, :project => @project)
       FileUtils.cp_r "#{$test_app_skel_dir}//.", @instance.working_directory
 
@@ -28,7 +28,6 @@ describe "rails units in rails_test" do
 
       it "should mark _keep it failing_ commit as OK" do
         commit = @project.commits.find_by_number '2937f04135130fceed58bdd763f7f120fbf46469'
-        puts commit.project_instance_commits.first.preparation_log
         commit.build_state.should == 'ok'
       end
 

@@ -27,7 +27,9 @@ end
 
 FileUtils.rm_rf("#{Rails.root}/tmp/spec_run") if File.exists? Rails.root
 
-
+# Speed up the test suite
+Rails.logger.level = 4 # fatal
+Devise.stretches = 1
 
 RSpec.configure do |config|
   # ## Mock Framework

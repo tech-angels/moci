@@ -4,6 +4,7 @@ ActiveAdmin.register Project do
   filter :project_type, :as => :select, :collection => Moci::ProjectHandler.types
 
   index do
+    selectable_column
     column :name
     column :vcs_type
     column :project_type

@@ -23,7 +23,7 @@
     .title moci
 
   #top_menu
-    = render :partial => '/common/top_menu.html.haml'
+    = render '/common/top_menu'
 
   - if flash[:alert]
     .flash.alert= flash[:alert]
@@ -33,7 +33,7 @@
 
   #cols
     #sidebar
-      = render :partial => '/common/sidebar'
+      = render '/common/sidebar'
 
     #content
       = yield
