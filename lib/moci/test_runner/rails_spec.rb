@@ -16,7 +16,9 @@ module Moci
 
       def command
         formatter_path = File.expand_path File.join(Rails.root,'lib','rspec','moci_formatter.rb')
-        "rake spec#{options['specs'] ? ":#{options['specs']}" : ""} #{options['spec'] ? "SPEC=#{options['spec']} " : ""}SPEC_OPTS=\"--require #{formatter_path}\""
+        spec_opts = options['specs'].blank? ? "" : ":#{options['specs']}"
+        specs_opts = options['spec'].blank? ? "" : "SPEC=#{options['spec']} "
+        "rake spec#{spec_opts} #{spec_opts} SPEC_OPTS=\"--require #{formatter_path}\""
       end
 
     end

@@ -3,7 +3,7 @@ require 'json'
 module Moci
   module TestRunner
 
-    # SPec tests runner
+    # Spec tests runner
     # Options:
     # * specs - spec files to run in any format that is accepted by rspec
     class Spec < Base
