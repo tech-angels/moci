@@ -3,12 +3,13 @@
 Webs =
   init: ->
     try
-      @jug = new Juggernaut(host: '<%= Moci.config[:juggernaut_host] || 'localhost' %>', port: <%= Moci.config[:juggernaut_port] || 8080 %>)
-      @jug.subscribe "moci", (data) ->
+      @pusher = new Pusher('<%= Pusher.key %>')
+      @pusher.subscribe "moci", (data) ->
         Moci.debug("Got data: " + JSON.stringify(data))
 
-  subscribe: (channel) ->
-    @jug.subscribe channel,Webs.receive if @jug
+  subscribe: (channel_name) ->
+    channel = @pusher.subscribe channel_name if @pusher
+    channel.bind_all(Webs.receive)
 
   receive: (data) ->
     Moci.debug("Got project data: " + JSON.stringify(data))
@@ -72,7 +73,7 @@ $(document).ready ->
     Project.id = $('h1.project').attr('data-project-id')
     Project.name = $('h1.project').attr('data-project-name')
     channel = 'moci_project_' + Project.id
-    Moci.debug("Subsribing to project channel " + channel)
+    Moci.debug("Subscribing to project channel " + channel)
     Webs.subscribe(channel)
     setInterval LastTestSuiteRuns.update_progress, 500
 

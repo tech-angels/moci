@@ -16,7 +16,7 @@ gem 'activeadmin'
 gem 'annotator'
 
 # live web notifications
-gem 'juggernaut'
+gem 'pusher'
 
 # test runner
 gem 'open4'

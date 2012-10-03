@@ -1,4 +1,6 @@
 # Public URL under which moci rails app is available
 application_url: http://moci.example.com:3000/
-juggernaut_host: moci.example.com
-juggernaut_port: 8080
+pusher:
+  app_id: ''
+  key: ''
+  secret: ''
