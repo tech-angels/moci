@@ -5,6 +5,7 @@
 //= require jquery_ujs
 //= require jquery-ui
 //= require jquery.simplemodal
+//= require pusher.min
 //= require moci
 //= require webs
 
