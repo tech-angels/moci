@@ -3,6 +3,10 @@
 Webs =
   init: ->
     try
+      <% if Pusher.host %>
+        Pusher.host = '<%= Pusher.host %>';
+        Pusher.wss_port = '443';
+      <% end %>
       @pusher = new Pusher('<%= Pusher.key %>')
       @pusher.subscribe "moci", (data) ->
         Moci.debug("Got data: " + JSON.stringify(data))
