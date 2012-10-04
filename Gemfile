@@ -38,7 +38,7 @@ gem 'kaminari' # pagination
 gem 'git'
 
 # notifications
-gem 'httparty' # used by campfire
+gem 'tinder'
 
 group :production do
   # Unicorn
