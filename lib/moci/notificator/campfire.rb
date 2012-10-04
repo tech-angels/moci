@@ -13,12 +13,8 @@ module Moci
                        :type => :select, :options => ['verbose','compact'], :default => "verbose"
       end
 
-      def initialize(params)
-        unless params.empty?
-          @campfire = Tinder::Campfire.new params[:subdomain], :token => params[:auth_token] unless params[:subdomain].blank?
-          @room = @campfire.find_room_by_name(params[:room_name])
-          @params = params
-        end
+      def initialize(params={})
+        @params = params
         super
       end
 
@@ -40,14 +36,23 @@ module Moci
         else
           message += " ( #{Moci.config[:application_url].match(/.+[^\/]/)[0]}/c/#{commit.id} )"
         end
-        @room.speak message
-        @room.play 'trombone' if commit.build_state == 'fail'
-        @room.play 'rimshot' if commit.build_state == 'clean' && fixed > 0
+        room.speak message
+        room.play 'trombone' if commit.build_state == 'fail'
+        room.play 'rimshot' if commit.build_state == 'clean' && fixed > 0
         true
       end
 
       def default_options
         {:style => 'compact'}
+      end
+
+      protected
+
+      def room
+        @campfire ||= Tinder::Campfire.new @options['subdomain'], :token => @options['auth_token']
+        @room ||= @campfire.find_room_by_name(@options['room_name'])
+      rescue Exception => e
+        Rails.logger.error "[#{self}] Error during campfire notification: #{e.message}"
       end
     end
   end
