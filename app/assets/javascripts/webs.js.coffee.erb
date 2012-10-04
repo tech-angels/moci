@@ -3,11 +3,13 @@
 Webs =
   init: ->
     try
-      <% if Pusher.host %>
-        Pusher.host = '<%= Pusher.host %>';
-        Pusher.wss_port = '443';
+      <% if Moci.config[:pusher][:host] %>
+        Pusher.host = '<%= Pusher.host %>'
       <% end %>
-      @pusher = new Pusher('<%= Pusher.key %>')
+      <% if Moci.config[:pusher][:wss_port] %>
+      Pusher.wss_port = '<%= Moci.config[:pusher][:wss_port] %>'
+      <% end %>
+      @pusher = new Pusher('<%= Pusher.key %>'<%= ", {encrypted: true}" if Moci.config[:pusher][:encrypted] %>)
       @pusher.subscribe "moci", (data) ->
         Moci.debug("Got data: " + JSON.stringify(data))
 
