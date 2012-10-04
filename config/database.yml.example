@@ -18,12 +18,4 @@ test:
   host: 127.0.0.1
   pool: 5
   timeout: 5000
-
-production:
-  adapter: postgresql
-  database: moci_prod
-  username: moci
-  password: whatever
-  host: 127.0.0.1
-  pool: 5
-  timeout: 5000
+  min_messages: WARNING
