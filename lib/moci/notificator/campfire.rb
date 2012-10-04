@@ -19,7 +19,8 @@ module Moci
       end
 
       def commit_built(commit)
-        message = "[#{commit.project.name}] #{commit.number[0..4]} #{truncate(commit.description, lenght: 40)} @#{commit.author.name} on #{commit.project.vcs_branch_name}: #{commit.build_state.upcase}"
+        message = "[#{commit.project.name}] #{commit.number[0..4]} #{truncate(commit.description, lenght: 40)} @#{commit.author.name} on #{commit.project.vcs_branch_name}: #{commit.build_state.upcase} "
+        message << (%w(ok clean).include?(commit.build_state) ? ":+1:" : ":boom:")
         fixed = 0
         if @options[:style] == 'verbose'
           commit.latest_test_suite_runs.each do |tsr|
