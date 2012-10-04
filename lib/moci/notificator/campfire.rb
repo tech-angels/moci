@@ -1,10 +1,12 @@
+require 'tinder'
+
 module Moci
   module Notificator
     class Campfire < Base
       include ActionView::Helpers::TextHelper
 
       define_options do
-        o :subdomain,   "e.g. 'your-awesome-company' for https://[your-awesome-company].campfirenow.com", :required => true
+        o :subdomain,  "e.g. https://[subdomain].campfirenow.com", :required => true
         o :auth_token, :required => true
         o :room_name,  :required => true
         o :style,      "verbose: full list of fixed/introduced errors, compact: just build status and link to moci commit page",
@@ -12,9 +14,11 @@ module Moci
       end
 
       def initialize(params)
-        @campfire = Tinder::Campfire.new params[:subdomain], :token => params[:auth_token]
-        @room = @campfire.find_room_by_name(params[:room_name])
-        @params = params
+        unless params.empty?
+          @campfire = Tinder::Campfire.new params[:subdomain], :token => params[:auth_token] unless params[:subdomain].blank?
+          @room = @campfire.find_room_by_name(params[:room_name])
+          @params = params
+        end
         super
       end
 
