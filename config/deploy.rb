@@ -64,9 +64,9 @@ namespace :unicorn do
 end
 
 namespace :deploy do
-  desc "Restart the unicorn workers"
+  desc "Restart the moci worker"
   task :restart do
-    unicorn.restart
+    run "sudo monit restart prod-moci-worker"
   end
 end
 
