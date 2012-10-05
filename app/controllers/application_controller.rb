@@ -15,7 +15,7 @@ class ApplicationController < ActionController::Base
   def must_be_in_project
     @project ||= projects.find_by_name params[:project_name]
     unless @project && (@project.public || user_signed_in? && can?(:view, @project))
-      redirect_to({:action => :choose, :controller => '/projects'}, :alert => "Project not found")
+      redirect_to({controller: :projects, action: :choose}, alert: "Project not found")
       return false
     end
   end

@@ -2,7 +2,7 @@ class TestSuiteRunsController < ApplicationController
 
   def index
     #TODO: paginate
-    @test_suite_runs = TestSuiteRun.order('test_suite_runs.created_at DESC').includes(:commit => :author).includes(:test_suite => :project).where('projects.id' => visible_projects.map(&:id)).page(params[:page]).per(20)
+    @test_suite_runs = TestSuiteRun.order('test_suite_runs.created_at DESC').includes(commit: :author).includes(test_suite: :project).where('projects.id' => visible_projects.map(&:id)).page(params[:page]).per(20)
   end
 
   def show
@@ -15,6 +15,6 @@ class TestSuiteRunsController < ApplicationController
     @test_suite_run = TestSuiteRun.find params[:id]
     @test_unit = TestUnit.find params[:test_unit_id]
     @commit=  @test_suite_run.blame(@test_unit)
-    render :partial => 'blame'
+    render partial: 'blame'
   end
 end

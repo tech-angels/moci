@@ -53,6 +53,22 @@ Moci::Application.routes.draw do
     post :rerun_all_children, :on => :member
   end
 
+  resources :test_suite_runs do
+    member do
+      get :blame
+    end
+  end
+
+  resources :projects do
+    member do
+      get :tr_last_run
+    end
+    collection do
+      get :choose
+      get :stats
+    end
+  end
+
   # You can have the root of your site routed with "root"
   # just remember to delete public/index.html.
   root :to => "test_suite_runs#index"

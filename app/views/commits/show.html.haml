@@ -31,7 +31,7 @@
 
 %h2 Test suite runs
 
-= render :partial => '/test_suite_runs/list', :locals => {:test_suite_runs => @commit.test_suite_runs.includes(:test_suite, :project_instance)}
+= render :partial => 'test_suite_runs/list', :locals => {:test_suite_runs => @commit.test_suite_runs.includes(:test_suite, :project_instance)}
 
 %h2 Actions
 

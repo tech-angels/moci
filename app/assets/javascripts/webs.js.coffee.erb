@@ -23,7 +23,7 @@ Webs =
       when 'test_suite_run'
         if $('.last_runs .test_suite_run_'+data['id']).length == 0
           q = $.ajax
-            url: '/projects/tr_last_run?'+$.param({project_name: Project.name, test_suite_run_id: data['id']})
+            url: '/projects/' + Project.id + '/tr_last_run?'+$.param({test_suite_run_id: data['id']})
             dataType: 'html'
             async: false
             success: (data,t,j) ->
