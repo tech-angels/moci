@@ -36,7 +36,7 @@ describe "rails units in rails_test" do
         commit.build_state.should == 'fail'
       end
 
-      it "should marke _fix all test failing_ commit as CLEAN" do
+      it "should mark _fix all test failing_ commit as CLEAN" do
         commit = @project.commits.find_by_number 'f7cbcb2cc9e9bf5561329f26bd8ada990abce51e'
         commit.build_state.should == 'clean'
       end

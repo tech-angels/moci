@@ -6,49 +6,43 @@ module Moci
       # However parsing is safer in case when some other gems modified tests runner internals (which happens)
       # TODO: error messages parsing
       def run
-        t0 = lt = Time.now
-        output = ""
-
+        output = ''
+        t0 = Time.now
         exitstatus = execute("rake test:#{test_type} TESTOPTS=\"-v\"") do |pid, stdin, stdout, stderr|
           running = false
 
-          pipe = stdout
-          pipe.sync = true ### you can do this once
-          buf = ''
+          stdout.sync = true ### you can do this once
 
-          while c = pipe.getc
-            buf << c
-            output << c
+          while line = stdout.gets
+            output << line
 
             # Test suite start
-            if buf.match(/# Running tests:$/)
-              Rails.logger.debug("Found suite start line: #{buf}")
-              buf = ''
+            if line.match(/# Running tests:$/)
+              Rails.logger.debug("Found suite start line: #{line}")
               push :loading_time, Time.now - t0
               running = true
             end
 
             # Test suite finished
-            if buf.match(/Finished in (.*?) seconds\./)
-              Rails.logger.debug("Found finished line: #{buf}")
+            if line.match(/Finished in (.*?) seconds\./)
+              Rails.logger.debug("Found finished line: #{line}")
               running = false
             end
 
             # Single test run line
-            if running && m = buf.match(/(.*)#(.*) = \d+\.\d+ s = (.)/)
-              Rails.logger.debug("Found single test line: #{buf}")
+            if running && m = line.match(/(.*)#(.*) = (.*) s = (.)/)
+              Rails.logger.debug("Found single test line: #{line}")
               push_test m[2], m[1]
 
-              buf = ''
-              run_time = Time.now - lt
-              lt = Time.now
-              result = %w(. E F).include?(m[3]) ? m[3] : 'U'
+              line = ''
+              run_time = m[3]
+              result = %w(. E F).include?(m[4]) ? m[4] : 'U'
               last_test result, run_time
             end
 
             # Summary line
-            if m = buf.match(/(\d+?) tests, (\d+?) assertions, (\d+?) failures, (\d+?) errors/)
-              Rails.logger.debug("Found summary line: #{buf}")
+            if m = line.match(/(\d+?) tests, (\d+?) assertions, (\d+?) failures, (\d+?) errors/)
+              Rails.logger.debug("Found summary line: #{line}")
               push(
                 :tests_count => m[1],
                 :assertions_count => m[2],

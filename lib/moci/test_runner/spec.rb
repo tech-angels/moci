@@ -12,11 +12,9 @@ module Moci
       # to get info about single test runs as they appear
       def run
         t0 = Time.now
-        running = nil
         output = ""
         exitstatus = execute(command) do |pid, stdin, stdout, stderr|
           stdout.sync = true
-          dt0 = Time.now
 
           while line = stdout.gets
             output += line
@@ -29,11 +27,10 @@ module Moci
               case data[:event]
 
               when "start"
-                dt0 = Time.now
 
               when "result"
                 push_test data[:example][:name], data[:example][:group]
-                last_test data[:result], Time.now - dt0
+                last_test data[:result], data[:duration]
 
               when "stats"
                 push(

@@ -13,19 +13,19 @@ module RSpec
         end
 
         def example_started(example)
-          moci_push :event => "start"
+          moci_push event: "start"
         end
 
         def example_passed(example)
-          moci_push :event => "result", :result => '.', :example => description(example)
+          moci_push(format_result(example, '.'))
         end
 
         def example_pending(example)
-          moci_push :event => "result", :result => 'U', :example => description(example)
+          moci_push(format_result(example, 'U'))
         end
 
         def example_failed(example)
-          moci_push :event => "result", :result => 'F', :example => description(example)
+          moci_push(format_result(example, 'F'))
           @failed_examples << example
         end
 
@@ -52,6 +52,10 @@ module RSpec
         def moci_push(data)
           @output.puts "MOCI[[#{data.to_json}]]"
           @output.flush
+        end
+
+        def format_result(example, result)
+          {event: "result", result: result, example: description(example), duration: example.execution_result[:run_time]}
         end
 
       end
