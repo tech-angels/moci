@@ -10,11 +10,11 @@ describe Moci::TestRunner::Command do
   end
 
   it "should kill execution after timeout" do
-    Moci.stub(:config) { {:default_timeout => 1} }
-    cmd['sleep 20'].run
+    Moci.stub(:config) { {:default_timeout => 0.1} }
+    cmd['sleep 0.2'].run
     @tsr.reload.state.should == 'finished'
-    @tsr.run_time.should > 1
-    @tsr.run_time.should < 5
+    @tsr.run_time.should > 0.1
+    @tsr.run_time.should < 1
   end
 
   it "should properly collect exit status when false" do
