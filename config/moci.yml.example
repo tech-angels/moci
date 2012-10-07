@@ -4,3 +4,4 @@ pusher:
   app_id: ''
   key: ''
   secret: ''
+rvm_source: $HOME/.rvm/scripts/rvm
