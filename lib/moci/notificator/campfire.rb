@@ -41,6 +41,9 @@ module Moci
         room.play 'trombone' if commit.build_state == 'fail'
         room.play 'rimshot' if commit.build_state == 'clean' && fixed > 0
         true
+      rescue Exception => e
+        # Don't fail because of a failed notification
+        Rails.logger.error "[#{self.to_s}] Notification failed with error: #{e.message}"
       end
 
       def default_options
