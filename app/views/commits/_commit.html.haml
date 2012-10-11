@@ -17,7 +17,7 @@
         - else
           %i waiting for prepration
       %tt.title
-        = link_to_p commit.description, :action => 'show', :id => commit.id
+        = link_to_p commit.description, [@project, commit]
       (
       - if commit.repo_url
         = link_to commit.number[0..6], commit.repo_url

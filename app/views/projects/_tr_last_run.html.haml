@@ -5,7 +5,7 @@
     .spinner
       .progress
   %td= tsr.test_suite.name
-  %td= link_to tsr.commit.short_number, commit_path(tsr.commit)
+  %td= link_to tsr.commit.short_number, [tsr.commit.project, tsr.commit]
   %td.state= tsr.state
 %tr{:class => "test_suite_run_#{tsr.id} details state_#{tsr.state}", :style => "display: none"}
   %td{:colspan => 4}

@@ -3,38 +3,23 @@
 %p
   %table{:style => 'width: 100%'}
     %tr
-      %th
-        Project
-      %th
-        Test Suite
-      %th
-        Commit
-      %th
-        State
-      %th
-        Results
-      %th
-        Duration
+      %th Project
+      %th Test Suite
+      %th Commit
+      %th State
+      %th Results
+      %th Duration
     - @test_suite_runs.each do |tsr|
       %tr{:class => cycle('','bg')}
-        %td
-          = tsr.test_suite.project.name
-        %td
-          = tsr.test_suite.name
+        %td= tsr.test_suite.project.name
+        %td= tsr.test_suite.name
         %td
           = image_tag tsr.commit.author.gravatar_url :size => 15
-          %b= link_to tsr.commit.short_number[0..6], commit_path(tsr.commit)
+          %b= link_to tsr.commit.short_number[0..6], [tsr.commit.project, tsr.commit]
           = tsr.commit.short_description
-        %td
-          = link_to tsr.state.humanize, :action => :show, :id => tsr.id
-        %td
-          = render :partial => 'summary', :locals => {:tsr => tsr}
-        %td
-          = duration tsr.run_time
+        %td= link_to tsr.state.humanize, [tsr.commit.project, tsr]
+        %td= render :partial => 'summary', :locals => {:tsr => tsr}
+        %td= duration tsr.run_time
 
 %p
-
   = paginate @test_suite_runs
-
-
-

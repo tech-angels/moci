@@ -33,6 +33,7 @@ gem 'sass-rails'
 gem "haml-rails"
 gem 'gravtastic' # avatars from gravatar
 gem 'kaminari' # pagination
+gem 'friendly_id'
 
 # VCS
 gem 'git'

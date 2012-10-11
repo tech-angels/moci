@@ -6,28 +6,24 @@
     %td
       - if @commit.previous
         .commit_prev
-          = link_to "< prev", commit_path(@commit.previous)
+          = link_to "< prev", [@project, @commit.previous]
     %td{:align => "middle"}
       .commit_parent
         parent:
-        != @commit.parents.map{|c| link_to(c.short_description, commit_path(c)) }.join(" & ")
+        != @commit.parents.map{|c| link_to(c.short_description, [@project, c]) }.join(" & ")
     %td
       - if @commit.next
         .commit_next
-          = link_to "next >", commit_path(@commit.next)
+          = link_to "next >", [@project, @commit.next]
 %h2 Instances
 
 %table{:style => "width: 100%"}
   - @commit.project_instance_commits.each do |pic|
     %tr
-      %td
-        = pic.project_instance.name
-      %td
-        = pic.state
-      %td
-        = pic.created_at
-      %td
-        = link_to_longtext 'preparation log', pic.preparation_log
+      %td= pic.project_instance.name
+      %td= pic.state
+      %td= pic.created_at
+      %td= link_to_longtext 'preparation log', pic.preparation_log
 
 %h2 Test suite runs
 
@@ -37,4 +33,4 @@
 
 %ul
   %li
-    = link_to "Rerun all tests suites for this commit and all it's children", rerun_all_children_commit_path(@commit), :method => :post
+    = link_to "Rerun all tests suites for this commit and all it's children", rerun_all_children_project_commit_path(@project, @commit), :method => :post

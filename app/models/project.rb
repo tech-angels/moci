@@ -9,6 +9,10 @@
 # * updated_at [datetime] - last update time
 # * vcs_type [string, default=Base] - VCS type e.g. Git, Mercurial (see Moci::VCS::Base)
 class Project < ActiveRecord::Base
+
+  extend FriendlyId
+  friendly_id :name, use: :slugged
+
   validates_presence_of :name
   validates_uniqueness_of :name
 

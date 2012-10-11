@@ -1,6 +1,6 @@
 (
 introduced in
-= link_to @commit.short_number, commit_path(@commit)
+= link_to @commit.short_number, [@commit.project, @commit]
 by
 = @commit.author.name
 )

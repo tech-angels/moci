@@ -7,6 +7,6 @@
           %span= @project.name
       - else
         %li
-          = link_to :action => :show, :controller => '/projects', :project_name => project.name do
+          = link_to project do
             %span= project.name
 

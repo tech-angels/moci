@@ -1,9 +1,11 @@
 - if @project
   .section= @project.name
   %ul
-    = menu_li "Project info", :controller => '/projects', :action => 'show'
-    = menu_li "Latest commits", :controller => '/commits', :action => 'index', :project_name => @project.name
-    = menu_li "Statistics", :controller => '/projects', :action => 'stats', :project_name => @project.name
-
-%ul
-  = menu_li "Latest test runs", controller: :test_suite_runs
+    %li= link_to "Project info", @project
+    %li= link_to "Latest commits", project_commits_path(@project)
+    %li= link_to "Statistics", stats_project_path(@project)
+  %ul
+    %li= link_to "Latest test runs", project_test_suite_runs_path(@project)
+- else
+  %ul
+    %li= link_to "Latest test runs", test_suite_runs_path

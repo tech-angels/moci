@@ -12,6 +12,10 @@
 # * skipped [boolean] - commit can be marked as skipped if we don't want moci to run it
 # * updated_at [datetime] - last update time
 class Commit < ActiveRecord::Base
+
+  extend FriendlyId
+  friendly_id :number, use: :scoped, scope: :project
+
   belongs_to :author
   belongs_to :project
 

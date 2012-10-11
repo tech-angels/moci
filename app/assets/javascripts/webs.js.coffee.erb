@@ -23,7 +23,7 @@ Webs =
       when 'test_suite_run'
         if $('.last_runs .test_suite_run_'+data['id']).length == 0
           q = $.ajax
-            url: '/projects/' + Project.id + '/tr_last_run?'+$.param({test_suite_run_id: data['id']})
+            url: '/' + Project.slug + '/tr_last_run?'+$.param({test_suite_run_id: data['id']})
             dataType: 'html'
             async: false
             success: (data,t,j) ->
@@ -77,6 +77,7 @@ $(document).ready ->
   if $('h1.project').length != 0
     Project.id = $('h1.project').attr('data-project-id')
     Project.name = $('h1.project').attr('data-project-name')
+    Project.slug = $('h1.project').attr('data-project-slug')
     channel = 'moci_project_' + Project.id
     Moci.debug("Subscribing to project channel " + channel)
     Webs.subscribe(channel)

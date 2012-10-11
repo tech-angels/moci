@@ -5,4 +5,4 @@
       %td instance ##{tsr.project_instance.id}
       %td= render :partial => 'test_suite_runs/summary', locals: {tsr: tsr, no_diff: true}
       %td= duration tsr.run_time
-      %td= link_to tsr.state.humanize, tsr
+      %td= link_to tsr.state.humanize, [tsr.project, tsr]

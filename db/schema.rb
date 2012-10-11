@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120425231132) do
+ActiveRecord::Schema.define(:version => 20121010123121) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -47,7 +47,10 @@ ActiveRecord::Schema.define(:version => 20120425231132) do
     t.integer  "project_id"
     t.boolean  "skipped",         :default => false
     t.string   "build_state",     :default => "pending"
+    t.string   "slug"
   end
+
+  add_index "commits", ["project_id", "slug"], :name => "index_commits_on_project_id_and_slug", :unique => true
 
   create_table "commits_parents", :id => false, :force => true do |t|
     t.integer "commit_id"
@@ -104,7 +107,10 @@ ActiveRecord::Schema.define(:version => 20120425231132) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.boolean  "public",          :default => false
+    t.string   "slug"
   end
+
+  add_index "projects", ["slug"], :name => "index_projects_on_slug", :unique => true
 
   create_table "test_suite_runs", :force => true do |t|
     t.integer  "test_suite_id"
