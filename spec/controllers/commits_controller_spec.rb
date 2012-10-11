@@ -7,7 +7,7 @@ describe CommitsController do
     context "public project" do
     let(:commit) { Factory :commit, :project => Factory(:public_project) }
       it "should display commit" do
-        get :show, :id => commit.id
+        get :show, :project_id => commit.project, :id => commit.id
         response.should be_success
         assigns(:project).should == commit.project
       end
@@ -16,7 +16,7 @@ describe CommitsController do
     context "non-public project" do
     let(:commit) { Factory :commit }
       it "should not display commit" do
-        get :show, :id => commit.id
+        get :show, :project_id => commit.project, :id => commit.id
         response.should be_redirect
         flash[:alert].should == "Project not found"
       end
@@ -28,7 +28,7 @@ describe CommitsController do
         end
 
         it "should still not display commit" do
-          get :show, :id => commit.id
+          get :show, :project_id => commit.project, :id => commit.id
           response.should be_redirect
           flash[:alert].should == "Project not found"
         end
@@ -39,7 +39,7 @@ describe CommitsController do
           end
 
           it "should display commit" do
-            get :show, :id => commit.id
+            get :show, :project_id => commit.project_id, :id => commit.id
             response.should be_success
             assigns(:project).should == commit.project
           end

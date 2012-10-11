@@ -14,10 +14,11 @@ class ApplicationController < ActionController::Base
 
   def must_be_in_project
     @project ||= projects.find(params[:project_id] || params[:id])
-    unless @project && (@project.public || user_signed_in? && can?(:view, @project))
-      redirect_to({controller: :projects, action: :choose}, alert: "Project not found")
-      return false
+    if !@project.public && user_signed_in? && !can?(:view, @project)
+      raise ActiveRecord::RecordNotFound
     end
+  rescue ActiveRecord::RecordNotFound
+    redirect_to({controller: :projects, action: :choose}, alert: "Project not found")
   end
 
   def permission_denied!
