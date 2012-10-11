@@ -70,7 +70,8 @@ namespace :deploy do
   end
 end
 
-# ==============================================================================
+# Database migration on deploy
+after "deploy:update", "deploy:migrate"
+
 # Clean up old releases after deployments.
-# ==============================================================================
 after "deploy", "deploy:cleanup"
