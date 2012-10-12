@@ -29,6 +29,7 @@ after "deploy:update", "deploy:cleanup"
 
 role :app, main_server
 role :web, main_server
+role :db,  main_server, primary: true
 set :application,     'moci'
 set :user,            'deploy'
 set :group,           'www-data'
