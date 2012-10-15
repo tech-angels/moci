@@ -33,7 +33,9 @@ gem 'sass-rails'
 gem "haml-rails"
 gem 'gravtastic' # avatars from gravatar
 gem 'kaminari' # pagination
+gem 'kaminari-bootstrap' # bootstrap theme for kaminari
 gem 'friendly_id'
+gem "twitter-bootstrap-rails"
 
 # VCS
 gem 'git'

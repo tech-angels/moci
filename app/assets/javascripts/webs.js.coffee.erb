@@ -67,7 +67,7 @@ LastTestSuiteRuns =
         percentage = 100
       else
         percentage = Math.round((run_time / total)*100)
-      $(this).progressbar({value: percentage})
+      $(this).find('.bar').attr('style', 'width:' + percentage + '%')
 
 
 $(document).ready ->

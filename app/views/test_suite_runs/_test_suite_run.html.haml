@@ -1,0 +1,16 @@
+%tr{:class => "test_suite_run_#{test_suite_run.id} state_#{test_suite_run.state}", 'data-created-at' => test_suite_run.created_at.to_i, 'data-time-est' => test_suite_run.try(:previous_run).try(:run_time).to_i}
+  %td.info
+    .time
+      = l test_suite_run.updated_at, :format => :short
+    .spinner
+      .progress.progress-striped.active
+        .bar(style="width: 0%")
+  %td= test_suite_run.test_suite.name
+  %td.commit-btn
+    = link_to [test_suite_run.commit.project, test_suite_run.commit], class: 'btn btn-mini' do
+      = test_suite_run.commit.short_number
+      %i.icon-circle-arrow-right
+  %td.state= test_suite_run.state
+%tr{:class => "test_suite_run_#{test_suite_run.id} details state_#{test_suite_run.state}", :style => "display: none"}
+  %td{:colspan => 4}
+    %span.current_test_unit

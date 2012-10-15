@@ -30,7 +30,7 @@ class ProjectsController < ApplicationController
   def tr_last_run
     must_be_in_project
     tsr = @project.test_suite_runs.find(params[:test_suite_run_id])
-    render :partial => 'tr_last_run', :locals => {:tsr => tsr}
+    render tsr
   end
 
   protected

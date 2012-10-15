@@ -1,25 +1,25 @@
 %h1 Latest test suite runs
 
-%p
-  %table{:style => 'width: 100%'}
-    %tr
-      %th Project
-      %th Test Suite
-      %th Commit
-      %th State
-      %th Results
-      %th Duration
-    - @test_suite_runs.each do |tsr|
-      %tr{:class => cycle('','bg')}
-        %td= tsr.test_suite.project.name
-        %td= tsr.test_suite.name
-        %td
-          = image_tag tsr.commit.author.gravatar_url :size => 15
-          %b= link_to tsr.commit.short_number[0..6], [tsr.commit.project, tsr.commit]
-          = tsr.commit.short_description
-        %td= link_to tsr.state.humanize, [tsr.commit.project, tsr]
-        %td= render :partial => 'summary', :locals => {:tsr => tsr}
-        %td= duration tsr.run_time
+%table.table.table-hover.table-condensed
+  %tr
+    %th Project
+    %th Test Suite
+    %th Commit
+    %th Results
+    %th Duration
+    %th State
+  - @test_suite_runs.each do |tsr|
+    %tr{:class => cycle('','bg')}
+      %td= tsr.test_suite.project.name
+      %td= tsr.test_suite.name
+      %td
+        = image_tag tsr.commit.author.gravatar_url :size => 15
+        = link_to [tsr.commit.project, tsr.commit], class: 'btn btn-mini' do
+          =tsr.commit.short_number
+          %i.icon-circle-arrow-right
+        = tsr.commit.short_description
+      %td= render :partial => 'summary', :locals => {:tsr => tsr}
+      %td= duration tsr.run_time
+      %td= link_to tsr.state.humanize, [tsr.commit.project, tsr.commit, tsr]
 
-%p
-  = paginate @test_suite_runs
+= paginate @test_suite_runs

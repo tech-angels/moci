@@ -1,8 +1,5 @@
 %h1 Latest commits
 
-
-- @commits.each do |commit|
-  %br
-  = render :partial => 'commit', :locals => {:commit => commit}
+= render @commits
 
 = paginate @commits

@@ -5,30 +5,32 @@
   = '@'
   = @test_suite_run.created_at
 
-%table
+%dl.dl-horizontal
+  %dt Summary
+  %dd= render :partial => 'test_suite_runs/summary', locals: {tsr: @test_suite_run, no_diff: true}
+  %dt Running time
+  %dd= '%.3f s' % @test_suite_run.run_time.to_f
+
+%table.table.table-hover.table-condensed
   - @test_unit_runs.group_by {|x| x.test_unit.class_name}.each do |class_name, turs|
     %tr.clean
       %td{:colspan => 4}
         %h3= class_name.gsub(/Test$/,'')
-    %tr
-      %th result
-      %th test name
-      %th time taken
     - turs.each do |tur|
       %tr{:class => (tur.with_error? ? 'bad' : (tur.result == '.' ? 'clean' : 'info'))}
         %td
           - case tur.result
           - when '.'
-            .green OK
+            %span.label.label-success OK
           - when 'E'
-            .red ERROR
+            %span.label.label-important ERROR
           - when 'F'
-            .red FAILURE
+            %span.label.label-important FAILURE
           - else
             %b ???
         %td
           = tur.test_unit.name.gsub(/^test:? ?_?/,'')
-        %td= raw "#{'%.3f' % tur.run_time.to_f}&nbsp;s"
+        %td= '%.3f s' % tur.run_time.to_f
 
 %h3 Console output:
 

@@ -3,8 +3,7 @@
 
 //= require jquery
 //= require jquery_ujs
-//= require jquery-ui
-//= require jquery.simplemodal
+//= require twitter/bootstrap
 //= require pusher.min
 //= require moci
 //= require webs

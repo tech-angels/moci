@@ -7,8 +7,8 @@ module ApplicationHelper
 
   def bad_value(value)
     raw(value.to_i > 0 ?
-      %Q{<span class="red">#{value.to_i}</span>} :
-      %Q{<span class="green">#{value.to_i}</span>})
+      %Q{<span class="badge badge-important">#{value.to_i}</span>} :
+      %Q{<span class="badge badge-success">#{value.to_i}</span>})
   end
 
   def duration(seconds)
@@ -20,7 +20,7 @@ module ApplicationHelper
   end
 
   def link_to_longtext(name, longtext, options={})
-    render :partial => '/common/longtext', :locals => {:name => name, :longtext => longtext, :options => options}
+    render :partial => '/common/modal', :locals => {:name => name, :longtext => longtext, :options => options}
   end
 
 end

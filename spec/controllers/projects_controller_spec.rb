@@ -7,7 +7,7 @@ describe ProjectsController do
     let(:public_project) { Factory :project, :public => true }
 
     it "should be finding the project" do
-      get :show, :project_name => public_project.name
+      get :show, id: public_project.slug
       assigns(:project).should == public_project
       response.should be_success
     end
@@ -17,7 +17,7 @@ describe ProjectsController do
     let(:project) { Factory :project }
 
     it "should be redirecting" do
-      get :show, :project_name => project.name
+      get :show, id: project.slug
       response.should be_redirect
     end
   end
@@ -28,7 +28,7 @@ describe ProjectsController do
 
     it "should be displaying project" do
       sign_in admin
-      get :show, :project_name => project.name
+      get :show, id: project.slug
       assigns(:project).should == project
       response.should be_success
     end
@@ -40,7 +40,7 @@ describe ProjectsController do
 
     it "should be redirecting" do
       sign_in user
-      get :show, :project_name => project.name
+      get :show, id: project.slug
       response.should be_redirect
     end
   end
@@ -52,7 +52,7 @@ describe ProjectsController do
 
     it "should be displaying project" do
       sign_in user
-      get :show, :project_name => project.name
+      get :show, id: project.slug
       assigns(:project).should == project
       response.should be_success
     end

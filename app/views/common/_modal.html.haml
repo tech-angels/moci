@@ -1,0 +1,15 @@
+:ruby
+  @simple_modal_counter ||= 0
+  @simple_modal_counter += 1
+  div_id = "simple_modal_content_#@simple_modal_counter"
+
+.modal.fade{id: div_id, tabindex: "-1", role: "dialog", "aria-labelledby" => "#{div_id}_label", "aria-hidden" => "true"}
+  .modal-header
+    %button.close(type="button" data-dismiss="modal" aria-hidden="true") &times;
+    %h3{:id => "#{div_id}_label"}= name
+  .modal-body
+    %pre(style="font-size: 10px;")= longtext
+  .modal-footer
+    %button.btn(data-dismiss="modal" aria-hidden="true") Close
+
+= link_to name, "##{div_id}", role: :button, class: 'btn btn-small', "data-toggle" => "modal"

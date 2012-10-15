@@ -1,36 +1,41 @@
 = render :partial => 'commit', :locals => {:commit => @commit}
 
+.row-fluid
+  .span4
+    - if @commit.previous
+      = link_to [@project, @commit.previous], class: :btn do
+        %i.icon-arrow-left
+        prev
+  .span4
+    .btn-group
+      %a.btn.dropdown-toggle(data-toggle="dropdown") Parents
+      %a.btn.dropdown-toggle(data-toggle="dropdown")
+        %span.caret
+      %ul.dropdown-menu
+        %li!= @commit.parents.map{|c| link_to(c.short_description, [@project, c]) }.join(" & ")
+  .span4{style: 'text-align: right;'}
+    - if @commit.next
+      = link_to [@project, @commit.next], class: :btn do
+        next
+        %i.icon-arrow-right
 
-%table.no_border{:style => "width: 100%"}
-  %tr
-    %td
-      - if @commit.previous
-        .commit_prev
-          = link_to "< prev", [@project, @commit.previous]
-    %td{:align => "middle"}
-      .commit_parent
-        parent:
-        != @commit.parents.map{|c| link_to(c.short_description, [@project, c]) }.join(" & ")
-    %td
-      - if @commit.next
-        .commit_next
-          = link_to "next >", [@project, @commit.next]
-%h2 Instances
+%h3 Instances
 
-%table{:style => "width: 100%"}
+%table.table.condensed.table-hover
   - @commit.project_instance_commits.each do |pic|
     %tr
       %td= pic.project_instance.name
       %td= pic.state
       %td= pic.created_at
-      %td= link_to_longtext 'preparation log', pic.preparation_log
+      %td= link_to_longtext 'Preparation log', pic.preparation_log
 
-%h2 Test suite runs
+%h3 Test suite runs
 
-= render :partial => 'test_suite_runs/list', :locals => {:test_suite_runs => @commit.test_suite_runs.includes(:test_suite, :project_instance)}
+= render :partial => 'test_suite_runs/list', :locals => {:test_suite_runs => @commit.test_suite_runs.includes(:test_suite, :project_instance).order(:test_suite_id)}
 
-%h2 Actions
+%h3 Actions
 
-%ul
-  %li
-    = link_to "Rerun all tests suites for this commit and all it's children", rerun_all_children_project_commit_path(@project, @commit), :method => :post
+= link_to rerun_all_children_project_commit_path(@project, @commit), method: :post, class: 'btn' do
+  %i.icon-repeat
+  Rerun all tests suites for this commit and all it's children
+

@@ -2,9 +2,9 @@
   = "-"
 - else
   - if tsr.exitstatus
-    %span.green PASSED
+    %span.label.label-success PASSED
   - else
-    %span.red FAILED
+    %span.label.label-important FAILED
 
   - unless tsr.tests_count.nil? && tsr.assertions_count.nil?
     %b= tsr.tests_count
@@ -13,9 +13,9 @@
       -if prev_tsr && (diff = prev_tsr.tests_count.to_i - tsr.tests_count.to_i) != 0
         (
         - if diff > 0
-          %span.red= "-#{diff}"
+          = "-#{diff}"
         - else
-          %span.green= "+#{diff.abs}"
+          = "+#{diff.abs}"
         )
     tests,
     %b= tsr.assertions_count

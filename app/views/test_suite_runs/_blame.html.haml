@@ -1,6 +1,8 @@
 (
 introduced in
-= link_to @commit.short_number, [@commit.project, @commit]
+= link_to [@commit.project, @commit], class: 'btn btn-mini' do
+  = @commit.short_number
+  %i.icon-circle-arrow-right
 by
 = @commit.author.name
 )

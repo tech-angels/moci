@@ -1,8 +1,8 @@
-%table{:style => 'width: 100%'}
+%table.table.table-hover.table-condensed
   - test_suite_runs.each do |tsr|
-    %tr{:class => cycle('bg2','bg')}
+    %tr
       %td= tsr.test_suite.name
       %td instance ##{tsr.project_instance.id}
       %td= render :partial => 'test_suite_runs/summary', locals: {tsr: tsr, no_diff: true}
       %td= duration tsr.run_time
-      %td= link_to tsr.state.humanize, [tsr.project, tsr]
+      %td= link_to tsr.state.humanize, [tsr.project, tsr.commit, tsr]

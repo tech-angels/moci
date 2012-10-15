@@ -1,11 +1,14 @@
-- if @project
-  .section= @project.name
-  %ul
+%ul.nav.nav-list
+  - if @project
+    %li.nav-header= @project.name
     %li= link_to "Project info", @project
     %li= link_to "Latest commits", project_commits_path(@project)
     %li= link_to "Statistics", stats_project_path(@project)
-  %ul
     %li= link_to "Latest test runs", project_test_suite_runs_path(@project)
-- else
-  %ul
+    %li.divider
+    %li
+      Last build status:
+      = build_state_label @project.commits.last.build_state
+  - else
+    %li.nav-header No project selected
     %li= link_to "Latest test runs", test_suite_runs_path

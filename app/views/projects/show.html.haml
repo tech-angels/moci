@@ -2,54 +2,59 @@
 %h1.project{'data-project-id' => @project.id, 'data-project-name' => @project.name, 'data-project-slug' => @project.slug, :style => 'display: none'}= @project.name
 
 
-.project_state
-  %h3 Current state
-  .branch_title
-    .name
-      = @project.vcs_branch_name
-    .latest_commits
-      - last_commits = @project.commits.order('committed_at DESC').limit(20).all
-      - last_commits.each do |commit|
-        %div{:class => "build_state #{commit.build_state} latest_commits_mini"}
-          -#= commit.build_state[0..0].upcase
+.row-fluid
+  .project_state.span6
+    %h3 Current state
+    .branch_title
+      .name.lead= @project.vcs_branch_name
+      .latest_commits
+        Last builds summary:
+        - last_commits = @project.commits.order('committed_at DESC').limit(20).all
+        - last_commits.each do |commit|
+          = link_to [commit.project, commit], title: commit.short_description do
+            %span{:class => "build_state #{commit.build_state} latest_commits_mini"}
           &nbsp;
-  %br
-  - if !last_commits.empty?
-    %table.last_commits{:style => 'width: 100%'}
-      - last_commits[0..5].each_with_index do |commit, i|
-        -# commit = @project.commits.order('committed_at DESC').first
-        %tr{:class => "build_state #{commit.build_state}"}
-          %td{:style => 'width: 20px;'}
-            = image_tag commit.author.gravatar_url :size => 15
-          %td
-            = link_to commit.short_description, [@project, commit]
-          %td.state_name
-            = commit.build_state
-        - if i == 0
-          - @project.test_suites.each do |ts|
-            - tsr = commit.test_suite_runs.where(:test_suite_id => ts.id).first
-            - build_state = tsr ? tsr.build_state : 'pending'
-            %tr{:class => "build_state #{build_state}"}
-              %td
-              %td
-                = ts.name
-              %td.state_name
-                = build_state
+    - if !last_commits.empty?
+      .divider
+      %table.last_commits.table.table-hover.table-condensed
+        - last_commits[0..5].each_with_index do |commit, i|
+          -# commit = @project.commits.order('committed_at DESC').first
+          %tr
+            %td{:style => 'width: 20px;'}
+              = image_tag commit.author.gravatar_url :size => 15
+            %td
+              = link_to commit.short_description, [@project, commit]
+            %td.commit-btn
+              = link_to [commit.project,commit], class: 'btn btn-mini' do
+                = commit.short_number
+                %i.icon-circle-arrow-right
+            %td.state_name
+              = build_state_label commit.build_state
+          - if i == 0
+            - @project.test_suites.each do |ts|
+              - tsr = commit.test_suite_runs.where(:test_suite_id => ts.id).first
+              - build_state = tsr ? tsr.build_state : 'pending'
+              %tr
+                %td
+                %td
+                  = ts.name
+                %td
+                %td.state_name
+                  = build_state_label build_state
 
-.about
-  %h3 About project
+  .about.span6
+    %h3 About project
 
-  %table{:class => 'keyvalue nostyle', :style => 'width: 100%;'}
-    %tr
-      %td.key Monitored since
-      %td.value= @project.created_at
-    %tr
-      %td.key Commits in database
-      %td.value= @project.commits.count
+    %dl.dl-horizontal
+      %dt Monitored since
+      %dd= @project.created_at
+      %dt Commits in db
+      %dd= @project.commits.count
+      %dt VCS type
+      %dd= @project.vcs_type
 
 
-  %h3 Latest test suite runs
+    %h3 Latest test suite runs
 
-  %table.last_runs
-    - @project.test_suite_runs.order('updated_at DESC').limit(7).all.each do |tsr|
-      = render :partial => 'tr_last_run', :locals => {:tsr => tsr}
+    %table.last_runs.table.table-hover.table-condensed
+      = render @project.test_suite_runs.order('updated_at DESC').limit(7).all

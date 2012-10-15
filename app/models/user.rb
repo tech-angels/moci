@@ -15,6 +15,9 @@
 # * sign_in_count [integer, default=0] - devise trackable
 # * updated_at [datetime, not null] - last update time
 class User < ActiveRecord::Base
+  include Gravtastic
+  gravtastic :secure => true
+
   # Include default devise modules. Others available are:
   # :token_authenticatable, :encryptable, :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :recoverable, :rememberable, :trackable, :validatable

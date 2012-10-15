@@ -20,6 +20,7 @@ Moci::Application.routes.draw do
     end
     resources :commits do
       post :rerun_all_children, :on => :member
+      resources :test_suite_runs
     end
     resources :test_suite_runs
   end

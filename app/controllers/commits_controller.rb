@@ -11,7 +11,7 @@ class CommitsController < ApplicationController
   end
 
   def rerun_all_children
-    @commit = @project.find params[:id]
+    @commit = @project.commits.find params[:id]
     permission_denied! unless can? :manage, @project
     ([@commit] + @commit.all_children).each &:rerun_test_suites
     redirect_to :back, notice: "Test suites have been scheduled to rerun"
