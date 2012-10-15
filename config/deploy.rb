@@ -63,13 +63,15 @@ namespace :unicorn do
     run "oldpid=$(cat /var/www/#{application}/#{stage}/shared/pids/unicorn.pid) && kill -s USR2 $oldpid && echo 'Searching for newly spawned master process...' && until (pid=$(cat /var/www/#{application}/#{stage}/shared/pids/unicorn.pid 2>/dev/null) && test '$pid' != '$oldpid' && ps x |grep $pid|grep master) ; do sleep 1 ; done && kill -s WINCH $oldpid && kill -s QUIT $oldpid"
   end
 end
+after "deploy:restart", "unicorn:restart"
 
-namespace :deploy do
+namespace :moci_worker do
   desc "Restart the moci worker"
   task :restart do
     run "sudo monit restart prod-moci-worker"
   end
 end
+after "unicorn:restart", "moci_worker:restart"
 
 # Database migration on deploy
 after "deploy:update", "deploy:migrate"
