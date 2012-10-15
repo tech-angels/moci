@@ -5,7 +5,7 @@ module CommitsHelper
         'label-warning'
       when 'clean'
         'label-success'
-      when 'fail'
+      when /fail|preparation_failed|failed_to_run/
         'label-important'
       when 'running'
         'label-info'

@@ -133,7 +133,7 @@ class Commit < ActiveRecord::Base
     if new_build_state != build_state
       self.build_state = new_build_state
       save!
-      # TODO handle skipped ccommits (probably something like children without skipped will do)
+      # TODO handle skipped commits (probably something like children without skipped will do)
       children.each {|c| c.update_build_state! if c.build_state}
       # TODO this seems like a good place to move notification firing
     end
