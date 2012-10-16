@@ -6,3 +6,4 @@ log/*.log
 tmp/**/*
 tags
 db/schema.rb
+coverage

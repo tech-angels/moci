@@ -64,3 +64,8 @@ group :development, :test do
   gem 'ZenTest'
   gem 'debugger'
 end
+
+group :test do
+  # Code coverage for Ruby 1.9 https://github.com/colszowka/simplecov
+  gem 'simplecov', :require => false
+end
