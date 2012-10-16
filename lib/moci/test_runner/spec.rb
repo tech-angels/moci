@@ -5,8 +5,13 @@ module Moci
 
     # Spec tests runner
     # Options:
-    # * specs - spec files to run in any format that is accepted by rspec
+    # * spec - spec files to run in any format that is accepted by rspec
     class Spec < Base
+
+      define_options do
+        o :spec, 'You can use it instead of or with "specs" option, to provide specific directory'\
+                 ' with specs e.g. "spec/acceptance", it will be run like: rake spec SPEC=YOUR_VALUE'
+      end
 
       # It uses custom formatter from lib/moci/test_runner/rspec/moci_formatter.rb
       # to get info about single test runs as they appear
@@ -56,7 +61,7 @@ module Moci
 
       def command
         formatter_path = File.expand_path File.join(Rails.root,'lib','rspec','moci_formatter.rb')
-        "rspec --require #{formatter_path} #{options['specs']}"
+        "rspec --require #{formatter_path} #{options['spec']}"
       end
     end
   end

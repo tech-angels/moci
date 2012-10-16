@@ -60,6 +60,14 @@ module DynamicOptions
     def define_options(&block)
       definer = Definer.new
       definer.instance_eval(&block)
+      # Fetch options_definition from class ancestor
+      ancestors_options = self.ancestors[1..-1]
+        .collect {|ancestor|
+          ancestor.options_definition if ancestor.respond_to?(:options_definition)}
+        .compact
+      # Append options_definition from ancestors
+      @options_definition = ancestors_options.inject(options_definition) {|options, ancestor_option| options.merge(ancestor_option)}
+      # Eventualy override them, or complete them with current class
       @options_definition = options_definition.merge(definer.to_hash)
     end
 
