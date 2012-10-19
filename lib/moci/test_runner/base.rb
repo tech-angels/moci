@@ -9,6 +9,11 @@ module Moci
 
       extend DynamicOptions::Definition
 
+      define_options do
+        o :headless, "Some capybara drivers will need a window server to run, even the headless ones like capybara-webkit. " \
+                     "Use this option if you need your command to be run with 'xvfb-run'.#{`which xvfb-run`.blank? ? " (!!WARNING!! can't find xvfb-run in current PATH)" : ""}", type: :boolean
+      end
+
       # Run tests according to given TestSuiteRun params
       def self.run(tr)
         new(tr).run
@@ -32,6 +37,7 @@ module Moci
 
       def execute(command, output='', &block)
         exitstatus = false
+        command = headless_prepend + command # prepend xvfb-run if :headless option is set
         max_time = Moci.config[:default_timeout]
         begin
           Timeout.timeout(max_time) do
@@ -93,6 +99,11 @@ module Moci
           :result => result,
           :run_time => time
         )
+      end
+
+      # may be used to prepend xvfb-run command in inherited classes
+      def headless_prepend
+        options['headless'].blank? ? '' : 'xvfb-run '
       end
 
     end
