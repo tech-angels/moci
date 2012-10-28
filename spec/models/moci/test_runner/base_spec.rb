@@ -74,6 +74,7 @@ describe Moci::TestRunner::Base do
     pi = double('project instance')
     pi.should_receive(:execute).with('foo','bar')
     tsr.stub(:project_instance) { pi }
+    tsr.stub_chain("test_suite.options") { Hash.new }
     @base = Moci::TestRunner::Base.new(tsr)
     @base.send :execute, 'foo', 'bar'
   end
