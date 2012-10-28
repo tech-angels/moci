@@ -14,9 +14,9 @@ module Moci
       def run
         t0 = Time.now
         output = ''
-        execute(options['pre_command'], output) if options['pre_command']
+        execute(options['pre_command'], output) unless options['pre_command'].blank?
         exitstatus = execute(options['command'], output)
-        execute(options['post_command'], output) if options['post_command']
+        execute(options['post_command'], output) unless options['post_command'].blank?
         run_time = Time.now - t0
         push(
           :exitstatus => exitstatus,
