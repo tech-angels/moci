@@ -102,8 +102,9 @@ module Moci
       end
 
       # may be used to prepend xvfb-run command in inherited classes
+      # -a option: "try to get a free server number" => make sure a free X server is available
       def headless_prepend
-        options['headless'].blank? ? '' : 'xvfb-run '
+        options['headless'].blank? ? '' : 'xvfb-run -a '
       end
 
     end
