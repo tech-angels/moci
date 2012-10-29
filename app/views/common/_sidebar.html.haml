@@ -8,7 +8,8 @@
     %li.divider
     %li
       Last build status:
-      = build_state_label @project.commits.last.try(:build_state)
+      - if !@project.commits.empty? && !@project.commits.last.try(:build_state).blank?
+        = build_state_label @project.commits.last.build_state
   - else
     %li.nav-header No project selected
     %li= link_to "Latest test runs", test_suite_runs_path
