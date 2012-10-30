@@ -21,7 +21,7 @@ module RSpec
         end
 
         def example_pending(example)
-          moci_push(format_result(example, 'U'))
+          moci_push(format_result(example, 'P'))
         end
 
         def example_failed(example)
