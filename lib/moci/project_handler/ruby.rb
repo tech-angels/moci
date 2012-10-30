@@ -13,6 +13,25 @@ module Moci
                      "for all commands executed within project instance (example value: 1.8.7@moci)", :name => "RVM"
       end
 
+      def prepare_env(commit)
+        output = ''
+
+        if options[:bundler]
+          execute! "bundle install", output unless execute "bundle check"
+        end
+
+        # save some gigabytes
+        execute! "rm -f log/test.log"
+        true
+      end
+
+      def prepare_env_first_time(commit)
+        output = ''
+        preparation_ok = ( !options[:bundler] || execute("bundle install", output) )
+        commit.preparation_log = output
+        return preparation_ok
+      end
+
       def execute_wrapper(command, output='')
         if options[:bundler]
           command = "bundle exec #{command}" unless command.match(/bundle (install|check|exec)/)

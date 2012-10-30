@@ -8,22 +8,13 @@ module Moci
     class Rails < Ruby
 
       def prepare_env(commit)
-        output = ''
-
-        if options[:bundler]
-          execute! "bundle install", output unless execute "bundle check"
-        end
-
-        # save some gigabytes
-        execute! "rm -f log/test.log"
-
+        super
         # put development_structure for given version in place if needed
         if options[:db_structure_dump] && commit.data[:dev_structure]
           File.open("#{working_directory}/db/development_structure.sql",'w') do |f|
             f.puts commit.data[:dev_structure]
           end
         end
-
         true
       end
 
