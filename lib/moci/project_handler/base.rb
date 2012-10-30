@@ -28,6 +28,10 @@ module Moci
 
       protected
 
+      def options
+        @project_instance.project.options
+      end
+
       def working_directory
         @project_instance.working_directory
       end
