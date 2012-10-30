@@ -29,5 +29,5 @@ Moci::Application.routes.draw do
   # just remember to delete public/index.html.
   root :to => "test_suite_runs#index"
 
-  match 'c/:id', :controller => 'commits', :action => 'show'
+  match 'c/:id' => 'commits#short_url_show'
 end
