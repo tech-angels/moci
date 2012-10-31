@@ -31,7 +31,7 @@ ActiveAdmin.register User do
   controller do
     def update
       @user = User.find params[:id]
-     if params[:user][:password].blank?
+      if params[:user][:password].blank?
         params[:user].delete :password
         params[:user].delete :password_confirmation
       end
@@ -39,5 +39,11 @@ ActiveAdmin.register User do
       @user.assign_attributes params[:user], :without_protection => true
       update!
     end
+
+    def create
+      @user = User.new params[:user], :without_protection => true
+      create!
+    end
+
   end
 end
