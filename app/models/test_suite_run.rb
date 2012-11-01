@@ -38,6 +38,7 @@ class TestSuiteRun < ActiveRecord::Base
   def build_state
     return 'clean' if clean? && exitstatus
     return 'ok' if new_errors.size == 0 && errors.size != 0
+    return 'running' if running?
     return 'fail'
   end
 
