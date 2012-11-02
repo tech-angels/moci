@@ -31,8 +31,8 @@ ActiveRecord::Schema.define(:version => 20121010123121) do
   create_table "authors", :force => true do |t|
     t.string   "name"
     t.string   "email"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
   create_table "commits", :force => true do |t|
@@ -42,8 +42,8 @@ ActiveRecord::Schema.define(:version => 20121010123121) do
     t.datetime "committed_at"
     t.text     "preparation_log"
     t.text     "dev_structure"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                             :null => false
+    t.datetime "updated_at",                             :null => false
     t.integer  "project_id"
     t.boolean  "skipped",         :default => false
     t.string   "build_state",     :default => "pending"
@@ -61,8 +61,8 @@ ActiveRecord::Schema.define(:version => 20121010123121) do
     t.string   "name"
     t.string   "notification_type"
     t.text     "notification_options"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",           :null => false
+    t.datetime "updated_at",           :null => false
   end
 
   create_table "notifications_projects", :id => false, :force => true do |t|
@@ -76,8 +76,8 @@ ActiveRecord::Schema.define(:version => 20121010123121) do
     t.string   "state",               :default => "new"
     t.text     "preparation_log"
     t.text     "data_yaml"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                             :null => false
+    t.datetime "updated_at",                             :null => false
   end
 
   create_table "project_instances", :force => true do |t|
@@ -85,8 +85,8 @@ ActiveRecord::Schema.define(:version => 20121010123121) do
     t.string   "state",             :default => "new"
     t.string   "locked_by"
     t.string   "working_directory"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                           :null => false
+    t.datetime "updated_at",                           :null => false
   end
 
   create_table "project_permissions", :force => true do |t|
@@ -104,8 +104,8 @@ ActiveRecord::Schema.define(:version => 20121010123121) do
     t.text     "project_options"
     t.string   "vcs_type",        :default => "Base"
     t.string   "project_type",    :default => "Base"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                          :null => false
+    t.datetime "updated_at",                          :null => false
     t.boolean  "public",          :default => false
     t.string   "slug"
   end
@@ -123,8 +123,8 @@ ActiveRecord::Schema.define(:version => 20121010123121) do
     t.string   "state"
     t.boolean  "exitstatus"
     t.text     "run_log"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",          :null => false
+    t.datetime "updated_at",          :null => false
     t.integer  "project_instance_id"
   end
 
@@ -133,8 +133,8 @@ ActiveRecord::Schema.define(:version => 20121010123121) do
     t.string   "suite_type"
     t.text     "suite_options"
     t.integer  "project_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
   end
 
   create_table "test_unit_runs", :force => true do |t|
@@ -149,8 +149,8 @@ ActiveRecord::Schema.define(:version => 20121010123121) do
     t.integer  "test_suite_id"
     t.string   "class_name"
     t.text     "name"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
   end
 
   create_table "users", :force => true do |t|
