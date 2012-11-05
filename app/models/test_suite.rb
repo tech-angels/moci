@@ -28,13 +28,19 @@ class TestSuite < ActiveRecord::Base
   # Run TestSuite within given ProjectInstance
   def run(project_instance)
     puts " running test suite #{self.name}"
-    tr = TestSuiteRun.create!(
+    begin
+      tr = TestSuiteRun.create!(
       :state => 'running',
       :commit => project_instance.head_commit,
       :project_instance => project_instance,
       :test_suite => self)
-    runner_class.run(tr)
-    tr.after_run #TODO: events, successful finish
+      runner_class.run(tr)
+      tr.after_run #TODO: events, successful finish
+    rescue SignalException, Interrupt
+      # worker is getting killed, we don't care about unfinished run, destroy it
+      tr.destroy
+      raise $!
+    end
   end
 
   # Returns given test suite runner implementation class
