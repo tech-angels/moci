@@ -1,0 +1,18 @@
+%h2 Workers
+
+%table.table.table-hover.table-condensed
+  %tr
+    %th Type
+    %th PID
+    %th State
+    %th Task
+    %th Last seen
+  - @workers.each do |worker|
+    %tr
+      %td= worker.worker_type
+      %td= worker.pid
+      %td= worker.state
+      %td= worker.task[:name] || 'n/d'
+      %td= worker.last_seen_at
+
+

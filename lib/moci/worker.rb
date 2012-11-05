@@ -1,6 +1,51 @@
 module Moci
-  # Just a skeleton currently
   class Worker
+
+    attr_accessor :model
+
+    def initialize
+      register
+      monitoring_loop
+      Signal.trap("EXIT") do
+        unregister
+        exit 0
+      end
+
+      loop do
+        sleep 1
+        # Here be dragons
+      end
+    end
+
+    protected
+
+    def register
+      @model = ::Worker.create(
+        pid: Process.pid,
+        last_seen_at: Time.now,
+        state: 'idle',
+        worker_type: :slave
+      )
+    end
+
+    def unregister
+      @model.destroy
+    end
+
+    def monitoring_loop
+      Thread.new do
+        loop do
+          begin
+            sleep ::Worker::PING_FREQUENCY
+            @model.update_attribute :last_seen_at, Time.now
+          rescue Exception => e
+            puts e.inspect
+            # TODO organize some logging for worker
+          end
+        end
+      end
+    end
+
     def self.go
       my_id = "worker:#{Process.pid}"
       # TODO instead of updated_at use something like

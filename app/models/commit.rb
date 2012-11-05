@@ -10,6 +10,7 @@
 # * preparation_log [text] - FIXME: remove me, it's present in ProjectInstanceCommit
 # * project_id [integer] - belongs_to Project
 # * skipped [boolean] - commit can be marked as skipped if we don't want moci to run it
+# * slug [string] - TODO: document me
 # * updated_at [datetime] - last update time
 class Commit < ActiveRecord::Base
 
