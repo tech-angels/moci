@@ -1,6 +1,6 @@
 %h2 Workers
 
-%table.table.table-hover.table-condensed
+%table.table.table-hover.table-condensed.workers
   %tr
     %th Type
     %th PID
@@ -8,7 +8,7 @@
     %th Task
     %th Last seen
   - @workers.each do |worker|
-    %tr
+    %tr{:class => (worker.alive? ? 'alive' : 'dead')}
       %td= worker.worker_type
       %td= worker.pid
       %td= worker.state
