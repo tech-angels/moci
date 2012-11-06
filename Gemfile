@@ -48,6 +48,11 @@ group :production do
   gem 'unicorn'
 end
 
+group :development do
+  gem 'quiet_assets' # skip logs for serving assets in development.log
+  gem 'thin' # to avoid wobrick content-length confusion
+end
+
 # test suite
 group :development, :test do
   gem 'capistrano'
