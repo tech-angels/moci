@@ -28,6 +28,13 @@ class Worker < ActiveRecord::Base
   scope :alive, lambda { where('last_seen_at >= ?', Time.now - PING_FREQUENCY*2) }
   scope :dead, lambda { where('last_seen_at < ?', Time.now - PING_FREQUENCY*2) }
 
+  scope :slave, where(worker_type_id: TYPES.invert[:slave])
+  scope :master, where(worker_type_id: TYPES.invert[:master])
+
+  def self.cleanup
+    dead.delete_all
+  end
+
   def alive?
     last_seen_at > Time.now - PING_FREQUENCY*2
   end

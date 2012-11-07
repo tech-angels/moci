@@ -1,20 +1,52 @@
 module Moci
   module Worker
     class Master < Base
-      def start
-        num_workers = 5 # TODO make it dynamic/configurable
+      def initialize
+        super
+        ::Worker.cleanup
+      end
 
+      def start
+        num_workers = 2 # TODO make it dynamic/configurable
+        ActiveRecord::Base.establish_connection
         num_workers.times do
-          pid = Process.fork
-          if pid
-            # TODO see if it started correctly
-          else
+          fork do
             ActiveRecord::Base.establish_connection
             Process.daemon(true)
             Worker::Slave.new.start
           end
         end
-        exit 0
+
+        loop do
+          sleep 1
+          # here goes slaves monitoring
+        end
+      end
+
+      # TODO with multi machine confirguration master should probably
+      # only manage slaves on given machine (additional column in workers table)
+      def stop_slaves
+        slaves = ::Worker.slave.alive.all
+
+        # ask politely
+        slaves.each do |worker|
+          Process.kill 'SIGINT', worker.pid
+        end
+
+        # wait
+        sleep 2 # IMPROVE no need for waiting if they are dead
+        slaves.each do |worker|
+          begin
+            Process.kill 'SIGKILL', worker.pid
+          rescue Errno::ESRCH
+            # it was already dead, that's fine
+          end
+        end
+      end
+
+      def safe_quit
+        stop_slaves
+        super
       end
 
       def worker_type
