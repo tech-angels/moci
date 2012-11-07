@@ -1,5 +1,10 @@
 module Moci
   module Worker
+    # Master worker job is to manage all slave workers on given machine.
+    # In case some worker would die or stop responding (should not happen in theory),
+    # it's master worker responsibility to kill it or start again.
+    # Sending SigINT to master worker stops all slave workers and then master,
+    # but easier way to achieve that is jus using rake workers:stop
     class Master < Base
       def initialize
         super

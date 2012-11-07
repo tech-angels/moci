@@ -21,5 +21,9 @@ namespace :workers do
     end
   end
 
+  desc "Start single slave worker without deamonizing (for dubugging purposes)"
+  task :run_slave => :environment do # TODO: rename me? naming is hard
+    Moci::Worker::Slave.new.start
+  end
 
 end
