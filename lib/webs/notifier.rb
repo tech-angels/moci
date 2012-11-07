@@ -27,7 +27,18 @@ module Webs
         :test_suite_run => {:id => tur.test_suite_run.id}
     end
 
+    def worker(worker)
+      # TODO admin channel
+      # TODO push worker notification
+    end
+
     protected
+
+    def ch_admins
+      Rails.cache.fetch(:admin_webs_channels, expires_in: 10.minutes) do
+        User.admin.map &:webs_channel
+      end
+    end
 
     def ch_global
       'moci'

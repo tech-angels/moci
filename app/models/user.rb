@@ -1,3 +1,5 @@
+require 'digest/md5'
+
 # Attributes:
 # * id [integer, primary, not null] - primary key
 # * admin [boolean, not null] - TODO: document me
@@ -36,4 +38,10 @@ class User < ActiveRecord::Base
 
   has_many :manage_project_permissions, :class_name => 'ProjectPermission', :conditions => {:name => 'manage'}
   has_many :projects_can_manage, :through => :manage_project_permissions, :source => :project
+
+  scope :admin, where(admin: true)
+
+  def webs_channel
+    Digest::MD5.hexdigest(id.to_s + created_at.to_i.to_s + encrypted_password.to_s)
+  end
 end

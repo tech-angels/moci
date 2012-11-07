@@ -82,6 +82,9 @@ $(document).ready ->
     Moci.debug("Subscribing to project channel " + channel)
     Webs.subscribe(channel)
     setInterval LastTestSuiteRuns.update_progress, 500
+  if $('input#private_webs_channel').length != 0
+    Webs.subscribe($('input#private_webs_channel').val())
+
 
 
 

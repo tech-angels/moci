@@ -47,4 +47,7 @@ class Worker < ActiveRecord::Base
     self.worker_type_id = TYPES.invert[name.to_sym]
   end
 
+  after_save do
+    Webs.notify :worker, self
+  end
 end
