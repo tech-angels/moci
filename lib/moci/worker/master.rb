@@ -6,15 +6,10 @@ module Moci
     # Sending SigINT to master worker stops all slave workers and then master,
     # but easier way to achieve that is jus using rake workers:stop
     class Master < Base
-      def initialize
-        super
-        ::Worker.cleanup
-      end
 
       def start
-        num_workers = 2 # TODO make it dynamic/configurable
         ActiveRecord::Base.establish_connection
-        num_workers.times do
+        number_of_workers.times do
           fork do
             ActiveRecord::Base.establish_connection
             Process.daemon(true)
@@ -22,10 +17,20 @@ module Moci
           end
         end
 
+        monitor_slaves
+      end
+
+      protected
+
+      def monitor_slaves
         loop do
           sleep 1
           # here goes slaves monitoring
         end
+      end
+
+      def number_of_workers
+        Moci.config[:number_of_workers]
       end
 
       # TODO with multi machine confirguration master should probably

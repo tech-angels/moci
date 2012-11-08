@@ -8,11 +8,12 @@ module Moci
   # IMPROVE: consider keeping config options in database, this way it will be easier
   # to create step by step setup (assuming app not always may have permission to edit files in config dir)
   include ConfigFile
-  has_config 'moci.yml', :environments => false
+  has_config 'moci.yml', environments: false
 
-  def default_config
+  def self.default_config
     {
-      :default_timeout => 40.minutes
+      default_timeout: 40.minutes,
+      number_of_workers: 3
     }
   end
 
