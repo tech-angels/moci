@@ -24,8 +24,13 @@ module Moci
 
       def monitor_slaves
         loop do
-          sleep 1
-          # here goes slaves monitoring
+          begin
+            sleep 1
+            # here goes slaves monitoring
+          # whatever happens in the loop, we want to keep it going
+          rescue Exception => e
+            Mol.report_error e, :worker
+          end
         end
       end
 

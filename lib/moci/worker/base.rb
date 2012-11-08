@@ -52,8 +52,7 @@ module Moci
               sleep ::Worker::PING_FREQUENCY
               @model.update_attribute :last_seen_at, Time.now
             rescue Exception => e
-              puts e.inspect
-              # TODO organize some logging for worker
+              Moci.report_error e, :worker
             end
           end
         end

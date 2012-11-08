@@ -17,4 +17,29 @@ module Moci
     }
   end
 
+  # Stub for some better error reporting (stored in DB in the future),
+  # whatever happens this will be easier to find and replace then some
+  # writes to random logs
+  # * error - exception object or string
+  # * options - options hash or symbol deciding error class e.g.: internal, worker, test_runner, maybe some more)
+  def self.report_error(error, options=nil)
+    desc = "[#{options.inspect}] "
+    if error.kind_of? Exception
+      desc << "#{error.message}\n\t"
+      desc << error.backtrace.join("\n\t")
+    else
+      desc << error
+    end
+    error_logger.error desc
+  end
+
+  def self.error_logger
+    @error_logger ||= (
+      logger = Logger.new(File.join(Rails.root,'log','error.log'))
+      logger.formatter = ::Logger::Formatter.new
+      logger.datetime_format = "%Y-%m-%d %H:%M:%S "
+      logger
+    )
+  end
+
 end
