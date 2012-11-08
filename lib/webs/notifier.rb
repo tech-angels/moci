@@ -28,8 +28,7 @@ module Webs
     end
 
     def worker(worker)
-      # TODO admin channel
-      # TODO push worker notification
+      webs.event ch_admins, 'worker', worker.as_json['worker'] # IMPROVE use root: false when fixed in rails
     end
 
     protected

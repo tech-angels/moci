@@ -35,6 +35,11 @@ class Worker < ActiveRecord::Base
     dead.delete_all
   end
 
+  def as_json(options=nil)
+    super(only: [:id, :last_seen_at, :pid, :state, :task],
+          methods: [:worker_type, :destroyed?])
+  end
+
   def alive?
     last_seen_at > Time.now - PING_FREQUENCY*2
   end
@@ -47,7 +52,11 @@ class Worker < ActiveRecord::Base
     self.worker_type_id = TYPES.invert[name.to_sym]
   end
 
-  after_save do
-    Webs.notify :worker, self
-  end
+  # Live web notifications
+  # FIXME pusher is extremaly slow, especially if we keep using it we
+  # may want to send these notifications in some bg process. It's most painfull
+  # on destroy when we are waiting 2s for process to finish because of tihs pusher
+  after_save { Webs.notify :worker, self }
+  after_destroy { Webs.notify :worker, self }
+
 end

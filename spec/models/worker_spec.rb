@@ -41,6 +41,30 @@ describe Worker do
     it { Worker.dead.all.should == [@w3] }
     it { @w1.alive?.should == true }
     it { @w3.alive?.should == false }
+  end
+
+  context "webs notifications" do
+    before do
+      Rails.cache.delete :admin_webs_channels
+      @admin = create(:admin)
+    end
+
+    it "should receive notification on create" do
+      Webs.should_receive(:event).with([@admin.webs_channel], 'worker', anything)
+      worker = create :worker
+    end
+
+    it "should receive notification on update" do
+      worker = create :worker
+      Webs.should_receive(:event).with([@admin.webs_channel], 'worker', anything)
+      worker.update_attribute :state, 'working'
+    end
+
+    it "should receive notification on destroy" do
+      worker = create :worker
+      Webs.should_receive(:event).with([@admin.webs_channel], 'worker', hash_including(:destroyed? => true))
+      worker.destroy
+    end
 
   end
 end

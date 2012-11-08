@@ -5,6 +5,8 @@
 //= require jquery_ujs
 //= require twitter/bootstrap
 //= require pusher.min
+//= require moment
+//= require livestamp
 //= require moci
 //= require webs
 
