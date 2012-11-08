@@ -25,6 +25,10 @@ Moci::Application.routes.draw do
     resources :test_suite_runs
   end
 
+  resources :workers, :only => [:index] do
+    member { get :tr_worker }
+  end
+
   # You can have the root of your site routed with "root"
   # just remember to delete public/index.html.
   root :to => "test_suite_runs#index"

@@ -20,7 +20,25 @@ Webs =
   receive: (event, data) ->
     Moci.debug("Got project event '" + event + "' with data: " + JSON.stringify(data))
     switch event
+      when 'worker'
+        tr = $('table.workers tr.worker_'+data['id'])
+        if tr.length == 0
+          q = $.ajax
+            url: '/workers/'+data['id']+'/tr_worker'
+            dataType: 'html'
+            async: false
+            success: (data,t,j) ->
+              $(data).prependTo('table.workers tbody')
+        else
+          if data['destroyed?'] == true
+            tr.remove()
+          else
+            tr.find('.last_seen_at span').attr('data-livestamp',data['last_seen_at'])
+            tr.find('.state').html(data['state'])
+            tr.find('.task').html(data['task']['name'])
+
       when 'test_suite_run'
+        # TODO we probably want to switch to js view rendering with these on the long run
         if $('.last_runs .test_suite_run_'+data['id']).length == 0
           q = $.ajax
             url: '/p/' + Project.slug + '/tr_last_run?'+$.param({test_suite_run_id: data['id']})
@@ -34,6 +52,7 @@ Webs =
           tr.removeClass('state_running')
           tr.removeClass('state_finished')
           tr.addClass('state_'+data['state'])
+
        when 'test_unit_run'
          tsr_id = data['test_suite_run']['id']
          tr_details = $('.last_runs .details.test_suite_run_'+tsr_id)
@@ -82,6 +101,10 @@ $(document).ready ->
     Moci.debug("Subscribing to project channel " + channel)
     Webs.subscribe(channel)
     setInterval LastTestSuiteRuns.update_progress, 500
+  if $('input#private_webs_channel').length != 0
+    Moci.debug("Subscribing to private channel")
+    Webs.subscribe($('input#private_webs_channel').val())
+
 
 
 

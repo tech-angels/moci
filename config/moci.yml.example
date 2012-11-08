@@ -4,4 +4,8 @@ pusher:
   app_id: ''
   key: ''
   secret: ''
+# number of slave workers to spawn
+# TODO since it can be changed live it should be possible to change it from web,
+# or this should just be upper limit and number should be adjusted manually
+number_of_workers: 3
 rvm_source: $HOME/.rvm/scripts/rvm

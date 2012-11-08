@@ -27,7 +27,17 @@ module Webs
         :test_suite_run => {:id => tur.test_suite_run.id}
     end
 
+    def worker(worker)
+      webs.event ch_admins, 'worker', worker.as_json['worker'] # IMPROVE use root: false when fixed in rails
+    end
+
     protected
+
+    def ch_admins
+      Rails.cache.fetch(:admin_webs_channels, expires_in: 10.minutes) do
+        User.admin.map &:webs_channel
+      end
+    end
 
     def ch_global
       'moci'

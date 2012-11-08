@@ -64,4 +64,21 @@ describe User do
       subject.projects_can_manage.to_set.should == [project3].to_set
     end
   end
+
+  context "#webs_channel" do
+    it "should not be nil" do
+      subject.webs_channel.should_not be_nil
+    end
+
+    it "should not duplicate" do
+      user2 = create :user
+      subject.webs_channel.should_not == user2.webs_channel
+    end
+
+    it "should depend on password" do
+      prev = subject.webs_channel
+      subject.password = 'pass2'
+      subject.webs_channel.should_not == prev
+    end
+  end
 end

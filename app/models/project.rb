@@ -6,6 +6,7 @@
 # * project_type [string, default=Base] - same as class name that will be used as project handler
 #   (Moci::ProjectHandler::..)
 # * public [boolean] - if true, it can be viewed by everybody (without singing in)
+# * slug [string] - TODO: document me
 # * updated_at [datetime] - last update time
 # * vcs_type [string, default=Base] - VCS type e.g. Git, Mercurial (see Moci::VCS::Base)
 class Project < ActiveRecord::Base

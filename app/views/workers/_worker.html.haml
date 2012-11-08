@@ -1,0 +1,9 @@
+%tr{:class => [(worker.alive? ? 'alive' : 'dead'), "worker_#{worker.id}"]}
+  %td.worker_type= worker.worker_type
+  %td.pid= worker.pid
+  %td.state= worker.state
+  %td.task= worker.task[:name] || 'n/d'
+  %td.last_seen_at
+    %span{:'data-livestamp' => worker.last_seen_at.to_i}
+
+
