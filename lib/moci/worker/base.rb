@@ -10,7 +10,7 @@ module Moci
           safe_quit
           exit 0
         end
-
+        $0 = "moci worker #{worker_type}"
         @id = "#{self.class}:#{Process.pid}"
       end
 
@@ -42,11 +42,12 @@ module Moci
       end
 
       def unregister
+        @monitoring_loop.kill
         @model.destroy
       end
 
       def monitoring_loop
-        Thread.new do
+        @monitoring_loop = Thread.new do
           loop do
             begin
               sleep ::Worker::PING_FREQUENCY
@@ -56,6 +57,42 @@ module Moci
             end
           end
         end
+      end
+
+      def process_alive?(pid)
+        Process.kill 0, pid
+        return true
+      rescue Errno::ESRCH
+        return false
+      end
+
+      def process_name(pid)
+        `ps -o command #{pid}`.split("\n").last.strip
+      end
+
+      def process_kill(pid)
+        # ask politely
+        begin
+          Process.kill 'SIGINT', pid
+        rescue Errno::ESRCH
+          return false
+        end
+
+        # wait 3s to die
+        30.times do
+          sleep 0.1
+          break unless process_alive?(pid)
+        end
+
+        # -9 if still alive
+        if process_alive?(pid)
+          begin
+            Process.kill 'SIGKILL', pid
+          rescue Errno::ESRCH
+            # it's fine if it was already dead
+          end
+        end
+        return true
       end
     end
   end
