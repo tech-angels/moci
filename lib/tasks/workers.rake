@@ -13,7 +13,7 @@ namespace :workers do
   task :stop => :environment do
     master = Worker.master.first
     Process.kill 'SIGINT', master.pid
-    sleep 2.5 # IMPROVE don't wait if it was killed right away
+    sleep 5 # IMPROVE don't wait if it was killed right away
     begin
       Process.kill 'SIGKILL', master.pid
     rescue Errno::ESRCH

@@ -39,7 +39,7 @@ module Moci
         end
 
         # wait
-        sleep 2 # IMPROVE no need for waiting if they are dead
+        sleep 4 # IMPROVE no need for waiting if they are dead
         slaves.each do |worker|
           begin
             Process.kill 'SIGKILL', worker.pid
