@@ -8,7 +8,7 @@ set :rvm_bin_path,      '/usr/local/rvm/bin'
 require 'rvm/capistrano'
 
 # Set ruby version to use
-set :rvm_ruby_string, 'ruby-1.9.3-p194@moci'
+set :rvm_ruby_string, 'ruby-1.9.3-p327@moci'
 set :rvm_type, :system
 set :using_rvm, true
 
