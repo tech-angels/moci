@@ -2,7 +2,9 @@ source 'http://rubygems.org'
 
 ruby '1.9.3'
 
-gem 'rails', '3.2.11'
+gem 'rails', '3.2.12'
+# # Even it's shipped with rails, ensure we get latest security fix
+gem "json", ">=1.7.7"
 
 # users authentication
 gem 'devise'
