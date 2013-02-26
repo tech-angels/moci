@@ -8,8 +8,9 @@ Webs =
       <% end %>
       <% if Moci.config[:pusher][:wss_port] %>
       Pusher.wss_port = '<%= Moci.config[:pusher][:wss_port] %>'
+      Pusher.ws_port = '<%= Moci.config[:pusher][:wss_port] %>'
       <% end %>
-      @pusher = new Pusher('<%= Pusher.key %>'<%= ", {encrypted: true}" if Moci.config[:pusher][:encrypted] %>)
+      @pusher = new Pusher('<%= Pusher.key %>'<%= ", {encrypted: #{!Moci.config[:pusher][:encrypted].blank?}}" %>)
       @pusher.subscribe "moci", (data) ->
         Moci.debug("Got data: " + JSON.stringify(data))
 

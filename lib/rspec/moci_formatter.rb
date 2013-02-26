@@ -31,9 +31,11 @@ module RSpec
 
         def description(example)
           example_group = example.example_group
+          ancestors = example_group.ancestors.select{ |ancestor| ancestor.respond_to?(:description) and !ancestor.eql?(RSpec::Core::ExampleGroup) }
+
           {
-            :group => example_group.ancestors[-1].description.strip,
-            :name => "#{example_group.ancestors.reverse[1..-1].map(&:description).join(' ')} #{example.description}".strip
+            :group => ancestors[-1].description.strip,
+            :name => "#{ancestors.reverse[1..-1].map(&:description).join(' ')} #{example.description}".strip
           }
         end
 
