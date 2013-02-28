@@ -7,7 +7,7 @@ gem 'rails', '3.2.12'
 gem "json", ">=1.7.7"
 
 # users authentication
-gem 'devise'
+gem 'devise', '~>2.1.3'
 # users authorization
 gem 'cancan'
 
