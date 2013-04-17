@@ -13,7 +13,7 @@ class CommitsController < ApplicationController
   def short_url_show
     @commit = Commit.find params[:id]
     params[:project_id] = @commit.project_id
-    must_be_in_project
+    must_be_in_project || return
     render :show
   end
 

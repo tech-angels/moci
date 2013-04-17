@@ -1,13 +1,13 @@
 class ProjectsController < ApplicationController
+  before_filter :must_be_in_project, only: [:show, :stats, :tr_last_run]
+
   def show
-    must_be_in_project
   end
 
   def choose
   end
 
   def stats
-    must_be_in_project
     @assertions = []
     @tests_failing = []
     @run_times = []
@@ -28,7 +28,6 @@ class ProjectsController < ApplicationController
   end
 
   def tr_last_run
-    must_be_in_project
     tsr = @project.test_suite_runs.find(params[:test_suite_run_id])
     render tsr
   end

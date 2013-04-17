@@ -17,8 +17,10 @@ class ApplicationController < ActionController::Base
     if !@project.public && user_signed_in? && !can?(:view, @project)
       raise ActiveRecord::RecordNotFound
     end
+    true
   rescue ActiveRecord::RecordNotFound
     redirect_to({controller: :projects, action: :choose}, alert: "Project not found")
+    return false
   end
 
   def permission_denied!
